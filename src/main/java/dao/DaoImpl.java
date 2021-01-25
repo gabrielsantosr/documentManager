@@ -40,7 +40,8 @@ public class DaoImpl implements DAO{
 //			session = sf.openSession();
 //		}
 		
-		return sf.openSession();
+		session = sf.openSession();
+		return session;
 	}
 	private Session getSessionWithTransaction() {
  		transaction = getSession().beginTransaction();
@@ -51,20 +52,17 @@ public class DaoImpl implements DAO{
 	}
 	
 	private void closeSession() {
-		if(session != null) {
 			session.close();
-		}
 	}
-	private void commitTransaction() {
-		if (transaction!=null && !transaction.wasRolledBack()) {
+	private void closeSessionWithTransaction() {
 			transaction.commit();
-		}
+			session.close();
 	}
 
 	@Override
 	public AbstractEntity get(Class<? extends AbstractEntity> entityClass,Integer id) {
-		Session s = getSession();
-		AbstractEntity fetched = (AbstractEntity) s.get(entityClass, id);
+		getSession();
+		AbstractEntity fetched = (AbstractEntity) session.get(entityClass, id);
 		this.closeSession();
 		return fetched;
 	}
@@ -73,15 +71,14 @@ public class DaoImpl implements DAO{
 	@Override
 	public boolean save(AbstractEntity rowType) {
 		boolean success = false;
-		Session s = this.getSessionWithTransaction();
+		getSessionWithTransaction();
 		try {
-			s.save(rowType);
+			session.save(rowType);
 			success = true;
 		} catch (Exception e) {
-			this.getCurrentTransaction().rollback();
+			getCurrentTransaction().rollback();
 		}
-		this.commitTransaction();
-		this.closeSession();
+		closeSessionWithTransaction();
 		return success;
 
 	}
@@ -89,48 +86,46 @@ public class DaoImpl implements DAO{
 	@Override
 	public boolean update(AbstractEntity oldData, AbstractEntity newData) {
 		boolean success = false;
-		Session s = this.getSessionWithTransaction();
+		getSessionWithTransaction();
 		try {
 			newData.setId(oldData.getId());
-			s.update(newData);
+			session.update(newData);
 			success = true;
 		} catch (Exception e) {
-			this.getCurrentTransaction().rollback();
+			getCurrentTransaction().rollback();
 		}
 		
-		this.commitTransaction();
-		this.closeSession();
-
+		closeSessionWithTransaction();
 		return success;
 	}
 
 	@Override
 	public boolean delete(AbstractEntity rowType) {
 		boolean success = false;
-		Session s = this.getSessionWithTransaction();
+		getSessionWithTransaction();
 		try {
-			s.delete(rowType);
+			session.delete(rowType);
 			success = true;
 		} catch (Exception e) {
-			this.getCurrentTransaction().rollback();
+			getCurrentTransaction().rollback();
 		}
-		this.commitTransaction();
-		this.closeSession();
+		this.closeSessionWithTransaction();
 		return success;
 	}
 
 	@Override
 	public List<AbstractEntity> getAll(Class<? extends AbstractEntity> clazz) {
-		Session s = this.getSession();
+		getSession();
+		List<AbstractEntity> lista = null;
 		try {
 			String qText = "FROM "+ clazz.getName();
-			Query q = s.createQuery(qText);
+			Query q = session.createQuery(qText);
 			
 			System.out.println(qText);
-			return (List<AbstractEntity>)(q.list());
+			lista = (List<AbstractEntity>)(q.list());
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
-		return null;
+		closeSession();
+		return lista;
 	}
 }
