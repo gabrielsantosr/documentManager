@@ -58,5 +58,11 @@ public class DocumentType extends AbstractEntity {
 	public void setDocuments(List<Document> documents) {
 		this.documents = documents;
 	}
+
+	@Override
+	public String toString() {
+		return "DocumentType [id=" + id + ", description=" + description + "]";
+	}
+	
 	
 }

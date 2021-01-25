@@ -1,4 +1,7 @@
 package dao;
+import java.util.List;
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -13,13 +16,14 @@ import entities.Document;
 import entities.DocumentType;
 import entities.Note;
 
-public class Linker implements DAO{
+public class DaoImpl implements DAO{
+	
 
 	private SessionFactory sf;
 	private Session session;
 	private Transaction transaction;
 	
-	public Linker(){
+	public DaoImpl(){
 		Configuration config = new Configuration().configure()
     			.addAnnotatedClass(Document.class)
     			.addAnnotatedClass(DocumentType.class)
@@ -58,9 +62,9 @@ public class Linker implements DAO{
 	}
 
 	@Override
-	public AbstractEntity get(Class<?> clazz,Integer id) {
+	public AbstractEntity get(Class<? extends AbstractEntity> entityClass,Integer id) {
 		Session s = getSession();
-		AbstractEntity fetched = (AbstractEntity) s.get(clazz, id);
+		AbstractEntity fetched = (AbstractEntity) s.get(entityClass, id);
 		this.closeSession();
 		return fetched;
 	}
@@ -113,5 +117,20 @@ public class Linker implements DAO{
 		this.commitTransaction();
 		this.closeSession();
 		return success;
+	}
+
+	@Override
+	public List<AbstractEntity> getAll(Class<? extends AbstractEntity> clazz) {
+		Session s = this.getSession();
+		try {
+			String qText = "FROM "+ clazz.getName();
+			Query q = s.createQuery(qText);
+			
+			System.out.println(qText);
+			return (List<AbstractEntity>)(q.list());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
 	}
 }
