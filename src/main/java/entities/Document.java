@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import sub_entities.Volume;
 @Entity
 @Table(name="document")
-public class Document {
+public class Document extends AbstractEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")

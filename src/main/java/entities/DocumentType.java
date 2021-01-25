@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="doc_type")
-public class DocumentType {
+public class DocumentType extends AbstractEntity {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

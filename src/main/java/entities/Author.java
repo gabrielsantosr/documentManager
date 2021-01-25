@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="author")
-public class Author {
+public class Author extends AbstractEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")

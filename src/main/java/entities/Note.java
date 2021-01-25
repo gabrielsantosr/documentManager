@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table (name="note")
-public class Note {
+public class Note extends AbstractEntity {
 	@Override
 	public String toString() {
 		return "Note [document=" + document + ", noteText=" + noteText + "]";
