@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -72,6 +73,22 @@ public class DaoImpl implements DAO{
 	}
 	
 	
+	@Override
+	public Authorship get(Integer docId, Integer authorId) {
+		getSession();
+		SQLQuery sqlQuery =session
+				.createSQLQuery("SELECT * FROM authorship where document_id=:dID AND author_id =:aID");
+		sqlQuery.addEntity(Authorship.class);
+		sqlQuery.setParameter("dID", docId);
+		sqlQuery.setParameter("aID", authorId);
+		Authorship fetched = (Authorship) sqlQuery.uniqueResult();
+		Hibernate.initialize(fetched.getDocument().getAuthorships());
+		Hibernate.initialize(fetched.getDocument().getNotes());
+		
+//		Hibernate.initialize(fetched.getAuthor());
+		closeSession();
+		return fetched;
+	}
 
 	@Override
 	public boolean save(IntIdEntity rowType) {
@@ -156,4 +173,5 @@ public class DaoImpl implements DAO{
 		
 		return null;
 	}
+
 }
