@@ -16,7 +16,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name="author")
-public class Author extends EntityParent {
+public class Author extends IntIdEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")

@@ -15,7 +15,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name="doc_type")
-public class DocumentType extends EntityParent {
+public class DocumentType extends IntIdEntity {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

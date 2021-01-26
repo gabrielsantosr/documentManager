@@ -19,7 +19,7 @@ import javax.persistence.Transient;
 import sub_entities.Volume;
 @Entity
 @Table(name="document")
-public class Document extends EntityParent {
+public class Document extends IntIdEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")

@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table (name="note")
-public class Note extends EntityParent {
+public class Note extends IntIdEntity {
 	@Override
 	public String toString() {
 		return "Note [document=" + document + ", noteText=" + noteText + "]";

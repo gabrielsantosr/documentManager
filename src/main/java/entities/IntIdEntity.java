@@ -12,7 +12,7 @@ import java.util.List;
  * key como id.
  * 
  */
-public abstract class EntityParent{
+public abstract class IntIdEntity{
 	public abstract Integer getId();
 	public abstract void setId(Integer id);
 	public abstract List<Method>getLazyGetters();

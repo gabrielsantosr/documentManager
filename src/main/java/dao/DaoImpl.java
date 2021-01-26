@@ -17,7 +17,7 @@ import entities.Author;
 import entities.Authorship;
 import entities.Document;
 import entities.DocumentType;
-import entities.EntityParent;
+import entities.IntIdEntity;
 import entities.Note;
 
 public class DaoImpl implements DAO{
@@ -51,7 +51,7 @@ public class DaoImpl implements DAO{
  		transaction = getSession().beginTransaction();
 		return session;
 	}
-	public Transaction getCurrentTransaction() {
+	private Transaction getCurrentTransaction() {
 		return transaction;
 	}
 	
@@ -64,16 +64,17 @@ public class DaoImpl implements DAO{
 	}
 
 	@Override
-	public EntityParent get(Class<? extends EntityParent> entityClass,Integer id) {
+	public IntIdEntity get(Class<? extends IntIdEntity> entityClass,Integer id) {
 		getSession();
-		EntityParent fetched = (EntityParent) session.get(entityClass, id);
+		IntIdEntity fetched = (IntIdEntity) session.get(entityClass, id);
 		this.closeSession();
 		return fetched;
 	}
 	
+	
 
 	@Override
-	public boolean save(EntityParent rowType) {
+	public boolean save(IntIdEntity rowType) {
 		boolean success = false;
 		getSessionWithTransaction();
 		try {
@@ -88,8 +89,12 @@ public class DaoImpl implements DAO{
 	}
 
 	@Override
-	public boolean update(EntityParent oldData, EntityParent newData) {
+	public boolean update(IntIdEntity oldData, IntIdEntity newData) {
+		if(!oldData.getClass().equals(newData.getClass())) {
+			return false;
+		}
 		boolean success = false;
+		
 		getSessionWithTransaction();
 		try {
 			newData.setId(oldData.getId());
@@ -104,7 +109,7 @@ public class DaoImpl implements DAO{
 	}
 
 	@Override
-	public boolean delete(EntityParent rowType) {
+	public boolean delete(IntIdEntity rowType) {
 		boolean success = false;
 		getSessionWithTransaction();
 		try {
@@ -118,25 +123,20 @@ public class DaoImpl implements DAO{
 	}
 
 	@Override
-	public List<EntityParent> getAll(Class<? extends EntityParent> clazz) {
+	public List<IntIdEntity> getAll(Class<? extends IntIdEntity> clazz) {
 		getSession();
-		List<EntityParent> lista = null;
-		try {
-			String qText = "FROM "+ clazz.getName();
-			Query q = session.createQuery(qText);
-			
-			System.out.println(qText);
-			lista = (List<EntityParent>)(q.list());
-		} catch (Exception e) {
-		}
+		
+		List<IntIdEntity> lista = null;
+		Query q = session.createQuery("FROM "+ clazz.getName());
+		lista = (List<IntIdEntity>) (q.list());
 		closeSession();
 		return lista;
 	}
 
 	@Override
-	public EntityParent getEager(Class<? extends EntityParent> entityClass, Integer id) {
+	public IntIdEntity getEager(Class<? extends IntIdEntity> entityClass, Integer id) {
 		getSession();
-		EntityParent fetched = (EntityParent) session.get(entityClass, id);
+		IntIdEntity fetched = (IntIdEntity) session.get(entityClass, id);
 		for (Method getter: fetched.getLazyGetters()) {
 			try {
 				Hibernate.initialize(getter.invoke(fetched,null));
@@ -151,8 +151,9 @@ public class DaoImpl implements DAO{
 	}
 
 	@Override
-	public List<EntityParent> getAllEager(Class<? extends EntityParent> entityClass) {
-		// TODO Auto-generated method stub
+	public List<IntIdEntity> getAllEager(Class<? extends IntIdEntity> entityClass) {
+		getSession();
+		
 		return null;
 	}
 }

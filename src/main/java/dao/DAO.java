@@ -2,15 +2,15 @@ package dao;
 
 import java.util.List;
 
-import entities.EntityParent;
+import entities.IntIdEntity;
 
 public interface DAO {
-	EntityParent get(Class<? extends EntityParent> entityClass, Integer id);
-	EntityParent getEager (Class<? extends EntityParent> entityClass,Integer id);
-	List<EntityParent>getAll(Class<? extends EntityParent> entityClass);
-	List<EntityParent>getAllEager(Class<? extends EntityParent> entityClass);
-	boolean save (EntityParent row);
-	boolean update (EntityParent oldData, EntityParent newData);
-	boolean delete (EntityParent row);
+	IntIdEntity get(Class<? extends IntIdEntity> entityClass, Integer id);
+	IntIdEntity getEager (Class<? extends IntIdEntity> entityClass,Integer id);
+	List<IntIdEntity>getAll(Class<? extends IntIdEntity> entityClass);
+	List<IntIdEntity>getAllEager(Class<? extends IntIdEntity> entityClass);
+	boolean save (IntIdEntity row);
+	boolean update (IntIdEntity oldData, IntIdEntity newData);
+	boolean delete (IntIdEntity row);
 	
 }
