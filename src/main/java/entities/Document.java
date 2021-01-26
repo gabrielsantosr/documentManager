@@ -1,5 +1,7 @@
 package entities;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -12,11 +14,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import sub_entities.Volume;
 @Entity
 @Table(name="document")
-public class Document extends AbstractEntity {
+public class Document extends EntityParent {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
@@ -59,13 +62,39 @@ public class Document extends AbstractEntity {
 	
 	@OneToMany(mappedBy="document")
 	@OrderBy("id")
-	private List<Note>notes;
+	protected List<Note>notes;
+	
+	@Transient
+	private List<Method> lazyGetters;
+	
 
 	public Document() {
-		
+		lazyGetters = new ArrayList<>();
+		try {
+			lazyGetters.add(this.getClass().getMethod("getAuthorships"));
+			lazyGetters.add(this.getClass().getMethod("getNotes"));
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public Document(DocumentType documentType) {
+		lazyGetters = new ArrayList<>();
+		try {
+			lazyGetters.add(this.getClass().getMethod("getAuthorships"));
+			lazyGetters.add(this.getClass().getMethod("getNotes"));
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		this.documentType = documentType;
 	}
 
@@ -198,4 +227,12 @@ public class Document extends AbstractEntity {
 				+ title + ", authors: "+authorNames +", notes: " + qty + "]";
 	}
 
+	@Override
+	public List<Method> getLazyGetters() {
+		return lazyGetters;
+	}
+
+	
+
+	
 }

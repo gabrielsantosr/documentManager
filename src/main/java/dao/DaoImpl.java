@@ -1,6 +1,10 @@
 package dao;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,11 +13,11 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
-import entities.AbstractEntity;
 import entities.Author;
 import entities.Authorship;
 import entities.Document;
 import entities.DocumentType;
+import entities.EntityParent;
 import entities.Note;
 
 public class DaoImpl implements DAO{
@@ -60,16 +64,16 @@ public class DaoImpl implements DAO{
 	}
 
 	@Override
-	public AbstractEntity get(Class<? extends AbstractEntity> entityClass,Integer id) {
+	public EntityParent get(Class<? extends EntityParent> entityClass,Integer id) {
 		getSession();
-		AbstractEntity fetched = (AbstractEntity) session.get(entityClass, id);
+		EntityParent fetched = (EntityParent) session.get(entityClass, id);
 		this.closeSession();
 		return fetched;
 	}
 	
 
 	@Override
-	public boolean save(AbstractEntity rowType) {
+	public boolean save(EntityParent rowType) {
 		boolean success = false;
 		getSessionWithTransaction();
 		try {
@@ -84,7 +88,7 @@ public class DaoImpl implements DAO{
 	}
 
 	@Override
-	public boolean update(AbstractEntity oldData, AbstractEntity newData) {
+	public boolean update(EntityParent oldData, EntityParent newData) {
 		boolean success = false;
 		getSessionWithTransaction();
 		try {
@@ -100,7 +104,7 @@ public class DaoImpl implements DAO{
 	}
 
 	@Override
-	public boolean delete(AbstractEntity rowType) {
+	public boolean delete(EntityParent rowType) {
 		boolean success = false;
 		getSessionWithTransaction();
 		try {
@@ -114,18 +118,41 @@ public class DaoImpl implements DAO{
 	}
 
 	@Override
-	public List<AbstractEntity> getAll(Class<? extends AbstractEntity> clazz) {
+	public List<EntityParent> getAll(Class<? extends EntityParent> clazz) {
 		getSession();
-		List<AbstractEntity> lista = null;
+		List<EntityParent> lista = null;
 		try {
 			String qText = "FROM "+ clazz.getName();
 			Query q = session.createQuery(qText);
 			
 			System.out.println(qText);
-			lista = (List<AbstractEntity>)(q.list());
+			lista = (List<EntityParent>)(q.list());
 		} catch (Exception e) {
 		}
 		closeSession();
 		return lista;
+	}
+
+	@Override
+	public EntityParent getEager(Class<? extends EntityParent> entityClass, Integer id) {
+		getSession();
+		EntityParent fetched = (EntityParent) session.get(entityClass, id);
+		for (Method getter: fetched.getLazyGetters()) {
+			try {
+				Hibernate.initialize(getter.invoke(fetched,null));
+			} catch (HibernateException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.closeSession();
+		return fetched;
+	}
+
+	@Override
+	public List<EntityParent> getAllEager(Class<? extends EntityParent> entityClass) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

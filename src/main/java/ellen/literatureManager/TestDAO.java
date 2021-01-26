@@ -15,9 +15,9 @@ public class TestDAO {
 		linker.getAll(DocumentType.class)
 			.forEach(row->{System.out.println(row);});
 	
-		Document doc = (Document)linker.get(Document.class,2);
-		Note note = new Note(doc,"Altos curries");
-		linker.save(note);
+		Document doc = (Document)linker.getEager(Document.class,2);
+		Note note = doc.getNotes().get(0);
+		linker.update(note, new Note(doc,"Nota alterada"));
 		
 	}
 

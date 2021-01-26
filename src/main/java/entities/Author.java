@@ -1,5 +1,7 @@
 package entities;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -10,10 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="author")
-public class Author extends AbstractEntity {
+public class Author extends EntityParent {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
@@ -29,13 +32,37 @@ public class Author extends AbstractEntity {
 	@OrderBy("hierarchy")
 	private List<Authorship> authorships;
 	
+	@Transient
+	private List<Method>lazyGetters;
+	
 	public Author() {
+		lazyGetters = new ArrayList<>();
+		try {
+			lazyGetters.add(this.getClass().getMethod("getAuthorships"));
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 
 	public Author(String lastName, String firstName) {
+		lazyGetters = new ArrayList<>();
+		try {
+			lazyGetters.add(this.getClass().getMethod("getAuthorships"));
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.lastName = lastName;
 		this.firstName = firstName;
+
 	}
 
 
@@ -80,5 +107,9 @@ public class Author extends AbstractEntity {
 	}
 
 
+	@Override
+	public List<Method> getLazyGetters() {
+		return lazyGetters;
+	}
 		
 }

@@ -1,5 +1,9 @@
 package entities;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table (name="note")
-public class Note extends AbstractEntity {
+public class Note extends EntityParent {
 	@Override
 	public String toString() {
 		return "Note [document=" + document + ", noteText=" + noteText + "]";
@@ -51,6 +55,10 @@ public class Note extends AbstractEntity {
 	}
 	public void setNoteText(String noteText) {
 		this.noteText = noteText;
+	}
+	@Override
+	public List<Method> getLazyGetters() {
+		return new ArrayList<>();
 	}
 
 }

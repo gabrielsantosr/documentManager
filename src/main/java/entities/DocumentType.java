@@ -1,5 +1,7 @@
 package entities;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -9,10 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="doc_type")
-public class DocumentType extends AbstractEntity {
+public class DocumentType extends EntityParent {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -25,14 +28,37 @@ public class DocumentType extends AbstractEntity {
 	@OneToMany(mappedBy="documentType")
 	private List<Document> documents;
 	
+	@Transient
+	private List<Method>lazyGetters;
+	
 	
 
 	public DocumentType() {
-		// TODO Auto-generated constructor stub
+		lazyGetters = new ArrayList<>();
+		try {
+			lazyGetters.add(this.getClass().getMethod("getDocuments"));
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public DocumentType(String description) {
+		lazyGetters = new ArrayList<>();
+		try {
+			lazyGetters.add(this.getClass().getMethod("getDocuments"));
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.description = description;
+
 	}
 
 	public Integer getId() {
@@ -63,6 +89,12 @@ public class DocumentType extends AbstractEntity {
 	public String toString() {
 		return "DocumentType [id=" + id + ", description=" + description + "]";
 	}
-	
+
+	@Override
+	public List<Method> getLazyGetters() {
+		return lazyGetters;
+	}
+
+		
 	
 }
