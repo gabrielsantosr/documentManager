@@ -7,18 +7,23 @@ import entities.Document;
 import entities.DocumentType;
 
 public class TestDAO {
+	private DaoImpl chePibe;
+	public TestDAO() {
+		this.chePibe = new DaoImpl();
+	}
+	
 	public static void main(String []args) {
-		DaoImpl linker = new DaoImpl();
-		Author author = (Author)linker.get(Author.class, 3);
+		TestDAO test = new TestDAO();
+		Author author = (Author)test.chePibe.get(Author.class, 3);
 		System.out.println(author);
 		
-		linker.getAll(DocumentType.class)
+		test.chePibe.getAll(DocumentType.class)
 			.forEach(row->{System.out.println(row);});
 	
-		Document doc = (Document)linker.getEager(Document.class,4);
+		Document doc = (Document)test.chePibe.getEager(Document.class,4);
 		//Note note = doc.getNotes().get(0);
 		//linker.update(note, new Note(doc,"Esta nota volvió a ser alterada"));
-		System.out.println(linker.get(6,5));
+		System.out.println(test.chePibe.get(6,5));
 				
 	}
 }
