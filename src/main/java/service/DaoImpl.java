@@ -1,4 +1,4 @@
-package dao;
+package service;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -39,43 +39,31 @@ public class DaoImpl implements DAO{
     	sf = config.buildSessionFactory(reg);
 	}
 
-	private Session getSession() {
-//		session = sf.getCurrentSession();
-//		if(session==null) {
-//			session = sf.openSession();
-//		}
-		
+	protected void openSession() {
 		session = sf.openSession();
-		return session;
-	}
-	private Session getSessionWithTransaction() {
- 		transaction = getSession().beginTransaction();
-		return session;
-	}
-	private Transaction getCurrentTransaction() {
-		return transaction;
 	}
 	
-	private void closeSession() {
-			session.close();
+	protected void newTransaction() {
+ 		transaction = session.beginTransaction();
 	}
-	private void closeSessionWithTransaction() {
-			transaction.commit();
-			session.close();
+	
+	protected void commitTransaction() {
+		transaction.commit();
 	}
-
+	
+	protected void closeSession() {
+		session.close();
+	}
+	
 	@Override
 	public IntIdEntity get(Class<? extends IntIdEntity> entityClass,Integer id) {
-		getSession();
 		IntIdEntity fetched = (IntIdEntity) session.get(entityClass, id);
-		this.closeSession();
 		return fetched;
 	}
 	
 	
 	@Override
 	public Authorship get(Integer docId, Integer authorId) {
-		getSession();
 		SQLQuery sqlQuery =session
 				.createSQLQuery("SELECT * FROM authorship where document_id=:dID AND author_id =:aID");
 		sqlQuery.addEntity(Authorship.class);
@@ -84,25 +72,19 @@ public class DaoImpl implements DAO{
 		Authorship fetched = (Authorship) sqlQuery.uniqueResult();
 		Hibernate.initialize(fetched.getDocument().getAuthorships());
 		Hibernate.initialize(fetched.getDocument().getNotes());
-		
-//		Hibernate.initialize(fetched.getAuthor());
-		closeSession();
 		return fetched;
 	}
 
 	@Override
-	public boolean save(IntIdEntity rowType) {
+	public boolean save(Object row) {
 		boolean success = false;
-		getSessionWithTransaction();
 		try {
-			session.save(rowType);
+			session.save(row);
 			success = true;
 		} catch (Exception e) {
-			getCurrentTransaction().rollback();
+			transaction.rollback();
 		}
-		closeSessionWithTransaction();
 		return success;
-
 	}
 
 	@Override
@@ -112,47 +94,40 @@ public class DaoImpl implements DAO{
 		}
 		boolean success = false;
 		
-		getSessionWithTransaction();
 		try {
 			newData.setId(oldData.getId());
+			
 			session.update(newData);
 			success = true;
 		} catch (Exception e) {
-			getCurrentTransaction().rollback();
+			transaction.rollback();
 		}
-		
-		closeSessionWithTransaction();
 		return success;
 	}
 
 	@Override
 	public boolean delete(IntIdEntity rowType) {
 		boolean success = false;
-		getSessionWithTransaction();
 		try {
 			session.delete(rowType);
 			success = true;
 		} catch (Exception e) {
-			getCurrentTransaction().rollback();
+			transaction.rollback();
 		}
-		this.closeSessionWithTransaction();
 		return success;
 	}
 
 	@Override
 	public List<IntIdEntity> getAll(Class<? extends IntIdEntity> clazz) {
-		getSession();
 		
 		List<IntIdEntity> lista = null;
 		Query q = session.createQuery("FROM "+ clazz.getName());
 		lista = (List<IntIdEntity>) (q.list());
-		closeSession();
 		return lista;
 	}
 
 	@Override
 	public IntIdEntity getEager(Class<? extends IntIdEntity> entityClass, Integer id) {
-		getSession();
 		IntIdEntity fetched = (IntIdEntity) session.get(entityClass, id);
 		for (Method getter: fetched.getLazyGetters()) {
 			try {
@@ -163,13 +138,11 @@ public class DaoImpl implements DAO{
 				e.printStackTrace();
 			}
 		}
-		this.closeSession();
 		return fetched;
 	}
 
 	@Override
 	public List<IntIdEntity> getAllEager(Class<? extends IntIdEntity> entityClass) {
-		getSession();
 		
 		return null;
 	}

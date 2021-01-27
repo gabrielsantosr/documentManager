@@ -1,10 +1,10 @@
 package ellen.literatureManager;
 
-import dao.DaoImpl;
 import entities.Author;
 import entities.Authorship;
 import entities.Document;
 import entities.DocumentType;
+import service.DaoImpl;
 
 public class TestDAO {
 	private DaoImpl chePibe;

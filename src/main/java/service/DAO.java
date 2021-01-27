@@ -1,4 +1,4 @@
-package dao;
+package service;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public interface DAO {
 	IntIdEntity getEager (Class<? extends IntIdEntity> entityClass,Integer id);
 	List<IntIdEntity>getAll(Class<? extends IntIdEntity> entityClass);
 	List<IntIdEntity>getAllEager(Class<? extends IntIdEntity> entityClass);
-	boolean save (IntIdEntity row);
+	boolean save (Object row);
 	boolean update (IntIdEntity oldData, IntIdEntity newData);
 	boolean delete (IntIdEntity row);
 	
