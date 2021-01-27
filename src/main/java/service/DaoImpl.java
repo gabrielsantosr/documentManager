@@ -29,30 +29,32 @@ public class DaoImpl implements DAO{
 	private Transaction transaction;
 	
 	public DaoImpl(){
-		Configuration config = new Configuration().configure()
-    			.addAnnotatedClass(Document.class)
-    			.addAnnotatedClass(DocumentType.class)
-    			.addAnnotatedClass(Author.class)
-    			.addAnnotatedClass(Authorship.class)
-    			.addAnnotatedClass(Note.class);
-    	ServiceRegistry reg = new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
-    	sf = config.buildSessionFactory(reg);
+		sf = SingleSessionFactory.getInstance();
 	}
 
-	protected void openSession() {
-		session = sf.openSession();
+	
+	protected void enableSession() {
+		if (session==null || !session.isOpen()) {
+			session = sf.openSession();
+		}
 	}
 	
-	protected void newTransaction() {
- 		transaction = session.beginTransaction();
+	protected void enableTransaction() {
+		if (transaction==null || transaction.wasCommitted()) {
+			transaction = session.beginTransaction();
+		}
 	}
 	
 	protected void commitTransaction() {
-		transaction.commit();
+		if (!transaction.wasCommitted()) {
+			transaction.commit();
+		}
 	}
 	
 	protected void closeSession() {
-		session.close();
+		if (session!=null && session.isOpen()) {
+			session.close();
+		}
 	}
 	
 	@Override

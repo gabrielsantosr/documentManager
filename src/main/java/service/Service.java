@@ -14,7 +14,7 @@ public class Service {
 	}
 	
 	public IntIdEntity get(Class<? extends IntIdEntity> entityClass,Integer id, boolean eager) {
-		dao.openSession();
+		dao.enableSession();
 		IntIdEntity entity;
 		if (eager) {
 			entity = dao.getEager(entityClass, id);
@@ -26,7 +26,7 @@ public class Service {
 	}
 	
 	public Authorship get(Integer docId, Integer authorId) {
-		dao.openSession();
+		dao.enableSession();
 		Authorship authorship = dao.get(docId, authorId);
 		dao.closeSession();
 		return authorship;
@@ -34,8 +34,8 @@ public class Service {
 	}
 	
 	public boolean save(Object row) {
-		dao.openSession();
-		dao.newTransaction();
+		dao.enableSession();
+		dao.enableTransaction();
 		boolean success = dao.save(row);
 		dao.commitTransaction();
 		dao.closeSession();
@@ -43,8 +43,8 @@ public class Service {
 	}
 	
 	public boolean update(IntIdEntity oldData, IntIdEntity newData) {
-		dao.openSession();
-		dao.newTransaction();
+		dao.enableSession();
+		dao.enableTransaction();
 		boolean success = dao.update(oldData, newData);
 		dao.commitTransaction();
 		dao.closeSession();
@@ -52,8 +52,8 @@ public class Service {
 	}
 
 	public boolean delete(IntIdEntity rowType) {
-		dao.openSession();
-		dao.newTransaction();
+		dao.enableSession();
+		dao.enableTransaction();
 		boolean success = dao.delete(rowType);
 		dao.commitTransaction();
 		dao.closeSession();
@@ -61,7 +61,7 @@ public class Service {
 	}
 	
 	public List<IntIdEntity> getAll(Class<? extends IntIdEntity> clazz) {
-		dao.openSession();
+		dao.enableSession();
 		List<IntIdEntity> list = dao.getAll(clazz);
 		dao.closeSession();
 		return list;
