@@ -65,36 +65,28 @@ public class Document extends IntIdEntity {
 	protected List<Note>notes;
 	
 	@Transient
-	private List<Method> lazyGetters;
+	public static final List<Method>lazyGetters;
 	
-
-	public Document() {
-		lazyGetters = new ArrayList<>();
+	static {
+			lazyGetters = initLazyGetters();
+	}
+	
+	
+	private static List<Method>initLazyGetters(){
+		List<Method>list = new ArrayList<>();
 		try {
-			lazyGetters.add(this.getClass().getMethod("getAuthorships"));
-			lazyGetters.add(this.getClass().getMethod("getNotes"));
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
+			list.add(Document.class.getMethod("getAuthorships"));
+			list.add(Document.class.getMethod("getNotes"));
+		} catch (NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
 		}
+		return list;
+	}
+		 
+	public Document() {
 	}
 	
 	public Document(DocumentType documentType) {
-		lazyGetters = new ArrayList<>();
-		try {
-			lazyGetters.add(this.getClass().getMethod("getAuthorships"));
-			lazyGetters.add(this.getClass().getMethod("getNotes"));
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		this.documentType = documentType;
 	}
 
@@ -230,9 +222,5 @@ public class Document extends IntIdEntity {
 	@Override
 	public List<Method> getLazyGetters() {
 		return lazyGetters;
-	}
-
-	
-
-	
+	}	
 }

@@ -33,36 +33,29 @@ public class Author extends IntIdEntity {
 	private List<Authorship> authorships;
 	
 	@Transient
-	private List<Method>lazyGetters;
+	public static final List<Method>lazyGetters;
 	
-	public Author() {
-		lazyGetters = new ArrayList<>();
+	static {
+			lazyGetters = initLazyGetters();
+	}
+	
+	private static List<Method>initLazyGetters(){
+		List<Method>list = new ArrayList<>();
 		try {
-			lazyGetters.add(this.getClass().getMethod("getAuthorships"));
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
+			list.add(Author.class.getMethod("getAuthorships"));
+		} catch (NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
 		}
+		return list;
+	}
+	
+	public Author() {
 	}
 	
 
 	public Author(String lastName, String firstName) {
-		lazyGetters = new ArrayList<>();
-		try {
-			lazyGetters.add(this.getClass().getMethod("getAuthorships"));
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		this.lastName = lastName;
 		this.firstName = firstName;
-
 	}
 
 
@@ -106,10 +99,8 @@ public class Author extends IntIdEntity {
 		return "Author [id=" + id + ", lastName=" + lastName + ", firstName=" + firstName + "]";
 	}
 
-
 	@Override
 	public List<Method> getLazyGetters() {
 		return lazyGetters;
 	}
-		
 }

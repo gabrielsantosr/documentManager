@@ -60,11 +60,16 @@ public class Service {
 		return success;
 	}
 	
-	public List<IntIdEntity> getAll(Class<? extends IntIdEntity> clazz) {
+	public List<IntIdEntity> getAll(Class<? extends IntIdEntity> clazz, boolean eager) {
 		dao.enableSession();
-		List<IntIdEntity> list = dao.getAll(clazz);
+		List<IntIdEntity> lista;
+		if (eager) {
+			lista = dao.getAllEager(clazz);
+		} else {
+			lista = dao.getAll(clazz);
+		}
 		dao.closeSession();
-		return list;
+		return lista;
 	}
 	
 	

@@ -29,36 +29,29 @@ public class DocumentType extends IntIdEntity {
 	private List<Document> documents;
 	
 	@Transient
-	private List<Method>lazyGetters;
+	public static final List<Method>lazyGetters;
+	
+	static {
+			
+			lazyGetters = initLazyGetters();
+	}
 	
 	
-
-	public DocumentType() {
-		lazyGetters = new ArrayList<>();
+	private static List<Method>initLazyGetters(){
+		List<Method>list = new ArrayList<>();
 		try {
-			lazyGetters.add(this.getClass().getMethod("getDocuments"));
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
+			list.add(DocumentType.class.getMethod("getDocuments"));
+		} catch (NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
 		}
+		return list;
+	}
+
+	public DocumentType() {
 	}
 
 	public DocumentType(String description) {
-		lazyGetters = new ArrayList<>();
-		try {
-			lazyGetters.add(this.getClass().getMethod("getDocuments"));
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		this.description = description;
-
 	}
 
 	public Integer getId() {
@@ -89,12 +82,9 @@ public class DocumentType extends IntIdEntity {
 	public String toString() {
 		return "DocumentType [id=" + id + ", description=" + description + "]";
 	}
-
+	
 	@Override
 	public List<Method> getLazyGetters() {
 		return lazyGetters;
 	}
-
-		
-	
 }

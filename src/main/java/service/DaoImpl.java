@@ -120,10 +120,10 @@ public class DaoImpl implements DAO{
 	}
 
 	@Override
-	public List<IntIdEntity> getAll(Class<? extends IntIdEntity> clazz) {
+	public List<IntIdEntity> getAll(Class<? extends IntIdEntity> entityClass) {
 		
 		List<IntIdEntity> lista = null;
-		Query q = session.createQuery("FROM "+ clazz.getName());
+		Query q = session.createQuery("FROM "+ entityClass.getName());
 		lista = (List<IntIdEntity>) (q.list());
 		return lista;
 	}
@@ -145,8 +145,23 @@ public class DaoImpl implements DAO{
 
 	@Override
 	public List<IntIdEntity> getAllEager(Class<? extends IntIdEntity> entityClass) {
-		
-		return null;
+		List<IntIdEntity> lista = null;
+		List<Method>lazyGetters = null;
+		Query q = session.createQuery("FROM "+ entityClass.getName());
+		lista = (List<IntIdEntity>)(q.list());
+		if (lista.size()!=0) {
+			lazyGetters = lista.get(0).getLazyGetters();
+			for (IntIdEntity row: lista) {
+				for (Method getter: lazyGetters) {
+					try {
+						Hibernate.initialize(getter.invoke(row,null));
+					} catch (HibernateException | IllegalAccessException | IllegalArgumentException
+							| InvocationTargetException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		} 
+		return lista;
 	}
-
 }
