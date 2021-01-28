@@ -18,7 +18,7 @@ public class SingleSessionFactory {
 	public SingleSessionFactory() {
 		
 	}
-	protected static synchronized SessionFactory getInstance() {
+	public static synchronized SessionFactory getInstance() {
 		if (sf == null) {
 			Configuration config = new Configuration().configure()
 	    			.addAnnotatedClass(Document.class)

@@ -24,18 +24,13 @@ public class Test {
 			docType.getDocuments().forEach(doc->System.out.println("\t\u2022 "+doc.getTitle()));
 		}
 		
-		List <IntIdEntity>notes =service.getAll(Note.class,true);
+		List <IntIdEntity>notes =service.getAll(Note.class,false);
 		for(IntIdEntity row: notes) {
 			Note note = (Note) row;
 			System.out.println(note);
 		}
 		
-		
-	
 		Document doc = (Document)service.get(Document.class, 4, true);
-		//Note note = doc.getNotes().get(0);
-		//linker.update(note, new Note(doc,"Esta nota volvió a ser alterada"));
 		System.out.println(service.get(doc.getId(), author.getId()));
-				
 	}
 }
