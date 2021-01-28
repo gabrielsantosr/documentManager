@@ -7,6 +7,7 @@ import entities.Author;
 import entities.Document;
 import entities.DocumentType;
 import entities.IntIdEntity;
+import entities.Note;
 import service.Service;
 
 public class Test {
@@ -17,11 +18,19 @@ public class Test {
 		System.out.println(author);
 		
 		List <IntIdEntity>docTypes =service.getAll(DocumentType.class,true);
-			for(IntIdEntity row: docTypes) {
-				DocumentType docType = (DocumentType) row;
-				System.out.println("\n"+docType.getDescription()+":");
-				docType.getDocuments().forEach(doc->System.out.println("\t\u2022 "+doc.getTitle()));
-			}
+		for(IntIdEntity row: docTypes) {
+			DocumentType docType = (DocumentType) row;
+			System.out.println("\n"+docType.getDescription()+":");
+			docType.getDocuments().forEach(doc->System.out.println("\t\u2022 "+doc.getTitle()));
+		}
+		
+		List <IntIdEntity>notes =service.getAll(Note.class,true);
+		for(IntIdEntity row: notes) {
+			Note note = (Note) row;
+			System.out.println(note);
+		}
+		
+		
 	
 		Document doc = (Document)service.get(Document.class, 4, true);
 		//Note note = doc.getNotes().get(0);

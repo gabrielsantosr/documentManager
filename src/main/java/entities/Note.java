@@ -19,7 +19,7 @@ import javax.persistence.Transient;
 public class Note extends IntIdEntity {
 	@Override
 	public String toString() {
-		return "Note [document=" + document + ", noteText=" + noteText + "]";
+		return "Note [document=" + document.getTitle() + ", noteText=" + noteText + "]";
 	}
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

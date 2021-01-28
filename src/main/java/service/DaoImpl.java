@@ -151,8 +151,8 @@ public class DaoImpl implements DAO{
 		lista = (List<IntIdEntity>)(q.list());
 		if (lista.size()!=0) {
 			lazyGetters = lista.get(0).getLazyGetters();
-			for (IntIdEntity row: lista) {
-				for (Method getter: lazyGetters) {
+			for (Method getter: lazyGetters) {
+				for (IntIdEntity row: lista) {
 					try {
 						Hibernate.initialize(getter.invoke(row,null));
 					} catch (HibernateException | IllegalAccessException | IllegalArgumentException
