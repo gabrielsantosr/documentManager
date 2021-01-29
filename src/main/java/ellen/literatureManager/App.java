@@ -104,7 +104,7 @@ public class App {
     	indianJsm.setHierarchy(1);
     	
     	Authorship caSwing = new Authorship(swing,chrisAdamson);
-    	toPersist.add(sacksHat);
+    	toPersist.add(caSwing);
     	caSwing.setHierarchy(2);
 
     	Authorship jmSwing = new Authorship(swing,joshuaMarinacci);
