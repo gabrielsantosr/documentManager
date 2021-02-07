@@ -2,31 +2,24 @@ package sub_entities;
 
 import java.io.Serializable;
 
-import entities.Author;
-import entities.Document;
-
 public class AuthorshipCompositeKey implements Serializable{
 
 	/**
 	 * 
-	 */
+			 */
 	private static final long serialVersionUID = -3473634575133294542L;
-	private Document document;
-	private Author author;
+	private Integer document;
+	private Integer author;
 	
-	public AuthorshipCompositeKey(Document document, Author author) {
-		this.document = document;
-		this.author = author;
-	}
+//	public AuthorshipCompositeKey(Document document, Author author) {
+//		this.document = document;
+//		this.author = author;
+//	}
 
 	public AuthorshipCompositeKey() {
 	}
 
 
-	@Override
-	public String toString() {
-		return "AuthorshipCompositeKey [document=" + document.getId() + ", author=" + author.getId() + "]";
-	}
 
 	@Override
 	public int hashCode() {

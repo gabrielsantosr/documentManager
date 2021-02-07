@@ -14,12 +14,12 @@ import sub_entities.AuthorshipCompositeKey;
 @IdClass(AuthorshipCompositeKey.class)
 public class Authorship {
 	@Id
-//	@Column(name="author_id")
+//	@JoinColumn(name="author_id")
 	@ManyToOne()
 	private Author author;
 
 	@Id
-//	@Column(name="document_id")
+//	@JoinColumn(name="document_id")
 	@ManyToOne()
 	private Document document;
 

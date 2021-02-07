@@ -1,7 +1,5 @@
 package entities;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -11,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name="doc_type")
@@ -28,24 +25,24 @@ public class DocumentType extends IntIdEntity {
 	@OneToMany(mappedBy="documentType")
 	private List<Document> documents;
 	
-	@Transient
-	public static final List<Method>lazyGetters;
-	
-	static {
-			
-			lazyGetters = initLazyGetters();
-	}
-	
-	
-	private static List<Method>initLazyGetters(){
-		List<Method>list = new ArrayList<>();
-		try {
-			list.add(DocumentType.class.getMethod("getDocuments"));
-		} catch (NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
-		}
-		return list;
-	}
+//	@Transient
+//	public static final List<Method>lazyGetters;
+//	
+//	static {
+//			
+//			lazyGetters = initLazyGetters();
+//	}
+//	
+//	
+//	private static List<Method>initLazyGetters(){
+//		List<Method>list = new ArrayList<>();
+//		try {
+//			list.add(DocumentType.class.getMethod("getDocuments"));
+//		} catch (NoSuchMethodException | SecurityException e) {
+//			e.printStackTrace();
+//		}
+//		return list;
+//	}
 
 	public DocumentType() {
 	}
@@ -83,8 +80,8 @@ public class DocumentType extends IntIdEntity {
 		return "DocumentType [id=" + id + ", description=" + description + "]";
 	}
 	
-	@Override
-	public List<Method> getLazyGetters() {
-		return lazyGetters;
-	}
+//	@Override
+//	public List<Method> getLazyGetters() {
+//		return lazyGetters;
+//	}
 }

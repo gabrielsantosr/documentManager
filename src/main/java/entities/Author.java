@@ -1,7 +1,5 @@
 package entities;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -12,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name="author")
@@ -32,22 +29,6 @@ public class Author extends IntIdEntity {
 	@OrderBy("hierarchy")
 	private List<Authorship> authorships;
 	
-	@Transient
-	public static final List<Method>lazyGetters;
-	
-	static {
-			lazyGetters = initLazyGetters();
-	}
-	
-	private static List<Method>initLazyGetters(){
-		List<Method>list = new ArrayList<>();
-		try {
-			list.add(Author.class.getMethod("getAuthorships"));
-		} catch (NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
-		}
-		return list;
-	}
 	
 	public Author() {
 	}
@@ -99,8 +80,24 @@ public class Author extends IntIdEntity {
 		return "Author [id=" + id + ", lastName=" + lastName + ", firstName=" + firstName + "]";
 	}
 
-	@Override
-	public List<Method> getLazyGetters() {
-		return lazyGetters;
-	}
+//	@Override
+//	public List<Method> getLazyGetters() {
+//		return lazyGetters;
+//	}
 }
+//	@Transient
+//	public static final List<Method>lazyGetters;
+//	
+//	static {
+//			lazyGetters = initLazyGetters();
+//	}
+//	
+//	private static List<Method>initLazyGetters(){
+//		List<Method>list = new ArrayList<>();
+//		try {
+//			list.add(Author.class.getMethod("getAuthorships"));
+//		} catch (NoSuchMethodException | SecurityException e) {
+//			e.printStackTrace();
+//		}
+//		return list;
+//	}

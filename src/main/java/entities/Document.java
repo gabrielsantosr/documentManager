@@ -64,24 +64,6 @@ public class Document extends IntIdEntity {
 	@OrderBy("id")
 	protected List<Note>notes;
 	
-	@Transient
-	public static final List<Method>lazyGetters;
-	
-	static {
-			lazyGetters = initLazyGetters();
-	}
-	
-	
-	private static List<Method>initLazyGetters(){
-		List<Method>list = new ArrayList<>();
-		try {
-			list.add(Document.class.getMethod("getAuthorships"));
-			list.add(Document.class.getMethod("getNotes"));
-		} catch (NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
-		}
-		return list;
-	}
 		 
 	public Document() {
 	}
@@ -219,8 +201,26 @@ public class Document extends IntIdEntity {
 				+ title + ", authors: "+authorNames +", notes: " + qty + "]";
 	}
 
-	@Override
-	public List<Method> getLazyGetters() {
-		return lazyGetters;
-	}	
+//	@Override
+//	public List<Method> getLazyGetters() {
+//		return lazyGetters;
+//	}	
 }
+// @Transient
+//public static final List<Method>lazyGetters;
+//
+//static {
+//		lazyGetters = initLazyGetters();
+//}
+//
+//
+//private static List<Method>initLazyGetters(){
+//	List<Method>list = new ArrayList<>();
+//	try {
+//		list.add(Document.class.getMethod("getAuthorships"));
+//		list.add(Document.class.getMethod("getNotes"));
+//	} catch (NoSuchMethodException | SecurityException e) {
+//		e.printStackTrace();
+//	}
+//	return list;
+//}
