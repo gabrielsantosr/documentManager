@@ -1,7 +1,5 @@
 package entities;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -14,11 +12,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import sub_entities.Volume;
 @Entity
-@Table(name="document")
+@Table(	name="document",
+		uniqueConstraints= {
+			@UniqueConstraint(columnNames = {"journal_name","vol_number","vol_release","year"}),
+			@UniqueConstraint(columnNames = {"title","vol_number","vol_release","year"})})
 public class Document extends IntIdEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -39,10 +40,10 @@ public class Document extends IntIdEntity {
 	@Column(length=80)
 	private String title;
 
-	@Column
+	@Column(name="sub_title")
 	private String subTitle;
 	
-	@Column(length=80)
+	@Column(name="journal_name", length=80)
 	private String journalName;
 	
 	@Column
@@ -63,7 +64,6 @@ public class Document extends IntIdEntity {
 	@OneToMany(mappedBy="document")
 	@OrderBy("id")
 	protected List<Note>notes;
-	
 		 
 	public Document() {
 	}
@@ -72,10 +72,12 @@ public class Document extends IntIdEntity {
 		this.documentType = documentType;
 	}
 
+	@Override
 	public Integer getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -177,29 +179,29 @@ public class Document extends IntIdEntity {
 		this.notes = notes;
 	}
 
-	@Override
-	public String toString() {
-		
-		Author authorshipAuthor = null;
-		String authorNames = "";
-		String []names = null;
-		if(authorships==null || authorships.size()==0) {
-			authorNames = "None";
-		} else {
-			for (Authorship authorship: authorships) {
-				authorNames+=(authorNames.length()!=0)?", ":"";
-				authorshipAuthor = authorship.getAuthor();
-				authorNames+= authorshipAuthor.getLastName()+",";
-				names=authorshipAuthor.getFirstName().split("\\s+");
-				for(String name:names) {
-					authorNames+=" "+name.substring(0,1)+".";
-				}
-			}
-		}
-		String qty=(notes==null)?"0":String.valueOf(notes.size());
-		return "Document [id: " + id + ", documentType: " + documentType.getDescription() + ", title: "
-				+ title + ", authors: "+authorNames +", notes: " + qty + "]";
-	}
+//	@Override
+//	public String toString() {
+//		
+//		Author authorshipAuthor = null;
+//		String authorNames = "";
+//		String []names = null;
+//		if(authorships==null || authorships.size()==0) {
+//			authorNames = "None";
+//		} else {
+//			for (Authorship authorship: authorships) {
+//				authorNames+=(authorNames.length()!=0)?", ":"";
+//				authorshipAuthor = authorship.getAuthor();
+//				authorNames+= authorshipAuthor.getLastName()+",";
+//				names=authorshipAuthor.getFirstName().split("\\s+");
+//				for(String name:names) {
+//					authorNames+=" "+name.substring(0,1)+".";
+//				}
+//			}
+//		}
+//		String qty=(notes==null)?"0":String.valueOf(notes.size());
+//		return "Document [id: " + id + ", documentType: " + documentType.getDescription() + ", title: "
+//				+ title + ", authors: "+authorNames +", notes: " + qty + "]";
+//	}
 
 //	@Override
 //	public List<Method> getLazyGetters() {

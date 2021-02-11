@@ -1,9 +1,5 @@
 package entities;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,15 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table (name="note")
 public class Note extends IntIdEntity {
-	@Override
-	public String toString() {
-		return "Note [document=" + document.getTitle() + ", noteText=" + noteText + "]";
-	}
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
@@ -33,18 +24,6 @@ public class Note extends IntIdEntity {
 	@Column(name="note_text", nullable=false, length=3000)
 	private String noteText;
 
-	@Transient
-	public static final List<Method>lazyGetters;
-	
-	static {
-			lazyGetters = initLazyGetters();
-	}
-	
-	
-	private static List<Method>initLazyGetters(){
-		List<Method>list = new ArrayList<>();
-		return list;
-	}
 	
 	public Note() {
 	}
@@ -52,9 +31,11 @@ public class Note extends IntIdEntity {
 		this.noteText = text;
 		this.document = document;
 	}
+	@Override
 	public Integer getId() {
 		return id;
 	}
+	@Override
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -71,8 +52,20 @@ public class Note extends IntIdEntity {
 		this.noteText = noteText;
 	}
 
-	@Override
-	public List<Method> getLazyGetters() {
-		return lazyGetters;
-	}
+//	@Override
+//	public List<Method> getLazyGetters() {
+//		return lazyGetters;
+//	}
 }
+//	@Transient
+//	public static final List<Method>lazyGetters;
+//	
+//	static {
+//			lazyGetters = initLazyGetters();
+//	}
+//	
+//	
+//	private static List<Method>initLazyGetters(){
+//		List<Method>list = new ArrayList<>();
+//		return list;
+//	}

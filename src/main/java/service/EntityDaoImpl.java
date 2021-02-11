@@ -1,7 +1,10 @@
 package service;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -10,9 +13,6 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 
 import entities.Author;
 import entities.Authorship;
@@ -21,15 +21,50 @@ import entities.DocumentType;
 import entities.IntIdEntity;
 import entities.Note;
 
-public class DaoImpl implements DAO{
+public class EntityDaoImpl implements EntityDAO{
 	
 
 	private SessionFactory sf;
 	private Session session;
 	private Transaction transaction;
+	private Map<Class<? extends IntIdEntity>,List<Method>> lazyGetters;
+	private Map<Class<? extends IntIdEntity>,List<Method>> lazySetters;
 	
-	public DaoImpl(){
+	public EntityDaoImpl(){
 		sf = SingleSessionFactory.getInstance();
+		lazyGetters = new HashMap<>();
+		lazySetters = new HashMap<>();
+		List<Method> authorLazyGetters = new ArrayList<>();
+		List<Method> documentLazyGetters = new ArrayList<>();
+		List<Method> docTypeLazyGetters = new ArrayList<>();
+		List<Method> noteLazyGetters = new ArrayList<>();
+		List<Method> authorLazySetters = new ArrayList<>();
+		List<Method> documentLazySetters = new ArrayList<>();
+		List<Method> docTypeLazySetters = new ArrayList<>();
+		List<Method> noteLazySetters = new ArrayList<>();
+		try {
+			authorLazyGetters.add(Author.class.getMethod("getAuthorships"));
+			documentLazyGetters.add(Document.class.getMethod("getAuthorships"));
+			documentLazyGetters.add(Document.class.getMethod("getNotes"));
+			docTypeLazyGetters.add(DocumentType.class.getMethod("getDocuments"));
+			
+			authorLazySetters.add(Author.class.getMethod("setAuthorships",List.class));
+			documentLazySetters.add(Document.class.getMethod("setAuthorships",List.class));
+			documentLazySetters.add(Document.class.getMethod("setNotes", List.class));
+			docTypeLazySetters.add(DocumentType.class.getMethod("setDocuments",List.class));
+			
+		} catch (NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+		}
+		lazyGetters.put(Author.class,authorLazyGetters);
+		lazyGetters.put(Document.class,documentLazyGetters);
+		lazyGetters.put(DocumentType.class,docTypeLazyGetters);
+		lazyGetters.put(Note.class,noteLazyGetters);
+
+		lazySetters.put(Author.class,authorLazySetters);
+		lazySetters.put(Document.class,documentLazySetters);
+		lazySetters.put(DocumentType.class,docTypeLazySetters);
+		lazySetters.put(Note.class,noteLazySetters);
 	}
 
 	
@@ -60,6 +95,15 @@ public class DaoImpl implements DAO{
 	@Override
 	public IntIdEntity get(Class<? extends IntIdEntity> entityClass,Integer id) {
 		IntIdEntity fetched = (IntIdEntity) session.get(entityClass, id);
+		session.evict(fetched);
+		
+		for (Method m: lazySetters.get(entityClass)) {
+			try {
+				m.invoke(fetched, new ArrayList<>());
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
 		return fetched;
 	}
 	
@@ -119,49 +163,46 @@ public class DaoImpl implements DAO{
 		return success;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<IntIdEntity> getAll(Class<? extends IntIdEntity> entityClass) {
 		
 		List<IntIdEntity> lista = null;
 		Query q = session.createQuery("FROM "+ entityClass.getName());
-		lista = (List<IntIdEntity>) (q.list());
+		lista = q.list();
 		return lista;
 	}
 
 	@Override
 	public IntIdEntity getEager(Class<? extends IntIdEntity> entityClass, Integer id) {
 		IntIdEntity fetched = (IntIdEntity) session.get(entityClass, id);
-		for (Method getter: fetched.getLazyGetters()) {
+		for (Method getter: lazyGetters.get(fetched.getClass())) {
 			try {
-				Hibernate.initialize(getter.invoke(fetched,null));
+				Hibernate.initialize(getter.invoke(fetched));
 			} catch (HibernateException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		return fetched;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<IntIdEntity> getAllEager(Class<? extends IntIdEntity> entityClass) {
 		List<IntIdEntity> lista = null;
-		List<Method>lazyGetters = null;
 		Query q = session.createQuery("FROM "+ entityClass.getName());
-		lista = (List<IntIdEntity>)(q.list());
-		if (lista.size()!=0) {
-			lazyGetters = lista.get(0).getLazyGetters();
-			for (Method getter: lazyGetters) {
+		lista = (q.list());
+			for (Method getter: lazyGetters.get(entityClass)) {
 				for (IntIdEntity row: lista) {
 					try {
-						Hibernate.initialize(getter.invoke(row,null));
+						Hibernate.initialize(getter.invoke(row));
 					} catch (HibernateException | IllegalAccessException | IllegalArgumentException
 							| InvocationTargetException e) {
 						e.printStackTrace();
 					}
 				}
 			}
-		} 
 		return lista;
 	}
 }

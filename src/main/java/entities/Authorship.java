@@ -27,7 +27,6 @@ public class Authorship {
 	private Integer hierarchy;
 	
 
-	
 	public Authorship() {
 	}
 
@@ -35,7 +34,6 @@ public class Authorship {
 		this.document = document;
 		this.author = author;
 	}
-
 
 	public Author getAuthor() {
 		return author;
@@ -60,11 +58,4 @@ public class Authorship {
 	public void setHierarchy(Integer hierarchy) {
 		this.hierarchy = hierarchy;
 	}
-
-	@Override
-	public String toString() {
-		return "Authorship [author=" + author + ", document=" + document + ", hierarchy=" + hierarchy + "]";
-	}
-	
-
 }

@@ -11,6 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name="author")
 public class Author extends IntIdEntity {
@@ -29,21 +30,20 @@ public class Author extends IntIdEntity {
 	@OrderBy("hierarchy")
 	private List<Authorship> authorships;
 	
-	
 	public Author() {
 	}
-	
 
 	public Author(String lastName, String firstName) {
 		this.lastName = lastName;
 		this.firstName = firstName;
 	}
 
-
+	@Override
 	public Integer getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -64,20 +64,12 @@ public class Author extends IntIdEntity {
 		this.firstName = firstName;
 	}
 
-
 	public List<Authorship> getAuthorships() {
 		return authorships;
 	}
 
-
 	public void setAuthorships(List<Authorship> authorships) {
 		this.authorships = authorships;
-	}
-
-
-	@Override
-	public String toString() {
-		return "Author [id=" + id + ", lastName=" + lastName + ", firstName=" + firstName + "]";
 	}
 
 //	@Override

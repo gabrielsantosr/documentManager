@@ -2,15 +2,18 @@ package service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import entities.Authorship;
 import entities.IntIdEntity;
 
-public class Service {
+@Component
+public class EntityService {
 	
-	private DaoImpl dao;
+	private EntityDaoImpl dao;
 	
-	public Service() {
-		this.dao = new DaoImpl();
+	public EntityService() {
+		this.dao = new EntityDaoImpl();
 	}
 	
 	public IntIdEntity get(Class<? extends IntIdEntity> entityClass,Integer id, boolean eager) {

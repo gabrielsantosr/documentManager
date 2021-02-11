@@ -2,12 +2,10 @@ package service;
 
 import java.util.List;
 
-import entities.Author;
 import entities.Authorship;
-import entities.Document;
 import entities.IntIdEntity;
 
-public interface DAO {
+public interface EntityDAO {
 	IntIdEntity get(Class<? extends IntIdEntity> entityClass, Integer id);
 	Authorship get(Integer docId, Integer authorId);
 	IntIdEntity getEager (Class<? extends IntIdEntity> entityClass,Integer id);

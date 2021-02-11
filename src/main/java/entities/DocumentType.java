@@ -25,24 +25,6 @@ public class DocumentType extends IntIdEntity {
 	@OneToMany(mappedBy="documentType")
 	private List<Document> documents;
 	
-//	@Transient
-//	public static final List<Method>lazyGetters;
-//	
-//	static {
-//			
-//			lazyGetters = initLazyGetters();
-//	}
-//	
-//	
-//	private static List<Method>initLazyGetters(){
-//		List<Method>list = new ArrayList<>();
-//		try {
-//			list.add(DocumentType.class.getMethod("getDocuments"));
-//		} catch (NoSuchMethodException | SecurityException e) {
-//			e.printStackTrace();
-//		}
-//		return list;
-//	}
 
 	public DocumentType() {
 	}
@@ -51,10 +33,12 @@ public class DocumentType extends IntIdEntity {
 		this.description = description;
 	}
 
+	@Override
 	public Integer getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -75,13 +59,26 @@ public class DocumentType extends IntIdEntity {
 		this.documents = documents;
 	}
 
-	@Override
-	public String toString() {
-		return "DocumentType [id=" + id + ", description=" + description + "]";
-	}
-	
 //	@Override
 //	public List<Method> getLazyGetters() {
 //		return lazyGetters;
 //	}
 }
+//	@Transient
+//	public static final List<Method>lazyGetters;
+//	
+//	static {
+//			
+//			lazyGetters = initLazyGetters();
+//	}
+//	
+//	
+//	private static List<Method>initLazyGetters(){
+//		List<Method>list = new ArrayList<>();
+//		try {
+//			list.add(DocumentType.class.getMethod("getDocuments"));
+//		} catch (NoSuchMethodException | SecurityException e) {
+//			e.printStackTrace();
+//		}
+//		return list;
+//	}

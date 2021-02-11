@@ -5,7 +5,7 @@ package entities;
  * con id Integer.\
  * 
  */
-public abstract class IntIdEntity{
+public abstract class IntIdEntity {
 	public abstract Integer getId();
 	public abstract void setId(Integer id);
 	//public abstract List<Method> getLazyGetters();
