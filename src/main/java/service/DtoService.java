@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import dto.AuthorDTO;
+import dto.DocumentDTO;
 
 @Component
 public class DtoService {
@@ -25,6 +26,13 @@ public class DtoService {
 	public List<AuthorDTO>getAllAuthorDTO(){
 		dtoDAO.enableSession();
 		List<AuthorDTO>fetched = dtoDAO.getAllAuthorDTO();
+		dtoDAO.closeSession();
+		return fetched;
+	}
+	
+	public List<DocumentDTO>getAllDocumentDTO(){
+		dtoDAO.enableSession();
+		List<DocumentDTO>fetched = dtoDAO.getAllDocumentDTO();
 		dtoDAO.closeSession();
 		return fetched;
 	}

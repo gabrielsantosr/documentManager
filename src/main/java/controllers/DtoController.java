@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import dto.AuthorDTO;
+import dto.DocumentDTO;
 import service.DtoService;
 
 @RestController
@@ -32,5 +33,10 @@ public class DtoController {
 	public AuthorDTO newAuthor(@RequestBody AuthorDTO authorDTO) {
 			dtoService.saveAuthorFromDTO(authorDTO);
 			return authorDTO;
+	}
+	
+	@RequestMapping(value = "document_dto")
+	public List<DocumentDTO> getAllDocumentDTO() {
+		return dtoService.getAllDocumentDTO();
 	}
 }

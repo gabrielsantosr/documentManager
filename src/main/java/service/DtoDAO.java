@@ -9,7 +9,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import dto.AuthorDTO;
+import dto.DocumentDTO;
 import entities.Author;
+import entities.Document;
 
 public class DtoDAO {
 
@@ -72,6 +74,17 @@ public class DtoDAO {
 			 transaction.rollback();
 		 }
 		 return authorID;
+	}
+	
+	protected List<DocumentDTO>getAllDocumentDTO(){
+		Query q = session.createQuery("FROM " + Document.class.getName());
+		@SuppressWarnings("unchecked")
+		List<Document> docs = q.list();
+		List<DocumentDTO> docDTOs = new ArrayList<>();
+		for (Document doc : docs) {
+			docDTOs.add(new DocumentDTO(doc));
+		}
+		return docDTOs;
 	}
 
 }
