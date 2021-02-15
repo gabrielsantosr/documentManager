@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 
 import dto.AuthorDTO;
 import dto.DocumentDTO;
+import dto.FileDTO;
 import entities.Author;
 import entities.Document;
 
@@ -64,7 +65,7 @@ public class DtoDAO {
 		}
 		return authorDTOs;
 	}
-
+	
 	protected Integer saveAuthorFromDTO(AuthorDTO authorDTO) {
 		 Author newAuthor =  new Author(authorDTO.getLastName(),authorDTO.getFirstName());
 		 Integer authorID=null;
@@ -76,6 +77,11 @@ public class DtoDAO {
 		 return authorID;
 	}
 	
+	protected DocumentDTO getDocumentDTO(Integer id) {
+		Document doc = (Document)session.load(Document.class, id);
+		return new DocumentDTO(doc);
+	}
+	
 	protected List<DocumentDTO>getAllDocumentDTO(){
 		Query q = session.createQuery("FROM " + Document.class.getName());
 		@SuppressWarnings("unchecked")
@@ -85,6 +91,11 @@ public class DtoDAO {
 			docDTOs.add(new DocumentDTO(doc));
 		}
 		return docDTOs;
+	}
+	
+	protected FileDTO getFileDTO(Integer id) {
+		Document doc = (Document)session.load(Document.class, id);
+		return new FileDTO(doc.getSource());
 	}
 
 }

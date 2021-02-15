@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dto.AuthorDTO;
 import dto.DocumentDTO;
+import dto.FileDTO;
 import service.DtoService;
 
 @RestController
@@ -39,4 +40,10 @@ public class DtoController {
 	public List<DocumentDTO> getAllDocumentDTO() {
 		return dtoService.getAllDocumentDTO();
 	}
+	
+	@RequestMapping(value = "file/{id}")
+	public FileDTO getFile(@PathVariable("id") int id) {
+		return dtoService.getFileDTO(id);
+	}
+	
 }

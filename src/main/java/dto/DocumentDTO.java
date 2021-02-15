@@ -1,6 +1,11 @@
 package dto;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +20,6 @@ public class DocumentDTO {
 	private Map<String,Object> docType;
 	private List<AuthorDTO> authors;
 	private String title;
-	private String source;
 	
 	public DocumentDTO() {
 		
@@ -24,7 +28,6 @@ public class DocumentDTO {
 	public DocumentDTO(Document document) {
 		this.id = document.getId();
 		this.title = document.getTitle();
-		this.source = document.getSource();
 		docType = new HashMap<>();
 		DocumentType dt = document.getDocumentType();
 		docType.put("id", dt.getId());
@@ -63,11 +66,4 @@ public class DocumentDTO {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getSource() {
-		return source;
-	}
-	public void setSource(String source) {
-		this.source = source;
-	}
-	
 }
