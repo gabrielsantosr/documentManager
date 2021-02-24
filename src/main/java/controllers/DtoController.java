@@ -19,6 +19,10 @@ public class DtoController {
 
 	@Autowired
 	DtoService dtoService;
+	@RequestMapping(value = "trial")
+	public String getTrial() {
+		return "TRIAL";
+	}
 
 	@RequestMapping(value = "author_dto/{id}")
 	public AuthorDTO getAuthorDTO(@PathVariable("id") int id) {

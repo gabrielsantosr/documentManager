@@ -20,6 +20,7 @@ public class DocumentDTO {
 	private Map<String,Object> docType;
 	private List<AuthorDTO> authors;
 	private String title;
+	private Integer approxRequiredLengthForFile;
 	
 	public DocumentDTO() {
 		
@@ -38,6 +39,13 @@ public class DocumentDTO {
 			authorDTO = new AuthorDTO(a.getAuthor());
 			authorDTO.setDocuments(null);
 			authors.add(authorDTO);
+		}
+		try {
+			FileDTO fileDTO = new FileDTO(document.getSource());
+			approxRequiredLengthForFile = fileDTO.getData().length * 4 / 3;
+		}
+		catch(Exception e) {
+			approxRequiredLengthForFile = 0;
 		}
 	}
 	public Integer getId() {
@@ -65,5 +73,13 @@ public class DocumentDTO {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Integer getApproxRequiredLengthForFile() {
+		return approxRequiredLengthForFile;
+	}
+
+	public void setApproxRequiredLengthForFile(Integer fileLength) {
+		this.approxRequiredLengthForFile = fileLength;
 	}
 }
