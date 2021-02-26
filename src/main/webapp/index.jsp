@@ -17,6 +17,9 @@
 	color: blue;
 	cursor: pointer;
 }
+table {
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
 
 .remarked{
 	color: blue;
@@ -24,13 +27,13 @@
 	font-weight: bold;
 	text-align: left;
 }
-.authorsListItem{
+.authorsDropListItem{
 	color: black;
 	font-style: normal;
 	font-weight: normal;
 	text-align: left;
 }
-.authorsListItem:hover, .remarked:hover{
+.authorsDropListItem:hover, .remarked:hover{
 	background-color: #ddd;
 }
 td {
@@ -51,11 +54,11 @@ iframe {
 	height:600px;
 }
 /*
-#dropInput {
+#authorsDropInput {
 	color: black;
 }*/
 
-#authorsDropdown{
+#authorsDropDiv{
 	font-weight: normal;
 	text_align: left;
 	position:relative;
@@ -66,13 +69,13 @@ iframe {
 
 
 
-#authorsList{
+#authorsDropList{
 	position:absolute;
 	width: 100%;
 	cursor: pointer;
 	background-color: #f1f1f1;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-	max-height:100px;
+	max-height: 0px;
 	overflow: auto;
   	z-index: 1;
   	text-alignment: left;
@@ -101,15 +104,18 @@ iframe {
 				<tr>
 					<th>Authors</th>
 					<th>
-						<div id="authorsDropdown">
-							<input type="text" value="Look up author ..." onfocus="this.value=''" id="dropInput" onkeyup="searchAuthor(this.value)"/>
-								<div id="authorsList" onclick="emptyList(this)">
+						<div id="authorsDropDiv">
+							<input id="authorsDropInput" type="text" value="Look up author ..."
+							onfocus="this.value=''"
+							
+							onkeyup="searchAuthor(this.value)"/>
+								<div id="authorsDropList"  >
 								</div>
 						</div>
 					 </th>
 				</tr>
 				<tr>
-					<th>id</th><th>firstName</th><th>lastName</th>
+					<th>id</th><th>First name</th><th>Last name</th><th>options</th>
 				</tr>		
 			</thead>
 			<tbody>
@@ -133,14 +139,46 @@ iframe {
 						
 
 <script>
-
 var table = document.getElementById("table");
 var iframe = document.getElementsByTagName("iframe")[0];
 var downloadBar = document.getElementById("downloadBar");
 var barContainer = document.getElementById("barContainer");
-var authorsList = document.getElementById("authorsList");
+var authorsDropList = document.getElementById("authorsDropList");
 var documentAuthorsTable = document.getElementById("documentAuthorsTable");
-var lookUpAuthorText = document.getElementById("dropInput").value;
+var lookUpAuthorText = document.getElementById("authorsDropInput").value;
+document.body.addEventListener("click",function(event){evaluateHidingList(event)},false);
+
+function customAlert(event){
+    id = event.target.id;
+    if (id=='P') event.stopPropagation();
+    alert(id);
+  }
+
+function createArrowUp(){
+	span = document.createElement("span");
+	span.classList.add("glyphicon");
+	span.classList.add("glyphicon-chevron-up");
+	span.onclick = function(){moveUp(this)};
+	return span;
+}
+
+
+function createRemoveIcon(){
+	span = document.createElement("span");
+	span.classList.add("glyphicon");
+	span.classList.add("glyphicon-remove");
+	span.onclick = function(){remove(this)};
+	return span;
+}
+
+function createArrowDown(){
+	span = document.createElement("span");
+	span.classList.add("glyphicon");
+	span.classList.add("glyphicon-chevron-down");
+	span.onclick = function(){moveDown(this)};
+	return span;
+}
+
 
 var documents ={
 	fetched: false,
@@ -194,11 +232,11 @@ function search(target){
 }
 
 function searchAuthor(text){
-	authorsList.innerHTML = null;
+	authorsDropList.innerHTML = null;
 	p = document.createElement("p");
 	p.classList.add("remarked");
 	p.innerHTML= "new author";
-	authorsList.appendChild(p);
+	authorsDropList.appendChild(p);
 	searchArray = keyWordArrayGenerator(text);
 	promise = fetchAuthors();
 	promise.then(innerFunction);
@@ -212,30 +250,65 @@ function searchAuthor(text){
 			}
 			if(allWordsMatched){
 				div = document.createElement("div");
-				div.classList.add('authorsListItem');
+				div.classList.add('authorsDropListItem');
 				dataP = document.createElement("p");
 				dataP.hidden = true;
 				dataP.innerHTML = JSON.stringify(author);
 				div.appendChild(dataP);
 				p = document.createElement("p");
+				p.id="authorsDropListItem-"+author.id;
 				p.innerHTML = author.lastName+", "+author.firstName;
 				div.appendChild(p);
-				authorsList.appendChild(div);
-				p.onclick= function(){newAuthor(this)};
+				authorsDropList.appendChild(div);
+				p.addEventListener("click",function(event){newAuthor(event)},false);
 			}
 		}
-		
+		showList();
 	}
 }
 
-function emptyList(target){
-	target.innerHTML=null;
-	document.getElementById('dropInput').value = lookUpAuthorText;
+function evaluateHidingList(event){
+	id = event.target.id;
+	if(!id.includes("authorsDrop")) hideList();
 }
 
+function hideList(){
+	authorsDropList.style.overflow= "hidden";
+	height = authorsDropList.offsetHeight;
+	var interval = setInterval(reduceSize,1);
+	function reduceSize(){
+		if (height == 0){
+			clearInterval(interval);
+			document.getElementById('authorsDropInput').value = lookUpAuthorText;
+		} else{
+			height --;
+			authorsDropList.style.maxHeight=""+height+"px"; 
+		}
+	}
+}
+
+function showList(){
+	var height;
+	var interval = setInterval(increaseSize,1);
+	function increaseSize(){
+		height = authorsDropList.style.maxHeight.substr(0,(authorsDropList.style.maxHeight.length)-2);
+		if(height == 100){
+			clearInterval(interval);
+		} else {
+			height++;
+			authorsDropList.style.maxHeight=""+height+"px";
+		}
+	}
+	authorsDropList.style.overflow= "auto";
+}
+
+
+
 addedAuthorsIds=[];
-function newAuthor(target){
-	author = JSON.parse(target.parentElement.firstChild.innerHTML);
+function newAuthor(event){
+	event.stopPropagation();
+	hideList();
+	author = JSON.parse(event.target.parentElement.firstChild.innerHTML);
 	if (addedAuthorsIds.includes(author.id)) return;
 	tBody = documentAuthorsTable.tBodies[0];
 	row = tBody.insertRow();
@@ -245,6 +318,8 @@ function newAuthor(target){
 	firstName.innerHTML = author.firstName;
 	lastName = row.insertCell();
 	lastName.innerHTML = author.lastName;
+	options = row.insertCell();
+	options.appendChild(createArrowUp());
 	addedAuthorsIds.push(author.id);
 }
 
