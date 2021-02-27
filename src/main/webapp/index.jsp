@@ -13,6 +13,10 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style>
+body{
+	background-color: #777;
+}
+
 .title:hover, #table th:hover {
 	color: blue;
 	cursor: pointer;
@@ -20,6 +24,7 @@
 table {
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
+
 
 .remarked{
 	color: blue;
@@ -79,6 +84,22 @@ iframe {
 	overflow: auto;
   	z-index: 1;
   	text-alignment: left;
+}
+.glyphicon {
+	margin: 10px;
+}
+
+.arrow.enabled {
+	color: #0000AA;
+	cursor: pointer;
+}
+.arrow {
+	color: transparent;
+	cursor: inherit;
+}
+.removeIcon{
+	color: #AA0000;
+	cursor: pointer;
 }
 
 
@@ -146,38 +167,9 @@ var barContainer = document.getElementById("barContainer");
 var authorsDropList = document.getElementById("authorsDropList");
 var documentAuthorsTable = document.getElementById("documentAuthorsTable");
 var lookUpAuthorText = document.getElementById("authorsDropInput").value;
-document.body.addEventListener("click",function(event){evaluateHidingList(event)},false);
-
-function customAlert(event){
-    id = event.target.id;
-    if (id=='P') event.stopPropagation();
-    alert(id);
-  }
-
-function createArrowUp(){
-	span = document.createElement("span");
-	span.classList.add("glyphicon");
-	span.classList.add("glyphicon-chevron-up");
-	span.onclick = function(){moveUp(this)};
-	return span;
-}
 
 
-function createRemoveIcon(){
-	span = document.createElement("span");
-	span.classList.add("glyphicon");
-	span.classList.add("glyphicon-remove");
-	span.onclick = function(){remove(this)};
-	return span;
-}
 
-function createArrowDown(){
-	span = document.createElement("span");
-	span.classList.add("glyphicon");
-	span.classList.add("glyphicon-chevron-down");
-	span.onclick = function(){moveDown(this)};
-	return span;
-}
 
 
 var documents ={
@@ -260,12 +252,13 @@ function searchAuthor(text){
 				p.innerHTML = author.lastName+", "+author.firstName;
 				div.appendChild(p);
 				authorsDropList.appendChild(div);
-				p.addEventListener("click",function(event){newAuthor(event)},false);
+				p.addEventListener("click",appendToAuthorsTable,false);
 			}
 		}
 		showList();
 	}
 }
+
 
 function evaluateHidingList(event){
 	id = event.target.id;
@@ -273,29 +266,31 @@ function evaluateHidingList(event){
 }
 
 function hideList(){
+	document.body.removeEventListener("click",evaluateHidingList,false);
 	authorsDropList.style.overflow= "hidden";
 	height = authorsDropList.offsetHeight;
 	var interval = setInterval(reduceSize,1);
 	function reduceSize(){
-		if (height == 0){
+		if (height < 1){
 			clearInterval(interval);
 			document.getElementById('authorsDropInput').value = lookUpAuthorText;
 		} else{
-			height --;
+			height = height -2;
 			authorsDropList.style.maxHeight=""+height+"px"; 
 		}
 	}
 }
 
 function showList(){
+	document.body.addEventListener("click",evaluateHidingList,false);
 	var height;
 	var interval = setInterval(increaseSize,1);
 	function increaseSize(){
-		height = authorsDropList.style.maxHeight.substr(0,(authorsDropList.style.maxHeight.length)-2);
-		if(height == 100){
+		height = Number(authorsDropList.style.maxHeight.substr(0,(authorsDropList.style.maxHeight.length)-2));
+		if(height >= 100){
 			clearInterval(interval);
 		} else {
-			height++;
+			height = height + 2;
 			authorsDropList.style.maxHeight=""+height+"px";
 		}
 	}
@@ -305,7 +300,7 @@ function showList(){
 
 
 addedAuthorsIds=[];
-function newAuthor(event){
+function appendToAuthorsTable(event){
 	event.stopPropagation();
 	hideList();
 	author = JSON.parse(event.target.parentElement.firstChild.innerHTML);
@@ -319,10 +314,94 @@ function newAuthor(event){
 	lastName = row.insertCell();
 	lastName.innerHTML = author.lastName;
 	options = row.insertCell();
+	options.appendChild(createRemoveIcon());
 	options.appendChild(createArrowUp());
+	options.appendChild(createArrowDown());
 	addedAuthorsIds.push(author.id);
+	updateTableOptions();
 }
 
+function createArrowUp(){
+	span = document.createElement("span");
+	span.classList.add("glyphicon");
+	span.classList.add("glyphicon-chevron-up");
+	span.classList.add("arrow");
+	return span;
+}
+
+
+function createRemoveIcon(){
+	span = document.createElement("span");
+	span.classList.add("glyphicon");
+	span.classList.add("glyphicon-remove");
+	span.classList.add("removeIcon");
+	return span;
+}
+
+function createArrowDown(){
+	span = document.createElement("span");
+	span.classList.add("glyphicon");
+	span.classList.add("glyphicon-chevron-down");
+	span.classList.add("arrow");
+	return span;
+}
+
+function updateTableOptions(){
+	tBody = documentAuthorsTable.tBodies[0];
+	rows = tBody.children;
+	for (i = 0; i < rows.length; i++){
+		optionsCell = rows[i].lastChild;
+		removeIcon = optionsCell.children[0];
+		removeIcon.addEventListener("click",removeRow);
+		removeIcon.id = "remove-"+i;
+		arrowUp = optionsCell.children[1];
+		arrowUp.id = "up-"+i;
+		arrowDown = optionsCell.children[2];
+		arrowDown.id = "down-"+i;
+		if (rows.length == 1){
+			arrowUp.classList.remove("enabled");
+			arrowUp.removeEventListener("click",moveUp);
+			arrowDown.classList.remove("enabled");
+			arrowDown.removeEventListener("click",moveDown);
+		} else{
+			if (i > 0){
+				arrowUp.classList.add("enabled");
+				arrowUp.addEventListener("click",moveUp);
+				if(i < rows.length - 1){
+					arrowDown.classList.add("enabled");
+					arrowDown.addEventListener("click",moveDown);
+				}
+				
+			} else {
+				arrowUp.classList.remove("enabled");
+				arrowUp.removeEventListener("click",moveUp);
+				arrowDown.classList.add("enabled");
+				arrowDown.addEventListener("click",moveDown);
+			}
+		}
+	} 
+}
+function removeRow(event){
+	rowNumber= Number(event.target.id.split("-")[1]);
+	tBody = documentAuthorsTable.tBodies[0];
+	authorId = Number(tBody.children[rowNumber].firstChild.innerHTML);
+	for (i=0; i<addedAuthorsIds.length; i++){
+		if (addedAuthorsIds[i]==authorId){
+			addedAuthorsIds.splice(i,1);
+			break;
+		}
+	}
+	tBody.deleteRow(row);
+	updateTableOptions();
+}
+
+function moveUp(event){
+	
+	console.log(event.target.id);
+}
+function moveDown(event){
+	console.log(event.target.id);
+}
 function keyWordArrayGenerator(phrase){
 	phrase = phrase.replace(/(\s|,)+/g,".");
 	phrase = phrase.replace(/\.+/g,".");
