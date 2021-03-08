@@ -13,9 +13,16 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style>
+html{
+	background-color: #444;
+}
 body{
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
 	background-color: #777;
 }
+
 
 .title:hover, #table th:hover {
 	color: blue;
@@ -25,12 +32,54 @@ table {
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
+tr:nth-child(odd){
+	background-color: #EFEFEF;
+}
+tr:nth-child(even){
+	background-color: #E0E0E0;
+}
+td input{
+	width: 125px;
+}
+
+#documentAuthorsTable th:nth-child(1){
+	min-width: 60px;
+	text-align: center;
+}
+
+#documentAuthorsTable th:nth-child(2),
+#documentAuthorsTable th:nth-child(3){
+	width: 150px;
+	text-align: center;
+}
+
+#documentAuthorsTable th:nth-child(4){
+	width: 100px;
+	text-align: center;
+}
+
+#documentAuthorsTable td:nth-child(1){
+	min-width: 60px;
+	text-align: right;
+}
+
+#documentAuthorsTable td:nth-child(2),
+#documentAuthorsTable td:nth-child(3){
+	width: 150px;
+	text-align: left;
+	overflow-x: auto;
+}
+#documentAuthorsTable th:nth-child(4){
+	width: 125px;
+	text-align: center;
+}
+
+
 
 .remarked{
 	color: blue;
 	font-style: italic;
 	font-weight: bold;
-	text-align: left;
 }
 .authorsDropListItem{
 	color: black;
@@ -38,20 +87,21 @@ table {
 	font-weight: normal;
 	text-align: left;
 }
-.authorsDropListItem:hover, .remarked:hover{
+.listItem{
+	text-align: left;
+}
+.listItem:hover{
 	background-color: #ddd;
 }
 td {
 	padding: 10px;
 }
 
-td:nth-child(1) {
-	text-align: right;
-}
+
 
 th {
 	padding: 10px;
-	text-align: center;
+	text-align: left;
 }
 
 iframe {
@@ -67,10 +117,10 @@ iframe {
 	font-weight: normal;
 	text_align: left;
 	position:relative;
-	width: 200px;
+	width: 100%;
 	right: 0;
+	padding: 0;
 }
-
 
 
 
@@ -89,21 +139,28 @@ iframe {
 	margin: 10px;
 }
 
-.arrow.enabled {
+.regularGlyph.enabled {
 	color: #0000AA;
 	cursor: pointer;
 }
-.arrow {
+.regularGlyph {
 	color: transparent;
 	cursor: inherit;
 }
+
 .removeIcon{
 	color: #AA0000;
 	cursor: pointer;
 }
 
-
-
+.okIcon {
+	color: #00AA00;
+	cursor: pointer;
+}
+.container{
+position: relative;
+max-width: inherit;
+}
 </style>
 
 <title>Document Manager</title>
@@ -112,43 +169,44 @@ iframe {
 	<div class="container">
 		<button id="authors" onclick="getAuthors(fillAuthorsTable)">Get Authors</button>
 		<button id="documents" onclick="getDocuments()">Get	Documents</button>
-		<button id="addDocument"
-			onclick="addDocument()">Add Document</button> 
-		<input type="text" onkeyup="search(this)">
+		<button id="addDocument" onclick="addDocument()">Add Document</button>
 	</div>
-	<div class="container" id ="formContainer" hidden>
+	<div class="container" id ="formContainer" style="width:100%"onclick="enableHideFormContainer = false"hidden>
 		<form id="addForm"action="" >
 			<fieldset>
 			<legend>New Document</legend>
-		<table id="documentAuthorsTable" class="table-striped">
+		<table id="documentAuthorsTable" class="">
 			<thead>
 				<tr>
-					<th>Authors</th>
-					<th>
-						<div id="authorsDropDiv">
-							<input id="authorsDropInput" type="text" value="Look up author ..."
+					<th colspan="2">Authors</th>
+					<th colspan="2">
+						<div id="authorsDropDiv" >
+							<input id="authorsDropInput" style="width:100%" type="text" value="Look up author ..."
 							onfocus="this.value=''"
-							
-							onkeyup="searchAuthor(this.value)"/>
+							onkeyup="searchAuthor(this.value)"
+							/>
 								<div id="authorsDropList"  >
 								</div>
 						</div>
 					 </th>
 				</tr>
 				<tr>
-					<th>id</th><th>First name</th><th>Last name</th><th>options</th>
-				</tr>		
+					<th>ID</th><th>First name</th><th>Last name</th><th>options</th>
+				</tr>
 			</thead>
 			<tbody>
 			</tbody>
 		</table>
+		<span id="dateSpan">Date of publication:<input onkeyup="watchDate(event)"style="width:60px"type="text"/></span>
+		
 			<input type="submit"/>
 			</fieldset>
 		</form>
 	</div>
-	<div class="container">
+	<div id="documentsContainer" class="container" hidden>
 		<div class="col-sm-6">
-			<table id="table" class="table-striped"></table>
+			<input type="text" onkeyup="search(this)">
+			<table id="table" class="table"></table>
 		</div>
 		<div class="col-sm-6 source">
 			<iframe title="file"></iframe>
@@ -157,7 +215,10 @@ iframe {
 			</div>
 		</div>
 	</div>
-						
+	<div id ="references">
+	
+	</div>
+
 
 <script>
 var table = document.getElementById("table");
@@ -168,15 +229,11 @@ var authorsDropList = document.getElementById("authorsDropList");
 var documentAuthorsTable = document.getElementById("documentAuthorsTable");
 var lookUpAuthorText = document.getElementById("authorsDropInput").value;
 
-
-
-
-
 var documents ={
 	fetched: false,
 	items : [],
 	order : {
-		id: false,
+		id: true,
 		docType: false,
 		authors: false,
 		title: false
@@ -192,12 +249,77 @@ authors={
 		lastName: false,
 	}
 }
+var noNumberPattern = /[^0-9]/;
+var minDate = 1200;
+var maxDate = new Date().getFullYear();
+function watchDate(event){
+	target = event.target;
+	date = target.value.substring(0,4);
+	date = date.replace(noNumberPattern,"");
+	target.value = date;
+	
+	if (date.length < 4) return;
+	
+	date = Number(date);
+	if (date < minDate){
+		target.value = minDate; 
+	} else if (date > maxDate){
+		target.value =maxDate;
+	}
+}
+
+var enableHideDocumentsContainer;
+documentsContainer = document.getElementById("documentsContainer");
+documentsContainer.addEventListener("click",function(){enableHideDocumentsContainer = false;});
+
+function getDocuments(){
+	dc = documentsContainer;
+	dc.hidden = !dc.hidden;
+	if (!dc.hidden){
+		//Setting enableHideDocumentsContainer to false prevents the bubbling of the click
+		//that triggered the execution of this function from hiding the documents container.
+		enableHideDocumentsContainer = false;
+		document.body.addEventListener("click",hideDocuments);
+		promise = fetchDocuments();
+		promise.then(fillDocsTable);
+	} else {
+		document.body.removeEventListener("click",hideDocuments);
+	}
+}
+
+function hideDocuments(){
+	dc = documentsContainer;
+	if(enableHideDocumentsContainer){
+		dc.hidden = true;
+		document.body.removeEventListener("click",hideDocuments);
+	} else{
+		enableHideDocumentsContainer = true;
+	}
+}
+
+var enableHideFormContainer;
 
 function addDocument(){
-	document.getElementById('formContainer').hidden = false;
-	document.getElementById('addDocument').disabled = true;
-	addedAuthorsIds=[];
+	fc= document.getElementById("formContainer");
+	fc.hidden = !fc.hidden;
+	if(!fc.hidden){
+		enableHideFormContainer = false;
+		document.body.addEventListener("click",hideFormContainer);
+	} else{
+		document.body.removeEventListener("click",hideFormContainer);
+	}
 }
+
+function hideFormContainer(){
+	fc = document.getElementById("formContainer");
+	if(enableHideFormContainer){
+		fc.hidden = true;
+		document.body.removeEventListener("click",hideFormContainer);
+	} else{
+		enableHideFormContainer = true;
+	}
+}
+
 
 function search(target){
 	searchArray = keyWordArrayGenerator(target.value);
@@ -223,12 +345,25 @@ function search(target){
 	}
 }
 
+emptyAuthor = {
+		id: 0,
+		firstName: null,
+		lastName: null
+}
 function searchAuthor(text){
 	authorsDropList.innerHTML = null;
+	div = document.createElement("div");
+	div.classList.add('listItem');
+	dataP = document.createElement("p");
+	dataP.hidden = true;
+	dataP.innerHTML = JSON.stringify(emptyAuthor);
 	p = document.createElement("p");
 	p.classList.add("remarked");
 	p.innerHTML= "new author";
-	authorsDropList.appendChild(p);
+	p.addEventListener("click",appendToAuthorsTable,false);
+	div.appendChild(dataP);
+	div.appendChild(p);
+	authorsDropList.appendChild(div);
 	searchArray = keyWordArrayGenerator(text);
 	promise = fetchAuthors();
 	promise.then(innerFunction);
@@ -242,13 +377,13 @@ function searchAuthor(text){
 			}
 			if(allWordsMatched){
 				div = document.createElement("div");
-				div.classList.add('authorsDropListItem');
+				div.classList.add('listItem');
 				dataP = document.createElement("p");
 				dataP.hidden = true;
 				dataP.innerHTML = JSON.stringify(author);
 				div.appendChild(dataP);
 				p = document.createElement("p");
-				p.id="authorsDropListItem-"+author.id;
+				p.id="listItem-"+author.id;
 				p.innerHTML = author.lastName+", "+author.firstName;
 				div.appendChild(p);
 				authorsDropList.appendChild(div);
@@ -260,13 +395,11 @@ function searchAuthor(text){
 }
 
 
-function evaluateHidingList(event){
-	id = event.target.id;
-	if(!id.includes("authorsDrop")) hideList();
-}
-
-function hideList(){
-	document.body.removeEventListener("click",evaluateHidingList,false);
+function hideList(event){
+	if (event.target.id=="authorsDropInput"){
+		return;
+	}
+	document.body.removeEventListener("click",hideList);
 	authorsDropList.style.overflow= "hidden";
 	height = authorsDropList.offsetHeight;
 	var interval = setInterval(reduceSize,1);
@@ -274,21 +407,23 @@ function hideList(){
 		if (height < 1){
 			clearInterval(interval);
 			document.getElementById('authorsDropInput').value = lookUpAuthorText;
+			authorsDropList.hidden = true;
+			
 		} else{
-			height = height -2;
-			authorsDropList.style.maxHeight=""+height+"px"; 
+			height = height - 2;
+			authorsDropList.style.maxHeight=""+height+"px";
 		}
 	}
 }
-
 function showList(){
-	document.body.addEventListener("click",evaluateHidingList,false);
+	authorsDropList.hidden = false;
 	var height;
 	var interval = setInterval(increaseSize,1);
 	function increaseSize(){
 		height = Number(authorsDropList.style.maxHeight.substr(0,(authorsDropList.style.maxHeight.length)-2));
 		if(height >= 100){
 			clearInterval(interval);
+			document.body.addEventListener("click",hideList);
 		} else {
 			height = height + 2;
 			authorsDropList.style.maxHeight=""+height+"px";
@@ -298,34 +433,68 @@ function showList(){
 }
 
 
-
+/*
+ * addedAuthorsIds holds the ids of authors loaded in the document's authors table.
+ * This is how the the page knows whether an author has already been loaded or not, not to load it more than once.
+ * If a new author is being loaded, it will be identified with 0.
+ */
 addedAuthorsIds=[];
 function appendToAuthorsTable(event){
-	event.stopPropagation();
-	hideList();
 	author = JSON.parse(event.target.parentElement.firstChild.innerHTML);
 	if (addedAuthorsIds.includes(author.id)) return;
 	tBody = documentAuthorsTable.tBodies[0];
 	row = tBody.insertRow();
 	id = row.insertCell();
-	id.innerHTML = author.id;
 	firstName = row.insertCell();
-	firstName.innerHTML = author.firstName;
 	lastName = row.insertCell();
-	lastName.innerHTML = author.lastName;
 	options = row.insertCell();
+	if (author.id == 0 ){
+		okIcon = createOkIcon();
+		okIcon.classList.add("okIcon");
+		okIcon.addEventListener("click",acceptNewAuthor);
+		id.appendChild(okIcon);
+		input = document.createElement("input");
+		firstName.appendChild(input);
+		input = document.createElement("input");
+		lastName.appendChild(input);
+		/*
+		unshift instead of push for optimisation when adding new author.
+		See function acceptNewAuthor(event).
+		*/
+		addedAuthorsIds.unshift(0);
+	} else{
+		id.innerHTML = author.id;
+		firstName.innerHTML = author.firstName;
+		lastName.innerHTML = author.lastName;
+		addedAuthorsIds.push(author.id);
+	}
 	options.appendChild(createRemoveIcon());
 	options.appendChild(createArrowUp());
 	options.appendChild(createArrowDown());
-	addedAuthorsIds.push(author.id);
 	updateTableOptions();
+}
+
+/*
+ *
+ *
+ */
+function acceptNewAuthor(event){
+	row = event.target.parentElement.parentElement;
+	row.firstChild.innerHTML = "new";
+	row.firstChild.classList.add("remarked");
+	firstName = row.children[1].firstChild.value;
+	row.children[1].innerHTML = firstName;
+	lastName = row.children[2].firstChild.value;
+	row.children[2].innerHTML = lastName;
+	addedAuthorsIds.shift();// The momentary id of the new author, 0, has been unshifted, instead of pushed.
+							// This saves the programme having to iterate to find where whitin the array was the 0 stored.
 }
 
 function createArrowUp(){
 	span = document.createElement("span");
 	span.classList.add("glyphicon");
 	span.classList.add("glyphicon-chevron-up");
-	span.classList.add("arrow");
+	span.classList.add("regularGlyph");
 	return span;
 }
 
@@ -338,13 +507,30 @@ function createRemoveIcon(){
 	return span;
 }
 
+function createOkIcon(){
+	span = document.createElement("span");
+	span.classList.add("glyphicon");
+	span.classList.add("glyphicon-ok");
+	span.classList.add("okIcon");
+	return span;
+}
+
 function createArrowDown(){
 	span = document.createElement("span");
 	span.classList.add("glyphicon");
 	span.classList.add("glyphicon-chevron-down");
-	span.classList.add("arrow");
+	span.classList.add("regularGlyph");
 	return span;
 }
+
+function createRawIcon(){
+	span = document.createElement("span");
+	span.classList.add("glyphicon");
+	span.classList.add("regularGlyph");
+	span.classList.add("enabled");
+	return span;
+}
+
 
 function updateTableOptions(){
 	tBody = documentAuthorsTable.tBodies[0];
@@ -360,48 +546,69 @@ function updateTableOptions(){
 		arrowDown.id = "down-"+i;
 		if (rows.length == 1){
 			arrowUp.classList.remove("enabled");
-			arrowUp.removeEventListener("click",moveUp);
+			arrowUp.removeEventListener("click",move);
 			arrowDown.classList.remove("enabled");
-			arrowDown.removeEventListener("click",moveDown);
+			arrowDown.removeEventListener("click",move);
 		} else{
 			if (i > 0){
 				arrowUp.classList.add("enabled");
-				arrowUp.addEventListener("click",moveUp);
+				arrowUp.addEventListener("click",move);
 				if(i < rows.length - 1){
 					arrowDown.classList.add("enabled");
-					arrowDown.addEventListener("click",moveDown);
+					arrowDown.addEventListener("click",move);
+				} else{
+					arrowDown.classList.remove("enabled");
+					arrowDown.removeEventListener("click",move);
 				}
-				
+
 			} else {
 				arrowUp.classList.remove("enabled");
-				arrowUp.removeEventListener("click",moveUp);
+				arrowUp.removeEventListener("click",move);
 				arrowDown.classList.add("enabled");
-				arrowDown.addEventListener("click",moveDown);
+				arrowDown.addEventListener("click",move);
 			}
 		}
-	} 
+	}
 }
 function removeRow(event){
 	rowNumber= Number(event.target.id.split("-")[1]);
 	tBody = documentAuthorsTable.tBodies[0];
-	authorId = Number(tBody.children[rowNumber].firstChild.innerHTML);
-	for (i=0; i<addedAuthorsIds.length; i++){
-		if (addedAuthorsIds[i]==authorId){
-			addedAuthorsIds.splice(i,1);
-			break;
+	idCell = tBody.children[rowNumber].firstChild;
+	if (idCell.firstChild.tagName=="SPAN"){ // In case is an entering author row
+		addedAuthorsIds.shift() // remove 0 from array
+	} else if (idCell.firstChild.innerHTML == "new"){
+
+	} else{
+		authorId = Number(idCell.innerHTML);
+		for (i=0; i<addedAuthorsIds.length; i++){
+			if (addedAuthorsIds[i]==authorId){
+				addedAuthorsIds.splice(i,1);
+				break;
+			}
 		}
 	}
-	tBody.deleteRow(row);
+	tBody.deleteRow(rowNumber);
 	updateTableOptions();
 }
 
-function moveUp(event){
-	
-	console.log(event.target.id);
+function move(event){
+	idChunks = event.target.id.split("-");
+	rowNumber = Number(idChunks[1]);
+	if(idChunks[0]==="down") {
+		rowNumber ++;
+	}
+	tBody = documentAuthorsTable.tBodies[0];
+	row = tBody.children[rowNumber];
+	tr = row.cloneNode(true);
+
+	if (tr.firstChild.firstChild.tagName =="SPAN"){
+		tr.firstChild.firstChild.addEventListener("click",acceptNewAuthor)
+	}
+	tBody.deleteRow(rowNumber);
+	tBody.insertBefore(tr,tBody.children[rowNumber-1]);
+	updateTableOptions();
 }
-function moveDown(event){
-	console.log(event.target.id);
-}
+
 function keyWordArrayGenerator(phrase){
 	phrase = phrase.replace(/(\s|,)+/g,".");
 	phrase = phrase.replace(/\.+/g,".");
@@ -411,7 +618,7 @@ function keyWordArrayGenerator(phrase){
 	phraseBits.sort(function(a,b){
 		return (b.length - a.length)
 	});
-//Lo que hago acá es descartar palabras que sean parte de otras palabras. Por ejemplo descarto "para" si existe "parachute"
+//Lo que hago acï¿½ es descartar palabras que sean parte de otras palabras. Por ejemplo descarto "para" si existe "parachute"
 	for( let i = 0; i < phraseBits.length; i++){
 		for (let e = i; e < phraseBits.length; e++){
 			if (e === i) {
@@ -431,44 +638,49 @@ function keyWordArrayGenerator(phrase){
 	return phraseBits;
 }
 
-
 function fillDocsTable(){
 	table.innerHTML = null;
 	if (documents.items.length < 1){
 		return;
 	}
-	toLoad =[];
+	let displayableItems=0;
 	for(doc of documents.items){
 		if (doc.display){
-			toLoad.push(doc);
+			displayableItems++;
 		}
 	}
-	if (toLoad.length < 1){
+	if (displayableItems == 0){
 		return;
 	}
-	
-	
+
+
 	tHead = table.createTHead();
 	tBody = table.createTBody();
 	headerRow = tHead.insertRow();
 	let field;
 	let cell;
-	for( field in toLoad[0]){
-		if (field === "display") continue;
-		if (field === "approxRequiredLengthForFile") continue;
+	//NEW BLOCK OF CODE
+	for( field in documents.items[0]){
+		if(field !="docType" && field !="id" && field !="authors" && field !="title") continue;
 		th = document.createElement("th");
 		headerRow.appendChild(th);
 		th.innerHTML = field;
 		th.onclick = function(){orderDocsBy(this)};
 	}
-
-	for(var doc of toLoad){
+	th = document.createElement("th");
+	th.innerHTML = "Options";
+	headerRow.appendChild(th);
+	for (var doc of documents.items){
+		if (!doc.display)
+			continue;
 		row = tBody.insertRow();
 		for (field in doc){
-			if (field === "display") continue;
+			if (field !="docType" && field !="id" && field !="authors"
+				&& field !="title" && field !="approxRequiredLengthForFile")
+				continue;
 			cell = row.insertCell();
 			cell.style.whiteSpace="nowrap";
-	
+
 			if (field ==="docType"){
 				cell.innerHTML = doc.docType.type;
 			}
@@ -483,7 +695,7 @@ function fillDocsTable(){
 					for (let name of names){
 						initials+= " "+name.substring(0,1)+"."
 					}
-	
+
 					textNode = document.createTextNode(
 						author.lastName+","+initials);
 					li.appendChild(textNode);
@@ -491,17 +703,68 @@ function fillDocsTable(){
 
 			} else if (field === "title"){
 				cell.classList.add("title");
+				cell.id = "title-"+(tBody.children.length-1);
 				cell.innerHTML = doc.title;
 				cell.onclick = function(){visualiseDocument(this);};
 			} else if (field ==="approxRequiredLengthForFile"){
-				cell.style.visibility = "hidden";
+				cell.hidden = true;
 				cell.innerHTML = doc.approxRequiredLengthForFile;
-			}else {
+			} else {
 				cell.innerHTML = doc[field];
 			}
 		}
+		cell = row.insertCell();
+		plusOrMinusIcon = createRawIcon();
+		if (doc.addedToReferences){
+			plusOrMinusIcon.classList.remove('glyphicon-plus');
+			plusOrMinusIcon.classList.add('glyphicon-minus');
+		} else {
+			plusOrMinusIcon.classList.add('glyphicon-plus');
+			plusOrMinusIcon.classList.remove('glyphicon-minus');
+		}
+		plusOrMinusIcon.addEventListener("click",addOrRemoveReference);
+		cell.appendChild(plusOrMinusIcon);
 	}
+	// END NEW BLOCK OF CODE
 }
+function addOrRemoveReference(event){
+	clicked = event.target;
+	cell = clicked.parentElement;
+	row = cell.parentElement;
+	id = row.firstChild.innerHTML;
+	let found = false;
+	addedReferences = [];
+	for(doc of documents.items){
+		if (doc.id == id && !found){
+			doc.addedToReferences = !doc.addedToReferences;
+			found = true;
+		}
+		if (doc.addedToReferences) addedReferences.push(doc);
+	}
+	if (clicked.classList.contains('glyphicon-plus')){
+		clicked.classList.add('glyphicon-minus');
+		clicked.classList.remove('glyphicon-plus');
+	} else{
+		clicked.classList.remove('glyphicon-minus');
+		clicked.classList.add('glyphicon-plus');
+	}
+	addedReferences.sort(function (a,b){
+		x = (a.authors[0].lastName + a.authors[0].firstName).toLowerCase();
+		y = (b.authors[0].lastName + b.authors[0].firstName).toLowerCase();
+		if (y > x) return -1;
+		if (y < x) return 1;
+		return 0;
+	});
+	references.innerHTML = null;
+	for (ref of addedReferences){
+		p = document.createElement("p");
+		p.innerHTML = JSON.stringify(ref);
+		references.appendChild(p);
+	}
+	
+}
+var references = document.getElementById("references");
+var addedReferences=[];
 
 
 function fetchDocuments(){
@@ -515,7 +778,10 @@ function fetchDocuments(){
 				if (ajax.readyState == 4 && ajax.status == 200){
 					documents.fetched = true;
 					documents.items = JSON.parse(ajax.response);
-					documents.items.forEach(item =>item.display = true);
+					documents.items.forEach(function(item){
+												item.display = true;
+												item.addedToReferences = false;
+											});
 					resolve();
 				}
 			}
@@ -524,11 +790,6 @@ function fetchDocuments(){
 		}
 	});
 	return p;
-}
-
-function getDocuments(){
-	promise = fetchDocuments();
-	promise.then(fillDocsTable);
 }
 
 function fetchAuthors(){
@@ -604,8 +865,17 @@ mimeTypes = {
 		pdf: "application/pdf",
 		mp4: "video/mp4"
 }
+
+lastDocumentVisualised = -1;
+
 function visualiseDocument(target){
 	id = target.parentElement.firstChild.innerHTML;
+	if (id == lastDocumentVisualised){
+		lastDocumentVisualised = -1;
+		iframe.src = "";
+		return;
+	}
+	lastDocumentVisualised = id;
 	transferLength = target.parentElement.lastChild.innerHTML;
 	console.log(id);
 
