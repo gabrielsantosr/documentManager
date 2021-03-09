@@ -22,6 +22,7 @@ public class DocumentDTO {
 	private List<AuthorDTO> authors;
 	private Integer year;
 	private String title;
+	private String subTitle;
 	private String journalName;
 	private Volume volume;
 	private Integer startPage;
@@ -38,6 +39,7 @@ public class DocumentDTO {
 		this.id = document.getId();
 		this.year = document.getYear();
 		this.title = document.getTitle();
+		this.subTitle = document.getSubTitle();
 		this.journalName = document.getJournalName();
 		this.volume = document.getVolume();
 		this.startPage = document.getStartPage();
@@ -87,6 +89,14 @@ public class DocumentDTO {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getSubTitle() {
+		return subTitle;
+	}
+
+	public void setSubTitle(String subTitle) {
+		this.subTitle = subTitle;
 	}
 
 	public Integer getApproxRequiredLengthForFile() {

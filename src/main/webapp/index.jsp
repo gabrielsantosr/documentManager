@@ -727,6 +727,9 @@ function fillDocsTable(){
 	}
 	// END NEW BLOCK OF CODE
 }
+
+maxQuotedAuthors = 5; //This is the maximum number of authors quoted per reference;
+
 function addOrRemoveReference(event){
 	clicked = event.target;
 	cell = clicked.parentElement;
@@ -749,20 +752,70 @@ function addOrRemoveReference(event){
 		clicked.classList.add('glyphicon-plus');
 	}
 	addedReferences.sort(function (a,b){
-		x = (a.authors[0].lastName + a.authors[0].firstName).toLowerCase();
-		y = (b.authors[0].lastName + b.authors[0].firstName).toLowerCase();
-		if (y > x) return -1;
-		if (y < x) return 1;
+		var aString="";
+		var bString="";
+		for (authorA of a.authors){
+			aString+=authorA.lastName+authorA.firstName;
+		}
+		for (authorB of b.authors){
+			bString+=authorB.lastName+authorB.firstName;
+		}
+		if (aString > bString) return 1;
+		if (aString < bString) return -1;
 		return 0;
 	});
 	references.innerHTML = null;
 	for (ref of addedReferences){
+		var allAuthorsString = "";
+		authorsLength = ref.authors.length;
+		if (authorsLength > maxQuotedAuthors){
+			for (i=0; i < (maxQuotedAuthors - 1); i++){
+				if (i>0){
+					allAuthorsString+=", "
+				}
+				allAuthorsString+= getAuthorNameForReference(ref.authors[i])
+			}
+			allAuthorsString+= " et. al."
+		} else {
+			for (i=0; i < authorsLength; i++){
+				if( i > 0){
+					if (i == authorsLength-1){
+						allAuthorsString +=" & "
+					} else{
+						allAuthorsString +=", "
+					}
+				}
+				allAuthorsString += getAuthorNameForReference(ref.authors[i]);
+			}
+		}
+		
 		p = document.createElement("p");
-		p.innerHTML = JSON.stringify(ref);
+		if (ref.volume == null){
+			ref.volume ={
+					volumeNumber:"",
+					volumeRelease:""
+			}
+		}
+		p.innerHTML = allAuthorsString;
+		p.innerHTML += " ("+ref.year+"). ";
+		p.innerHTML += ref.title+" "+ref.subTitle;
+		p.innerHTML += ". <i>"+ref.journalName+", "+ref.volume.volumeNumber+"</i>("+ref.volume.volumeRelease+")";
+		p.innerHTML += ", "+ref.startPage+"-"+ref.endPage+"."
 		references.appendChild(p);
+		//if (references.children.length%2 == 1)
+			//p.style.fontStyle="italic";
 	}
 	
 }
+
+function getAuthorNameForReference(author){
+	authorString = author.lastName + ",";
+	for (name of author.firstName.split(" ")){
+		authorString +=" "+name.substring(0,1)+"."
+	}
+	return authorString;
+}
+
 var references = document.getElementById("references");
 var addedReferences=[];
 
