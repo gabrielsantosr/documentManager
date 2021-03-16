@@ -37,18 +37,27 @@ public class Document extends IntIdEntity {
 	@Column
 	private Integer year;
 	
-	@Column(length=80)
+	@Column(name="journal_name", length=80)
+	private String journalName;
+
+	@Column(length=255)
 	private String title;
 
 	@Column(name="sub_title")
 	private String subTitle;
 	
-	@Column(name="journal_name", length=80)
-	private String journalName;
-	
 	@Column
 	private Volume volume;
 
+	@Column
+	private Integer edition;
+	
+	@Column
+	private String publisher;
+	
+	@Column(name="publisher_location")
+	private String publisherLocation;
+	
 	@Column(name="start_page")
 	private Integer startPage;
 	
@@ -80,6 +89,28 @@ public class Document extends IntIdEntity {
 	@Override
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	public Integer getEdition() {
+		return edition;
+	}
+	
+	public void setEdition(Integer edition) {
+		this.edition = edition;
+	}
+	public String getPublisher() {
+		return publisher;
+	}
+	
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+	public String getPublisherLocation() {
+		return publisherLocation;
+	}
+	
+	public void setPublisherLocation(String publisherLocation) {
+		this.publisherLocation = publisherLocation;
 	}
 
 	public DocumentType getDocumentType() {

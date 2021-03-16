@@ -1,11 +1,6 @@
 package dto;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +20,9 @@ public class DocumentDTO {
 	private String subTitle;
 	private String journalName;
 	private Volume volume;
+	private Integer edition;
+	private String publisher;
+	private String publisherLocation;
 	private Integer startPage;
 	private Integer endPage;
 	private String doi;
@@ -42,6 +40,9 @@ public class DocumentDTO {
 		this.subTitle = document.getSubTitle();
 		this.journalName = document.getJournalName();
 		this.volume = document.getVolume();
+		this.edition = document.getEdition();
+		this.publisher = document.getPublisher();
+		this.publisherLocation = document.getPublisherLocation();
 		this.startPage = document.getStartPage();
 		this.endPage = document.getEndPage();
 		this.doi = document.getDoi();
@@ -129,6 +130,30 @@ public class DocumentDTO {
 
 	public void setVolume(Volume volume) {
 		this.volume = volume;
+	}
+
+	public Integer getEdition() {
+		return edition;
+	}
+
+	public void setEdition(Integer edition) {
+		this.edition = edition;
+	}
+
+	public String getPublisher() {
+		return publisher;
+	}
+
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+
+	public String getPublisherLocation() {
+		return publisherLocation;
+	}
+
+	public void setPublisherLocation(String publisherLocation) {
+		this.publisherLocation = publisherLocation;
 	}
 
 	public Integer getStartPage() {

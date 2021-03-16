@@ -17,7 +17,7 @@ html{
 	background-color: #444;
 }
 body{
-	width: 800px;
+	width: 80%;
 	margin-left: auto;
 	margin-right: auto;
 	background-color: #777;
@@ -29,7 +29,9 @@ body{
 	cursor: pointer;
 }
 table {
-	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+/* 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+	table-layout: fixed;
+	width: 70%;
 }
 
 tr:nth-child(odd){
@@ -41,40 +43,6 @@ tr:nth-child(even){
 td input{
 	width: 125px;
 }
-
-#documentAuthorsTable th:nth-child(1){
-	min-width: 60px;
-	text-align: center;
-}
-
-#documentAuthorsTable th:nth-child(2),
-#documentAuthorsTable th:nth-child(3){
-	width: 150px;
-	text-align: center;
-}
-
-#documentAuthorsTable th:nth-child(4){
-	width: 100px;
-	text-align: center;
-}
-
-#documentAuthorsTable td:nth-child(1){
-	min-width: 60px;
-	text-align: right;
-}
-
-#documentAuthorsTable td:nth-child(2),
-#documentAuthorsTable td:nth-child(3){
-	width: 150px;
-	text-align: left;
-	overflow-x: auto;
-}
-#documentAuthorsTable th:nth-child(4){
-	width: 125px;
-	text-align: center;
-}
-
-
 
 .remarked{
 	color: blue;
@@ -95,19 +63,18 @@ td input{
 }
 td {
 	padding: 10px;
+	overflow: hidden;
+	text-align: left;
 }
-
-
+td:nth-child(1){
+	text-align: right;
+}
 
 th {
 	padding: 10px;
 	text-align: left;
 }
 
-iframe {
-	width: 100%;
-	height:600px;
-}
 /*
 #authorsDropInput {
 	color: black;
@@ -157,25 +124,28 @@ iframe {
 	color: #00AA00;
 	cursor: pointer;
 }
-.container{
+.cont{
 position: relative;
-max-width: inherit;
+
+/* max-width: inherit; */
 }
+
+
 </style>
 
 <title>Document Manager</title>
 </head>
 <body>
-	<div class="container">
+	<div class="cont">
 		<button id="authors" onclick="getAuthors(fillAuthorsTable)">Get Authors</button>
 		<button id="documents" onclick="getDocuments()">Get	Documents</button>
 		<button id="addDocument" onclick="addDocument()">Add Document</button>
 	</div>
-	<div class="container" id ="formContainer" style="width:100%"onclick="enableHideFormContainer = false"hidden>
+	<div class="cont" id ="formContainer" onclick="enableHideFormContainer = false"hidden>
 		<form id="addForm"action="" >
 			<fieldset>
 			<legend>New Document</legend>
-		<table id="documentAuthorsTable" class="">
+		<table id="documentAuthorsTable">
 			<thead>
 				<tr>
 					<th colspan="2">Authors</th>
@@ -203,15 +173,30 @@ max-width: inherit;
 			</fieldset>
 		</form>
 	</div>
-	<div id="documentsContainer" class="container" hidden>
-		<div class="col-sm-6">
-			<input type="text" onkeyup="search(this)">
-			<table id="table" class="table"></table>
-		</div>
-		<div class="col-sm-6 source">
-			<iframe title="file"></iframe>
-			<div class="progress" id="barContainer" hidden>
-				<div class="progress-bar" role="progressbar" id="downloadBar" ></div>
+	<div id="documentsContainer" class="cont" hidden>
+		<input type="text" onkeyup="search(this)"/>
+		<div style="padding:0;margin:auto;">
+			<table id="table" style="display:inline-block; width:50%; margin: auto">
+				<colgroup>
+					<col width="10%"/>
+					<col width="20%"/>
+					<col width="20%"/>
+					<col width="40%"/>
+					<col width="10%"/>
+				</colgroup>
+				<thead>
+					<tr>
+						<th>ID</th> <th>Type</th> <th>Authors</th> <th>Title</th> <th></th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<div id="previewDiv" style="width:49%; display: inline-block; background-color:black;">
+				<iframe title="file" style="height: 50vh;width:100%"></iframe>
+				<div class="progress" id="barContainer" hidden>
+					<div class="progress-bar" role="progressbar" id="downloadBar" ></div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -227,6 +212,7 @@ var downloadBar = document.getElementById("downloadBar");
 var barContainer = document.getElementById("barContainer");
 var authorsDropList = document.getElementById("authorsDropList");
 var documentAuthorsTable = document.getElementById("documentAuthorsTable");
+var references = document.getElementById("references");
 var lookUpAuthorText = document.getElementById("authorsDropInput").value;
 
 var documents ={
@@ -279,11 +265,11 @@ function getDocuments(){
 		//Setting enableHideDocumentsContainer to false prevents the bubbling of the click
 		//that triggered the execution of this function from hiding the documents container.
 		enableHideDocumentsContainer = false;
-		document.body.addEventListener("click",hideDocuments);
+		document.addEventListener("click",hideDocuments);
 		promise = fetchDocuments();
 		promise.then(fillDocsTable);
 	} else {
-		document.body.removeEventListener("click",hideDocuments);
+		document.removeEventListener("click",hideDocuments);
 	}
 }
 
@@ -291,7 +277,7 @@ function hideDocuments(){
 	dc = documentsContainer;
 	if(enableHideDocumentsContainer){
 		dc.hidden = true;
-		document.body.removeEventListener("click",hideDocuments);
+		document.removeEventListener("click",hideDocuments);
 	} else{
 		enableHideDocumentsContainer = true;
 	}
@@ -304,9 +290,9 @@ function addDocument(){
 	fc.hidden = !fc.hidden;
 	if(!fc.hidden){
 		enableHideFormContainer = false;
-		document.body.addEventListener("click",hideFormContainer);
+		document.addEventListener("click",hideFormContainer);
 	} else{
-		document.body.removeEventListener("click",hideFormContainer);
+		document.removeEventListener("click",hideFormContainer);
 	}
 }
 
@@ -314,7 +300,7 @@ function hideFormContainer(){
 	fc = document.getElementById("formContainer");
 	if(enableHideFormContainer){
 		fc.hidden = true;
-		document.body.removeEventListener("click",hideFormContainer);
+		document.removeEventListener("click",hideFormContainer);
 	} else{
 		enableHideFormContainer = true;
 	}
@@ -399,7 +385,7 @@ function hideList(event){
 	if (event.target.id=="authorsDropInput"){
 		return;
 	}
-	document.body.removeEventListener("click",hideList);
+	document.removeEventListener("click",hideList);
 	authorsDropList.style.overflow= "hidden";
 	height = authorsDropList.offsetHeight;
 	var interval = setInterval(reduceSize,1);
@@ -423,7 +409,7 @@ function showList(){
 		height = Number(authorsDropList.style.maxHeight.substr(0,(authorsDropList.style.maxHeight.length)-2));
 		if(height >= 100){
 			clearInterval(interval);
-			document.body.addEventListener("click",hideList);
+			document.addEventListener("click",hideList);
 		} else {
 			height = height + 2;
 			authorsDropList.style.maxHeight=""+height+"px";
@@ -638,9 +624,25 @@ function keyWordArrayGenerator(phrase){
 	return phraseBits;
 }
 
+columns = table.tHead.children[0].children;
+for (column of columns){
+	if(column.innerHTML=="ID"){
+		column.onclick= function(){orderDocsBy("id")};
+	} else if (column.innerHTML=="Type"){
+		column.onclick= function(){orderDocsBy("docType")};
+	} else if (column.innerHTML=="Authors"){
+		column.onclick= function(){orderDocsBy("authors")};
+	} else if (column.innerHTML=="Title"){
+		column.onclick= function(){orderDocsBy("title")};
+	}
+}
+
 function fillDocsTable(){
-	table.innerHTML = null;
+	tBody =	table.tBodies[0];
+	tHead = table.tHead;
+	tBody.innerHTML = null;
 	if (documents.items.length < 1){
+		tHead.hidden=true;
 		return;
 	}
 	let displayableItems=0;
@@ -650,69 +652,59 @@ function fillDocsTable(){
 		}
 	}
 	if (displayableItems == 0){
+		tHead.hidden = true;
 		return;
 	}
-
-
-	tHead = table.createTHead();
-	tBody = table.createTBody();
-	headerRow = tHead.insertRow();
+	tHead.hidden = false;
+	//NEW BLOCK of CODE
+	
+	// END NEW BLOCK
 	let field;
 	let cell;
-	//NEW BLOCK OF CODE
-	for( field in documents.items[0]){
-		if(field !="docType" && field !="id" && field !="authors" && field !="title") continue;
-		th = document.createElement("th");
-		headerRow.appendChild(th);
-		th.innerHTML = field;
-		th.onclick = function(){orderDocsBy(this)};
-	}
-	th = document.createElement("th");
-	th.innerHTML = "Options";
-	headerRow.appendChild(th);
+// 	headerRow = tHead.insertRow();
+// 	for( field in documents.items[0]){
+// 		if(field !="docType" && field !="id" && field !="authors" && field !="title") continue;
+// 		th = document.createElement("th");
+// 		headerRow.appendChild(th);
+// 		th.innerHTML = field;
+// 		th.onclick = function(){orderDocsBy(this)};
+// 	}
+// 	th = document.createElement("th");
+// 	th.innerHTML = "Options";
+// 	headerRow.appendChild(th);
 	for (var doc of documents.items){
 		if (!doc.display)
 			continue;
 		row = tBody.insertRow();
-		for (field in doc){
-			if (field !="docType" && field !="id" && field !="authors"
-				&& field !="title" && field !="approxRequiredLengthForFile")
-				continue;
-			cell = row.insertCell();
-			cell.style.whiteSpace="nowrap";
-
-			if (field ==="docType"){
-				cell.innerHTML = doc.docType.type;
+		
+		cell = row.insertCell();
+		cell.innerHTML = doc.id;
+		
+		cell = row.insertCell();
+		cell.innerHTML = doc.docType.type;
+		
+		cell = row.insertCell();
+		ul = document.createElement("ul");
+		cell.appendChild(ul);
+		for (author of doc.authors){
+			li = document.createElement("li");
+			ul.appendChild(li);
+			names = author.firstName.split();
+			initials = "";
+			for (let name of names){
+				initials+= " "+name.substring(0,1)+"."
 			}
-			else if (field ==="authors"){
-				ul = document.createElement("ul");
-				cell.appendChild(ul);
-				for (author of doc.authors){
-					li = document.createElement("li");
-					ul.appendChild(li);
-					names = author.firstName.split();
-					initials = "";
-					for (let name of names){
-						initials+= " "+name.substring(0,1)+"."
-					}
-
-					textNode = document.createTextNode(
-						author.lastName+","+initials);
-					li.appendChild(textNode);
-				}
-
-			} else if (field === "title"){
-				cell.classList.add("title");
-				cell.id = "title-"+(tBody.children.length-1);
-				cell.innerHTML = doc.title;
-				cell.onclick = function(){visualiseDocument(this);};
-			} else if (field ==="approxRequiredLengthForFile"){
-				cell.hidden = true;
-				cell.innerHTML = doc.approxRequiredLengthForFile;
-			} else {
-				cell.innerHTML = doc[field];
-			}
+			textNode = document.createTextNode(
+					author.lastName+","+initials);
+			li.appendChild(textNode);
 		}
+		
+		cell = row.insertCell();
+		cell.classList.add("title");
+		cell.id = "title-"+(tBody.children.length-1);
+		cell.innerHTML = doc.title;
+		cell.onclick = function(){visualiseDocument(this);};
+		
 		cell = row.insertCell();
 		plusOrMinusIcon = createRawIcon();
 		if (doc.addedToReferences){
@@ -724,8 +716,11 @@ function fillDocsTable(){
 		}
 		plusOrMinusIcon.addEventListener("click",addOrRemoveReference);
 		cell.appendChild(plusOrMinusIcon);
+
+		cell = row.insertCell();
+		cell.hidden = true;
+		cell.innerHTML = doc.approxRequiredLengthForFile;
 	}
-	// END NEW BLOCK OF CODE
 }
 
 maxQuotedAuthors = 5; //This is the maximum number of authors quoted per reference;
@@ -766,47 +761,17 @@ function addOrRemoveReference(event){
 	});
 	references.innerHTML = null;
 	for (ref of addedReferences){
-		var allAuthorsString = "";
-		authorsLength = ref.authors.length;
-		if (authorsLength > maxQuotedAuthors){
-			for (i=0; i < (maxQuotedAuthors - 1); i++){
-				if (i>0){
-					allAuthorsString+=", "
-				}
-				allAuthorsString+= getAuthorNameForReference(ref.authors[i])
-			}
-			allAuthorsString+= " et. al."
-		} else {
-			for (i=0; i < authorsLength; i++){
-				if( i > 0){
-					if (i == authorsLength-1){
-						allAuthorsString +=" & "
-					} else{
-						allAuthorsString +=", "
-					}
-				}
-				allAuthorsString += getAuthorNameForReference(ref.authors[i]);
-			}
-		}
-		
 		p = document.createElement("p");
-		if (ref.volume == null){
-			ref.volume ={
-					volumeNumber:"",
-					volumeRelease:""
-			}
+		if (ref.docType.id!=3){
+			p.innerHTML = getBookReference(ref);
+		} else {
+			p.innerHTML = getJournalArticleReference(ref);
 		}
-		p.innerHTML = allAuthorsString;
-		p.innerHTML += " ("+ref.year+"). ";
-		p.innerHTML += ref.title+" "+ref.subTitle;
-		p.innerHTML += ". <i>"+ref.journalName+", "+ref.volume.volumeNumber+"</i>("+ref.volume.volumeRelease+")";
-		p.innerHTML += ", "+ref.startPage+"-"+ref.endPage+"."
 		references.appendChild(p);
-		//if (references.children.length%2 == 1)
-			//p.style.fontStyle="italic";
 	}
 	
 }
+
 
 function getAuthorNameForReference(author){
 	authorString = author.lastName + ",";
@@ -816,8 +781,115 @@ function getAuthorNameForReference(author){
 	return authorString;
 }
 
-var references = document.getElementById("references");
-var addedReferences=[];
+function referenceAuthors(doc){
+	var allAuthorsString = "";
+	authorsLength = doc.authors.length;
+	if (authorsLength > maxQuotedAuthors){
+		for (i=0; i < (maxQuotedAuthors - 1); i++){
+			if (i>0){
+				allAuthorsString+=", "
+			}
+			allAuthorsString+= getAuthorNameForReference(doc.authors[i])
+		}
+		allAuthorsString+= " et. al."
+	} else {
+		for (i=0; i < authorsLength; i++){
+			if( i > 0){
+				if (i == authorsLength-1){
+					allAuthorsString +=" & "
+				} else{
+					allAuthorsString +=", "
+				}
+			}
+			allAuthorsString += getAuthorNameForReference(doc.authors[i]);
+		}
+	}
+	return allAuthorsString;
+}
+
+function getBookReference(book){
+	//AUTHORS
+	var refString = referenceAuthors(book);
+	//YEAR
+	if (book.year != null){
+		refString += " ("+book.year+").";
+	}
+	//TITLE
+	if (book.title != null){
+		refString += " <i>"+ book.title;
+		//SUB-TITLE
+		if (book.subTitle != null){
+			refString += " "+book.subTitle;
+		}
+		refString +="</i>."
+	}
+	//EDITION
+	if (book.edition != null){
+		refString += " "+book.edition;
+		ed = book.edition.toString();
+		if (ed.endsWith('13') || ed.endsWith('12') || ed.endsWith('11')){
+			refString +="th";
+		} else if (ed.endsWith('1')){
+			refString += "st";
+		} else if (ed.endsWith('2')){
+			refString += "nd";
+		} else if (ed.endsWith('3')){
+			refString += "rd";
+		} else {
+			refString += "th";
+		}
+		refString += " ed.";
+	}
+	//PUBLISHER
+	if (book.publisher != null){
+		refString += " "+book.publisher;
+		if (book.publisherLocation != null){
+			refString +=", "+book.publisherLocation;
+		}
+		refString +=".";
+	}
+	return refString;
+}
+
+function getJournalArticleReference(journalArticle){
+	ja = journalArticle;
+	//AUTHORS
+	var refString = referenceAuthors(ja);
+	//YEAR
+	if (ja.year != null){
+		refString += " ("+ja.year+").";
+	}
+	//TITLE
+	if (ja.title != null){
+		refString += " "+ja.title;
+		if (ja.subTitle != null){
+			refString += " "+ja.subTitle;
+		}
+		refString += "."
+	}
+	// JOURNAL NAME
+	if (ja.journalName != null){
+		refString +=" <i>"+ja.journalName+"</i>";
+		// VOLUME
+		if (ja.volume != null){
+			refString += ", <i>"+ja.volume.volumeNumber+"</i>";
+			if (ja.volume.volumeRelease){
+				refString+="("+ja.volume.volumeRelease+")";
+			}
+		}
+		refString +=",";
+	}
+	// PAGES
+	if (ja.startPage != null && ja.endPage != null){
+	refString += " "+ja.startPage+"-"+ja.endPage+"."
+	}
+	//DOI
+	if (ja.doi != null){
+		refString += " DOI: "+ja.doi+".";
+	}
+	return refString;
+}
+
 
 
 function fetchDocuments(){
@@ -964,8 +1036,7 @@ function visualiseDocument(target){
 
 }
 
-function orderDocsBy(target){
-	criteria = target.innerHTML;
+function orderDocsBy(criteria){
 	ret = (documents.order[criteria])?-1:1;
 	documents.order[criteria] = !documents.order[criteria];
 	if (criteria==="id"){
