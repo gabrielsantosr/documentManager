@@ -1,10 +1,3 @@
-
-Hay que crear una base de datos llamada 'literature_manager'.
-En hibernate.cfg.xml hay que agregar los datos de conexión.
-No hay que crear las tablas. Se crean solas al correr App.java
-
-Hay un META-INF con un archivo de configuración por si paso
-la EntityManagerFactory a JPA. No está en uso.
-
-La aplicación TestDAO es para ver si funciona la implementación
-que hice de la interfaz DAO a través de la clase DAOImpl.
+The project is a tool for academic students and researchers.
+It is an explorer for different sort of documents that the user provides as sources for their research.
+It provides tool for rendering the references section of an article to be submitted following the APA referencing style.
