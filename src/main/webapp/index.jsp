@@ -24,9 +24,12 @@ body{
 }
 
 
-.title:hover, #table th:hover {
+.title:hover, #docsHeader th:hover {
 	color: blue;
 	cursor: pointer;
+}
+#docsHeader {
+	background-color: transparent;
 }
 table {
 /* 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
@@ -126,6 +129,7 @@ th {
 }
 .cont{
 position: relative;
+margin: auto;
 
 /* max-width: inherit; */
 }
@@ -175,8 +179,27 @@ position: relative;
 	</div>
 	<div id="documentsContainer" class="cont" hidden>
 		<input type="text" onkeyup="search(this)"/>
-		<div style="padding:0;margin:auto;">
-			<table id="table" style="display:inline-block; width:50%; margin: auto">
+		<div style="padding:0;margin:auto; ">
+			<div id="tableScrollableDiv" style="display:inline-block; width:50%; height: 50vh;" >
+				<div id="headerDiv" style=" height: 10%">
+					<table style="width:100%">
+					<colgroup>
+					<col width="10%"/>
+					<col width="20%"/>
+					<col width="20%"/>
+					<col width="40%"/>
+					<col width="10%"/>
+					</colgroup>
+					<thead id="docsHeader">
+					<tr>
+						<th>ID</th> <th>Type</th> <th>Authors</th> <th>Title</th> <th></th>
+					</tr>
+					</thead>
+					</table>
+				</div>
+				<div id="dataTableDiv" style="width:100%; height: 90%;overflow-y:scroll;">
+				
+			<table id="table" style="width:100%">
 				<colgroup>
 					<col width="10%"/>
 					<col width="20%"/>
@@ -184,14 +207,11 @@ position: relative;
 					<col width="40%"/>
 					<col width="10%"/>
 				</colgroup>
-				<thead>
-					<tr>
-						<th>ID</th> <th>Type</th> <th>Authors</th> <th>Title</th> <th></th>
-					</tr>
-				</thead>
-				<tbody>
+				<tbody style="">
 				</tbody>
 			</table>
+				</div>
+			</div>
 			<div id="previewDiv" style="width:49%; display: inline-block; background-color:black;">
 				<iframe title="file" style="height: 50vh;width:100%"></iframe>
 				<div class="progress" id="barContainer" hidden>
@@ -253,6 +273,21 @@ function watchDate(event){
 		target.value =maxDate;
 	}
 }
+
+function getScrollBarWidth(){
+	let sDiv = document.createElement("div");
+	document.body.appendChild(sDiv);
+	sDiv.style.overflow="scroll";
+	let barWidth = sDiv.offsetWidth-sDiv.clientWidth;
+	document.body.removeChild(sDiv);
+	return barWidth;
+}
+
+headerDiv=document.getElementById("headerDiv");
+barWidth = getScrollBarWidth();
+arg = "calc(100% - "+barWidth+"px)";
+headerDiv.style.width=arg;
+
 
 var enableHideDocumentsContainer;
 documentsContainer = document.getElementById("documentsContainer");
@@ -624,7 +659,7 @@ function keyWordArrayGenerator(phrase){
 	return phraseBits;
 }
 
-columns = table.tHead.children[0].children;
+columns = document.getElementById("docsHeader").getElementsByTagName("tr")[0].children;
 for (column of columns){
 	if(column.innerHTML=="ID"){
 		column.onclick= function(){orderDocsBy("id")};
@@ -639,7 +674,7 @@ for (column of columns){
 
 function fillDocsTable(){
 	tBody =	table.tBodies[0];
-	tHead = table.tHead;
+	tHead = document.getElementById("docsHeader");
 	tBody.innerHTML = null;
 	if (documents.items.length < 1){
 		tHead.hidden=true;
@@ -824,7 +859,7 @@ function getBookReference(book){
 		refString +="</i>."
 	}
 	//EDITION
-	if (book.edition != null){
+	if (book.edition != null && book.edition != 1){
 		refString += " "+book.edition;
 		ed = book.edition.toString();
 		if (ed.endsWith('13') || ed.endsWith('12') || ed.endsWith('11')){
