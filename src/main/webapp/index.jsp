@@ -77,6 +77,9 @@ th {
 	padding: 10px;
 	text-align: left;
 }
+#table tbody tr:last-child td:nth-child(1){
+	border-bottom-left-radius:6px;
+}
 
 /*
 #authorsDropInput {
@@ -105,12 +108,12 @@ th {
   	z-index: 1;
   	text-alignment: left;
 }
-#referencesContainer div{
-	margin: 10px 10px;
-	padding: 10px, 10px;
-}
+/*#referencesContainer div{
+}*/
 
 #references{
+	margin: 10px 10px;
+	padding: 10px 10px;
 	background-color: #EFEFEF;
 	border-left: 4px solid #00AA00;
 	border-radius:6px;
@@ -192,9 +195,14 @@ border-radius: 6px;
 			</fieldset>
 		</form>
 	</div>
-	<div id="documentsContainer" class="cont" hidden>
-		<input type="text" onkeyup="search(this)"/>
-		<div style="padding:0;margin:auto; ">
+	<div id="documentsContainer" style="position:relative; margin:10px"  hidden>
+		<span class="glyphicon glyphicon-search"
+		style="position:relative; margin:4px;color: #222; left:170px; top: 3px;font-weight:900;text-align:center" >
+		
+		</span>
+			<input style="position:absolute;left:20px;  opacity: 0.5;background-color:white;"type="text" onkeyup="search(this)"/>
+		
+		<div style="position:relative; margin: 10px;">
 			<div id="tableScrollableDiv" style="display:inline-block; width:50%; height: 50vh;" >
 				<div id="headerDiv" style=" height: 10%">
 					<table style="width:100%">
@@ -217,8 +225,7 @@ border-radius: 6px;
 					</table>
 				</div>
 				<div id="dataTableDiv" style="width:100%; height: 90%;overflow-y:scroll;border-radius:6px;">
-				
-			<table id="table" style="width:100%">
+			<table id="table" style="width:100%;">
 				<colgroup>
 					<col width="10%"/>
 					<col width="20%"/>
@@ -238,9 +245,9 @@ border-radius: 6px;
 				</div>
 			</div>
 		</div>
-		<div id= "referencesContainer" style="position:relative;width:100%; bottom:0;">
+		<div id= "referencesContainer" style="position:relative;width:100%; ">
 		
-			<div style="color: #EEEEEE">References</div>
+			<div style="color: #EEEEEE; margin: 25px 10px 10px;">References</div>
 			<div id ="references">
 			</div>
 		</div>
@@ -580,6 +587,7 @@ function createSortIcon(){
 	span.classList.add("glyphicon-sort");
 	span.classList.add("regularGlyph");
 	span.style.fontSize="12px";
+	span.style.fontWeight="100";
 	return span;
 } 
 
