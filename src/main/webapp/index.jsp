@@ -18,23 +18,23 @@ html{
 }
 body{
 	width: 80%;
+	height: 100vh;
 	margin-left: auto;
 	margin-right: auto;
 	background-color: #777;
 }
 
 
-.title:hover, #docsHeader th:hover {
+.title:hover {
 	color: blue;
 	cursor: pointer;
 }
-#docsHeader {
-	background-color: transparent;
-}
+
 table {
 /* 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
 	table-layout: fixed;
 	width: 70%;
+	border-radius: 6px;
 }
 
 tr:nth-child(odd){
@@ -105,6 +105,19 @@ th {
   	z-index: 1;
   	text-alignment: left;
 }
+#referencesContainer div{
+	margin: 10px 10px;
+	padding: 10px, 10px;
+}
+
+#references{
+	background-color: #EFEFEF;
+	border-left: 4px solid #00AA00;
+	border-radius:6px;
+	height: 20vh;
+	overflow: auto;
+	position: relative;
+}
 .glyphicon {
 	margin: 10px;
 }
@@ -113,6 +126,7 @@ th {
 	color: #0000AA;
 	cursor: pointer;
 }
+
 .regularGlyph {
 	color: transparent;
 	cursor: inherit;
@@ -130,6 +144,7 @@ th {
 .cont{
 position: relative;
 margin: auto;
+border-radius: 6px;
 
 /* max-width: inherit; */
 }
@@ -192,12 +207,16 @@ margin: auto;
 					</colgroup>
 					<thead id="docsHeader">
 					<tr>
-						<th>ID</th> <th>Type</th> <th>Authors</th> <th>Title</th> <th></th>
+						<th style="border-top-left-radius: 6px;">ID</th>
+						<th>Type</th>
+						<th>Authors</th>
+						<th>Title</th>
+						<th style="border-top-right-radius: 6px;"></th>
 					</tr>
 					</thead>
 					</table>
 				</div>
-				<div id="dataTableDiv" style="width:100%; height: 90%;overflow-y:scroll;">
+				<div id="dataTableDiv" style="width:100%; height: 90%;overflow-y:scroll;border-radius:6px;">
 				
 			<table id="table" style="width:100%">
 				<colgroup>
@@ -212,16 +231,19 @@ margin: auto;
 			</table>
 				</div>
 			</div>
-			<div id="previewDiv" style="width:49%; display: inline-block; background-color:black;">
-				<iframe title="file" style="height: 50vh;width:100%"></iframe>
-				<div class="progress" id="barContainer" hidden>
+			<div id="previewDiv" style="width:calc(50% - 4px); display: inline-block;position: relative;">
+				<iframe title="file" style="height: 50vh;width:100%;border-radius:6px;"></iframe>
+				<div class="progress" id="barContainer" style="z-index:10; position:absolute; width: 100%;" hidden>
 					<div class="progress-bar" role="progressbar" id="downloadBar" ></div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div id ="references">
-	
+		<div id= "referencesContainer" style="position:relative;width:100%; bottom:0;">
+		
+			<div style="color: #EEEEEE">References</div>
+			<div id ="references">
+			</div>
+		</div>
 	</div>
 
 
@@ -552,6 +574,15 @@ function createRawIcon(){
 	return span;
 }
 
+function createSortIcon(){
+	span = document.createElement("span");
+	span.classList.add("glyphicon");
+	span.classList.add("glyphicon-sort");
+	span.classList.add("regularGlyph");
+	span.style.fontSize="12px";
+	return span;
+} 
+
 
 function updateTableOptions(){
 	tBody = documentAuthorsTable.tBodies[0];
@@ -658,26 +689,34 @@ function keyWordArrayGenerator(phrase){
 	}
 	return phraseBits;
 }
-
-columns = document.getElementById("docsHeader").getElementsByTagName("tr")[0].children;
+docsHeader = document.getElementById("docsHeader");
+columns = docsHeader.getElementsByTagName("tr")[0].children;
 for (column of columns){
-	if(column.innerHTML=="ID"){
-		column.onclick= function(){orderDocsBy("id")};
-	} else if (column.innerHTML=="Type"){
-		column.onclick= function(){orderDocsBy("docType")};
-	} else if (column.innerHTML=="Authors"){
-		column.onclick= function(){orderDocsBy("authors")};
-	} else if (column.innerHTML=="Title"){
-		column.onclick= function(){orderDocsBy("title")};
+	if (!column.innerText) continue;
+	sort = createSortIcon();
+	column.append(sort);
+	if(column.innerText=="ID"){
+		sort.addEventListener("click",function(){orderDocsBy("id")});
+	} else if (column.innerText=="Type"){
+		sort.addEventListener("click",function(){orderDocsBy("docType")});
+	} else if (column.innerText=="Authors"){
+		sort.addEventListener("click",function(){orderDocsBy("authors")});
+	} else if (column.innerText=="Title"){
+		sort.addEventListener("click",function(){orderDocsBy("title")});
 	}
 }
+var enableSorting;
 
 function fillDocsTable(){
 	tBody =	table.tBodies[0];
-	tHead = document.getElementById("docsHeader");
 	tBody.innerHTML = null;
+	tHead = document.getElementById("docsHeader");
+	sorters = tHead.getElementsByClassName("glyphicon-sort");
 	if (documents.items.length < 1){
-		tHead.hidden=true;
+		enableSorting=false;
+		for (sorter of sorters){
+			sorter.classList.remove("enabled");
+		}
 		return;
 	}
 	let displayableItems=0;
@@ -686,27 +725,22 @@ function fillDocsTable(){
 			displayableItems++;
 		}
 	}
-	if (displayableItems == 0){
-		tHead.hidden = true;
-		return;
+	if (displayableItems < 2){
+		enableSorting = false;
+		for (sorter of sorters){
+			sorter.classList.remove("enabled");
+		}
+		if (!displayableItems)
+			return;
+	} else{
+		enableSorting = true;
+		for (sorter of sorters){
+			sorter.classList.add("enabled");
+		}
 	}
-	tHead.hidden = false;
-	//NEW BLOCK of CODE
 	
-	// END NEW BLOCK
 	let field;
 	let cell;
-// 	headerRow = tHead.insertRow();
-// 	for( field in documents.items[0]){
-// 		if(field !="docType" && field !="id" && field !="authors" && field !="title") continue;
-// 		th = document.createElement("th");
-// 		headerRow.appendChild(th);
-// 		th.innerHTML = field;
-// 		th.onclick = function(){orderDocsBy(this)};
-// 	}
-// 	th = document.createElement("th");
-// 	th.innerHTML = "Options";
-// 	headerRow.appendChild(th);
 	for (var doc of documents.items){
 		if (!doc.display)
 			continue;
@@ -1072,6 +1106,7 @@ function visualiseDocument(target){
 }
 
 function orderDocsBy(criteria){
+	if (!enableSorting) return;
 	ret = (documents.order[criteria])?-1:1;
 	documents.order[criteria] = !documents.order[criteria];
 	if (criteria==="id"){
@@ -1109,7 +1144,7 @@ function orderDocsBy(criteria){
 	fillDocsTable();
 }
 
-function orderAuthorsBy(target){
+function orderAuthorsBy(criteria){
 	criteria = target.innerHTML;
 	ret = (documents.order[criteria])?-1:1;
 	documents.order[criteria] = !documents.order[criteria];
