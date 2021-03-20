@@ -5,3 +5,4 @@ As a special feature, it provides a tool that renders the references section for
 
 There is an SQL file that creates a db with some data for testing purposes.
 As of now, the url sources that work are stored locally in my computer. To try out the visualisation, update the db data, field 'source' from table 'document' with the route to any sort of document stored in your computer. 
+I have recently uploaded a bunch of documents to visualise. Make sure you update the db with the URLs where you decide to store them.
