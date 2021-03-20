@@ -18,6 +18,7 @@ html{
 }
 body{
 	width: 80%;
+	min-width: 1076px;
 	height: 100vh;
 	margin-left: auto;
 	margin-right: auto;
@@ -76,10 +77,13 @@ td:nth-child(1){
 th {
 	padding: 10px;
 	text-align: left;
+	font-weight: normal;
+	letter-spacing: 0.1em;
 }
 #table tbody tr:last-child td:nth-child(1){
 	border-bottom-left-radius:6px;
 }
+
 
 /*
 #authorsDropInput {
@@ -115,11 +119,12 @@ th {
 	margin: 10px 10px;
 	padding: 10px 10px;
 	background-color: #EFEFEF;
-	border-left: 4px solid #00AA00;
+	border-left: 5px solid #00AA00;
 	border-radius:6px;
 	height: 20vh;
 	overflow: auto;
 	position: relative;
+/* 	opacity:0.5; */
 }
 .glyphicon {
 	margin: 10px;
@@ -197,7 +202,7 @@ border-radius: 6px;
 	</div>
 	<div id="documentsContainer" style="position:relative; margin:10px"  hidden>
 		<span class="glyphicon glyphicon-search"
-		style="position:relative; margin:4px;color: #222; left:170px; top: 3px;font-weight:900;text-align:center" >
+		style="position:relative; margin:4px;color: #000;left:170px; font-weight:900;" >
 		
 		</span>
 			<input style="position:absolute;left:20px;  opacity: 0.5;background-color:white;"type="text" onkeyup="search(this)"/>
@@ -245,9 +250,9 @@ border-radius: 6px;
 				</div>
 			</div>
 		</div>
+		<div style="color: #EEEEEE; margin: 25px 10px 10px; letter-spacing: 0.2em; padding: 0 10px; font-size:16px; text-shadow: 1px 1px black">References</div>
 		<div id= "referencesContainer" style="position:relative;width:100%; ">
-		
-			<div style="color: #EEEEEE; margin: 25px 10px 10px;">References</div>
+<!-- 			<span id="referencesBackground" style="color:#222; font-weight:900; padding:0 ; position:absolute; letter-spacing: 0.5em;text-align: center;width: 100%; height:100%; font-size:100px;line-height:20vh;">references</span> -->
 			<div id ="references">
 			</div>
 		</div>
@@ -302,7 +307,9 @@ function watchDate(event){
 		target.value =maxDate;
 	}
 }
-
+function referencesBackgroundPadding(){
+	
+}
 function getScrollBarWidth(){
 	let sDiv = document.createElement("div");
 	document.body.appendChild(sDiv);
@@ -587,7 +594,7 @@ function createSortIcon(){
 	span.classList.add("glyphicon-sort");
 	span.classList.add("regularGlyph");
 	span.style.fontSize="12px";
-	span.style.fontWeight="100";
+	span.style.margin="0";
 	return span;
 } 
 
@@ -703,13 +710,13 @@ for (column of columns){
 	if (!column.innerText) continue;
 	sort = createSortIcon();
 	column.append(sort);
-	if(column.innerText=="ID"){
+	if(column.innerText.toLowerCase()=="id"){
 		sort.addEventListener("click",function(){orderDocsBy("id")});
-	} else if (column.innerText=="Type"){
+	} else if (column.innerText.toLowerCase()=="type"){
 		sort.addEventListener("click",function(){orderDocsBy("docType")});
-	} else if (column.innerText=="Authors"){
+	} else if (column.innerText.toLowerCase()=="authors"){
 		sort.addEventListener("click",function(){orderDocsBy("authors")});
-	} else if (column.innerText=="Title"){
+	} else if (column.innerText.toLowerCase()=="title"){
 		sort.addEventListener("click",function(){orderDocsBy("title")});
 	}
 }
