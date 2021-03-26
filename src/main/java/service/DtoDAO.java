@@ -10,9 +10,11 @@ import org.hibernate.Transaction;
 
 import dto.AuthorDTO;
 import dto.DocumentDTO;
+import dto.DocumentTypeDTO;
 import dto.FileDTO;
 import entities.Author;
 import entities.Document;
+import entities.DocumentType;
 
 public class DtoDAO {
 
@@ -96,6 +98,16 @@ public class DtoDAO {
 	protected FileDTO getFileDTO(Integer id) {
 		Document doc = (Document)session.load(Document.class, id);
 		return new FileDTO(doc.getSource());
+	}
+	protected List<DocumentTypeDTO>getAllDocumentTypeDTO(){
+		Query q = session.createQuery("FROM " + DocumentType.class.getName());
+		@SuppressWarnings("unchecked")
+		List<DocumentType> docTypes = q.list();
+		List<DocumentTypeDTO> docTypeDTOs = new ArrayList<>();
+		for (DocumentType docType: docTypes) {
+			docTypeDTOs.add(new DocumentTypeDTO(docType));
+		}
+		return docTypeDTOs;
 	}
 
 }

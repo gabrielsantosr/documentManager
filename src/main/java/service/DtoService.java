@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import dto.AuthorDTO;
 import dto.DocumentDTO;
+import dto.DocumentTypeDTO;
 import dto.FileDTO;
 
 @Component
@@ -61,6 +62,13 @@ public class DtoService {
 		FileDTO fileDTO = dtoDAO.getFileDTO(id);
 		dtoDAO.closeSession();
 		return fileDTO;
+	}
+	
+	public List<DocumentTypeDTO>getAllDocumentTypeDTO(){
+		dtoDAO.enableSession();
+		List<DocumentTypeDTO>fetched = dtoDAO.getAllDocumentTypeDTO();
+		dtoDAO.closeSession();
+		return fetched;
 	}
 
 }

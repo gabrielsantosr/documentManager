@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dto.AuthorDTO;
 import dto.DocumentDTO;
+import dto.DocumentTypeDTO;
 import dto.FileDTO;
 import service.DtoService;
 
@@ -50,4 +51,8 @@ public class DtoController {
 		return dtoService.getFileDTO(id);
 	}
 	
+	@RequestMapping(value="doc_types")
+	public List<DocumentTypeDTO> getAllDocumentTypeDTO(){
+		return dtoService.getAllDocumentTypeDTO();
+	}
 }

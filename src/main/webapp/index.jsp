@@ -3,22 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet"
-		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet"	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
 <!-- jQuery library -->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- Latest compiled JavaScript -->
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style>
 html{
 	background-color: #444;
 }
 body{
 	width: 80%;
-	min-width: 1076px;
+	min-width: 1303px;
 	height: 100vh;
 	margin-left: auto;
 	margin-right: auto;
@@ -33,7 +30,7 @@ body{
 
 table {
 /* 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
-	table-layout: fixed;
+/* 	table-layout: fixed; */
 	width: 70%;
 	border-radius: 6px;
 }
@@ -68,11 +65,10 @@ td input{
 td {
 	padding: 10px;
 	overflow: hidden;
+	text-overflow: ellipsis;
 	text-align: left;
 }
-td:nth-child(1){
-	text-align: right;
-}
+
 
 th {
 	padding: 10px;
@@ -83,6 +79,7 @@ th {
 #table tbody tr:last-child td:nth-child(1){
 	border-bottom-left-radius:6px;
 }
+
 
 
 /*
@@ -97,6 +94,7 @@ th {
 	width: 100%;
 	right: 0;
 	padding: 0;
+	color: #222;
 }
 
 
@@ -157,7 +155,48 @@ border-radius: 6px;
 /* max-width: inherit; */
 }
 
+#documentAuthorsTable thead tr{
+ background-color: #222;
+ color: #EEE;
+}
+#documentAuthorsTable td:last-child{
+	min-width: 122px;
+}
+#documentAuthorsTable td{
+	text-overflow:ellipsis;
+}
 
+#addForm label{
+
+}
+/* #addForm input:not(#authorsDropInput) { */
+/* 	margin: 3px auto; */
+/* } */
+.formDiv{
+	margin: 10px 20px;
+	width: 180px;
+}
+.formDiv p{
+	margin: 0px 10px;
+	text-align: right;
+	color: #EEE;
+	text-shadow: 1px 1px #222;
+}
+.formDiv input, .formDiv select{
+	margin: 0 10px 5px 10px;
+	width: calc(100% - 20px);
+	background-image:linear-gradient(to bottom right, transparent, #777);
+	border: none;
+	border-radius: 3px;
+	
+}
+.mandatory{
+	position: absolute;
+	color: #440044;
+	font-size: 20px;
+	font-weight: bold;
+	right:20px;
+}
 </style>
 
 <title>Document Manager</title>
@@ -169,34 +208,103 @@ border-radius: 6px;
 		<button id="addDocument" onclick="addDocument()">Add Document</button>
 	</div>
 	<div class="cont" id ="formContainer" onclick="enableHideFormContainer = false"hidden>
-		<form id="addForm"action="" >
+		<form id="addForm" action="" style="" >
 			<fieldset>
 			<legend>New Document</legend>
-		<table id="documentAuthorsTable">
-			<thead>
-				<tr>
-					<th colspan="2">Authors</th>
-					<th colspan="2">
-						<div id="authorsDropDiv" >
-							<input id="authorsDropInput" style="width:100%" type="text" value="Look up author ..."
+			<span style="display:inline-block;border-style:dotted; position: relative;">
+			<div class="formDiv">
+			<p for="docTypeSelector">Document type</p>
+			<select name="docType" id="docTypeSelector">
+				<option value="0"></option>
+			</select>
+			</div>
+			<div class="formDiv">
+<!-- 			<span class="mandatory">*</span> -->
+			<p >Date of publication</p>
+			<input id="dateInput" style="width:60px; margin: 0 10px 5px calc(100% - 10px - 60px)"type="text"/>
+			</div>
+			<div class="formDiv">
+			<p for="journalNameInput">Journal name</p>
+			<input id="journalNameInput"/>
+			</div>
+			<div class="formDiv">
+			<p for="titleInput">Title</p>
+			<input id="titleInput"/>
+			</div>
+			<div class="formDiv">
+			<p for="subTitleInput">Sub-title</p>
+			<input id="subTitleInput"/>
+			</div>
+			<div class="formDiv">
+			<p for="volNumberInput">Volume #</p>
+			<input id="volNumberInput"/>
+			</div>
+			<div class="formDiv">
+			<p for="volReleaseInput">Volume release</p>
+			<input id="volReleaseInput"/>
+			</div>
+			<div class="formDiv">
+			<p for="editionInput">Edition</p>
+			<input id="editionInput"/>
+			</div>
+			<div class="formDiv">
+			<p for="publisherInput">Publisher</p>
+			<input id="publisherInput"/>
+			</div>
+			<div class="formDiv">
+			<p for="publisherLocationInput">Publisher location</p>
+			<input id="publisherLocationInput"/>
+			</div>
+			<div class="formDiv">
+			<p for="startPageInput">Start page</p>
+			<input id="startPageInput"/>
+			</div>
+			<div class="formDiv">
+			<p for="endPageInput">End page</p>
+			<input id="endPageInput"/>
+			</div>
+			<div class="formDiv">
+			<p for="doiInput">DOI</p>
+			<input id="doiInput"/>
+			</div>
+			<div class="formDiv">
+			<p for="sourceInput">Source</p>
+			<input id="sourceInput"/>
+			</div>
+			</span>
+			<span style="display:inline-block;position: absolute;width:400px/*calc(50% - 40px)*/; border-style:dotted;">
+				<table id="documentAuthorsTable" style="position: relative; max-width: 100%; width:100%;">
+					<colgroup>
+						<col width="10%"/>
+						<col width="35%"/>
+						<col width="35%"/>
+						<col width="20%"/>
+					</colgroup>
+					<thead>
+						<tr>
+							<th colspan="2" style="text-align:center">Authors</th>
+							<th colspan="2">
+								<div id="authorsDropDiv" >
+									<input id="authorsDropInput" style="width:100%" type="text" value="Look up author ..."
 							onfocus="this.value=''"
 							onkeyup="searchAuthor(this.value)"
 							/>
-								<div id="authorsDropList"  >
+									<div id="authorsDropList"  >
+									</div>
 								</div>
-						</div>
-					 </th>
-				</tr>
-				<tr>
-					<th>ID</th><th>First name</th><th>Last name</th><th>options</th>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
-		<span id="dateSpan">Date of publication:<input onkeyup="watchDate(event)"style="width:60px"type="text"/></span>
-		
-			<input type="submit"/>
+					 		</th>
+					</tr>
+					<tr>
+						<th>ID</th><th>First name</th><th>Last name</th><th>options</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</span>
+		<div>
+		<input type="submit"/>
+		</div>
 			</fieldset>
 		</form>
 	</div>
@@ -280,7 +388,7 @@ var documents ={
 	}
 }
 
-authors={
+var authors={
 	fetched: false,
 	items:[],
 	order : {
@@ -289,27 +397,63 @@ authors={
 		lastName: false,
 	}
 }
-var noNumberPattern = /[^0-9]/;
+
+var docTypes = {
+	fetched : false,
+	items:[],
+}
+
+formDivs = document.getElementsByClassName("formDiv");
+for (i = 1/*first formDiv is the selector, hence ignored*/; i < formDivs.length; i++){
+	span = document.createElement("span");
+	span.appendChild(document.createTextNode("*"));
+	span.classList.add("mandatory");
+	formDivs[i].insertBefore(span, formDivs[i].firstChild);
+}
+
+
+fetchDocTypes().then(function(){
+	docTypeSelector = document.getElementById("docTypeSelector");
+	for (docType of docTypes.items){
+		option = document.createElement("option")
+		textNode = document.createTextNode(docType.description);
+		option.appendChild(textNode);
+		option.value = docType.id;
+		docTypeSelector.appendChild(option);
+	}
+});
+
+
 var minDate = 1200;
 var maxDate = new Date().getFullYear();
+dateInput = document.getElementById("dateInput");
+
+dateInput.onkeypress = watchDate;
 function watchDate(event){
 	target = event.target;
-	date = target.value.substring(0,4);
-	date = date.replace(noNumberPattern,"");
-	target.value = date;
-	
-	if (date.length < 4) return;
-	
-	date = Number(date);
-	if (date < minDate){
-		target.value = minDate; 
-	} else if (date > maxDate){
-		target.value =maxDate;
+	date = target.value;
+	key = event.which || event.keyCode;
+	if (key>=48 && key <=57){
+		if (date.length==4){
+			return false;
+		} else if (date.length==3){
+			newVal = date + String.fromCharCode(key);
+			newVal = Number(newVal);
+			if (newVal<minDate){
+				event.target.value = minDate;
+				return false;
+			} else if(newVal>maxDate){
+				event.target.value = maxDate;
+				return false;
+			}
+		}
+	} else {
+		return false;
 	}
 }
-function referencesBackgroundPadding(){
-	
-}
+
+
+
 function getScrollBarWidth(){
 	let sDiv = document.createElement("div");
 	document.body.appendChild(sDiv);
@@ -478,7 +622,7 @@ function showList(){
 	var interval = setInterval(increaseSize,1);
 	function increaseSize(){
 		height = Number(authorsDropList.style.maxHeight.substr(0,(authorsDropList.style.maxHeight.length)-2));
-		if(height >= 100){
+		if(height >= 200){
 			clearInterval(interval);
 			document.addEventListener("click",hideList);
 		} else {
@@ -640,7 +784,8 @@ function updateTableOptions(){
 function removeRow(event){
 	rowNumber= Number(event.target.id.split("-")[1]);
 	tBody = documentAuthorsTable.tBodies[0];
-	idCell = tBody.children[rowNumber].firstChild;
+	tr = tBody.children[rowNumber];
+	idCell = tr.firstChild;
 	if (idCell.firstChild.tagName=="SPAN"){ // In case is an entering author row
 		addedAuthorsIds.shift() // remove 0 from array
 	} else if (idCell.firstChild.innerHTML == "new"){
@@ -654,8 +799,20 @@ function removeRow(event){
 			}
 		}
 	}
-	tBody.deleteRow(rowNumber);
-	updateTableOptions();
+	opacity = tr.style.opacity || 1;
+	
+	var interval = setInterval(fade,1);
+	function fade(){
+		if (opacity < 0){
+			clearInterval(interval);
+			tBody.deleteRow(rowNumber);
+			updateTableOptions();
+		} else{
+			opacity = opacity - 0.01;
+			tr.style.opacity=opacity;
+		}
+	}
+	
 }
 
 function move(event){
@@ -975,7 +1132,25 @@ function getJournalArticleReference(journalArticle){
 }
 
 
-
+function fetchDocTypes(){
+	let p = new Promise(function(resolve){
+		if (docTypes.fetched){
+			resolve();
+		} else{
+			let ajax = new XMLHttpRequest();
+			ajax.onreadystatechange = function(){
+				if (ajax.readyState == 4 && ajax.status == 200){
+					docTypes.fetched = true;
+					docTypes.items = JSON.parse(ajax.response);
+					resolve();
+				}
+			}
+			ajax.open("GET","doc_types",true);
+			ajax.send();
+		}
+	});
+	return p;
+}
 function fetchDocuments(){
 	let p = new Promise(function(resolve){
 		if (documents.fetched){
