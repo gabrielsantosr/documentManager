@@ -31,7 +31,7 @@ body{
 table {
 /* 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
 /* 	table-layout: fixed; */
-	width: 70%;
+/* 	width: 70%; */
 	border-radius: 6px;
 }
 
@@ -41,8 +41,12 @@ tr:nth-child(odd){
 tr:nth-child(even){
 	background-color: #E0E0E0;
 }
+
 td input{
-	width: 125px;
+	width: 110px;
+	margin: 0;
+	padding: 0;
+	border:none;
 }
 
 .remarked{
@@ -99,17 +103,7 @@ th {
 
 
 
-#authorsDropList{
-	position:absolute;
-	width: 100%;
-	cursor: pointer;
-	background-color: #f1f1f1;
-	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-	max-height: 0px;
-	overflow: auto;
-  	z-index: 1;
-  	text-alignment: left;
-}
+
 /*#referencesContainer div{
 }*/
 
@@ -146,6 +140,8 @@ th {
 .okIcon {
 	color: #00AA00;
 	cursor: pointer;
+	margin:0px;
+	padding:0px;
 }
 .cont{
 position: relative;
@@ -155,16 +151,24 @@ border-radius: 6px;
 /* max-width: inherit; */
 }
 
-#documentAuthorsTable thead tr{
- background-color: #222;
- color: #EEE;
+#documentAuthorsTable thead tr:not(tr:first-child){
+	/*background-color: #222;*/
+	background-image:linear-gradient(to right,#222, #444, #222);
+ 	color: #EEE;
+ 	border;
 }
-#documentAuthorsTable td:last-child{
+
+#documentAuthorsTable thead tr:first-child{
+	background-image: none;
+	background-color: transparent;
+}
+
+#documentAuthorsTable td:last-child,
+#documentAuthorsTable th:last-child{
 	min-width: 122px;
 }
-#documentAuthorsTable td{
-	text-overflow:ellipsis;
-}
+
+
 
 #addForm label{
 
@@ -176,11 +180,12 @@ border-radius: 6px;
 	margin: 10px 20px;
 	width: 180px;
 }
-.formDiv p{
+.formDiv p:not(#authorsDropList p){
 	margin: 0px 10px;
 	text-align: right;
 	color: #EEE;
 	text-shadow: 1px 1px #222;
+	position:relative;
 }
 .formDiv input, .formDiv select{
 	margin: 0 10px 5px 10px;
@@ -196,6 +201,19 @@ border-radius: 6px;
 	font-size: 20px;
 	font-weight: bold;
 	right:20px;
+}
+
+#authorsDropList{
+	position:absolute;
+	width: 100%;
+	cursor: pointer;
+	background-color: #f1f1f1;
+	box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.2);
+	max-height: 0px;
+	overflow: auto;
+  	z-index: 1;
+  	text-alignment: left;
+  	opacity: 0.9;
 }
 </style>
 
@@ -272,22 +290,26 @@ border-radius: 6px;
 			<input id="sourceInput"/>
 			</div>
 			</span>
-			<span style="display:inline-block;position: absolute;width:400px/*calc(50% - 40px)*/; border-style:dotted;">
-				<table id="documentAuthorsTable" style="position: relative; max-width: 100%; width:100%;">
+			<div class="formDiv" style="display:inline-block;position: absolute;width:470px; ">
+				<p style="text-align:right; margin: 0 30px;">Authors</p>
+				<table id="documentAuthorsTable" style="position: relative; width:100%;">
 					<colgroup>
-						<col width="10%"/>
-						<col width="35%"/>
-						<col width="35%"/>
-						<col width="20%"/>
+						<col width="50px"/>
+						<col width="150px"/>
+						<col width="150px"/>
+						<col width="120px"/>
 					</colgroup>
 					<thead>
-						<tr>
-							<th colspan="2" style="text-align:center">Authors</th>
+						<tr class="trans">
+							<th colspan="2"></th>
 							<th colspan="2">
 								<div id="authorsDropDiv" >
-									<input id="authorsDropInput" style="width:100%" type="text" value="Look up author ..."
-							onfocus="this.value=''"
+									<input id="authorsDropInput" style="/*width:calc(100% - 20px);background-image:linear-gradient(to bottom right, transparent, #777);
+	border: none;
+	border-radius: 3px;*/" type="text" value="Look up author ..."
+							onfocus="this.value=''; searchAuthor('')"
 							onkeyup="searchAuthor(this.value)"
+							autocomplete="off"
 							/>
 									<div id="authorsDropList"  >
 									</div>
@@ -301,7 +323,7 @@ border-radius: 6px;
 				<tbody>
 				</tbody>
 			</table>
-		</span>
+		</div>
 		<div>
 		<input type="submit"/>
 		</div>
@@ -606,9 +628,9 @@ function hideList(event){
 	var interval = setInterval(reduceSize,1);
 	function reduceSize(){
 		if (height < 1){
-			clearInterval(interval);
 			document.getElementById('authorsDropInput').value = lookUpAuthorText;
 			authorsDropList.hidden = true;
+			clearInterval(interval);
 			
 		} else{
 			height = height - 2;
