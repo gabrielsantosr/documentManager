@@ -11,6 +11,7 @@ public class DocumentTypeDTO {
 		id = docType.getId();
 		description=docType.getDescription();
 	}
+	
 	public DocumentTypeDTO() {
 		
 	}

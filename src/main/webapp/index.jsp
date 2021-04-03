@@ -75,7 +75,7 @@ td {
 
 
 th {
-	padding: 10px;
+ 	padding: 5px; 
 	text-align: left;
 	font-weight: normal;
 	letter-spacing: 0.1em;
@@ -151,17 +151,17 @@ border-radius: 6px;
 /* max-width: inherit; */
 }
 
-#documentAuthorsTable thead tr:not(tr:first-child){
+#documentAuthorsTable thead tr/*:not(tr:first-child)*/{
 	/*background-color: #222;*/
 	background-image:linear-gradient(to right,#222, #444, #222);
  	color: #EEE;
- 	border;
+ 	
 }
 
-#documentAuthorsTable thead tr:first-child{
-	background-image: none;
-	background-color: transparent;
-}
+/* #documentAuthorsTable thead tr:first-child{ */
+/* 	background-image: none; */
+/* 	background-color: transparent; */
+/* } */
 
 #documentAuthorsTable td:last-child,
 #documentAuthorsTable th:last-child{
@@ -176,7 +176,7 @@ border-radius: 6px;
 /* #addForm input:not(#authorsDropInput) { */
 /* 	margin: 3px auto; */
 /* } */
-.formDiv{
+.formDiv/*:not(#datDiv)*/{
 	margin: 10px 20px;
 	width: 180px;
 }
@@ -205,10 +205,8 @@ border-radius: 6px;
 
 #authorsDropList{
 	position:absolute;
-	width: 100%;
 	cursor: pointer;
 	background-color: #f1f1f1;
-	box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.2);
 	max-height: 0px;
 	overflow: auto;
   	z-index: 1;
@@ -229,70 +227,82 @@ border-radius: 6px;
 		<form id="addForm" action="" style="" >
 			<fieldset>
 			<legend>New Document</legend>
-			<span style="display:inline-block;border-style:dotted; position: relative;">
-			<div class="formDiv">
+			<div class="formDiv" style="display:inline-block">
 			<p for="docTypeSelector">Document type</p>
 			<select name="docType" id="docTypeSelector">
-				<option value="0"></option>
+				<option value="0" selected>Select ...</option>
 			</select>
 			</div>
-			<div class="formDiv">
-<!-- 			<span class="mandatory">*</span> -->
-			<p >Date of publication</p>
-			<input id="dateInput" style="width:60px; margin: 0 10px 5px calc(100% - 10px - 60px)"type="text"/>
+			<button id="registerButton" style="display: inline-block" disabled> Register</button>
+			<div id="fields" hidden>
+			<span style="display:inline-block;box-shadow: 3px 3px 10px #222;
+	border-radius: 3px; position: relative;">
+			<div class="formDiv field" id="dateField">
+				<p >Date of publication</p>
+				<input id="dateInput" autocomplete="off"style="width:60px; margin: 0 10px 5px calc(100% - 10px - 60px)"type="text"/>
 			</div>
-			<div class="formDiv">
-			<p for="journalNameInput">Journal name</p>
-			<input id="journalNameInput"/>
+			<div class="formDiv field" id="journalNameField">
+				<p for="journalNameInput">Journal name</p>
+				<input id="journalNameInput"/>
 			</div>
-			<div class="formDiv">
-			<p for="titleInput">Title</p>
-			<input id="titleInput"/>
+			<div class="formDiv field" id="titleField">
+				<p for="titleInput">Title</p>
+				<input id="titleInput"/>
 			</div>
-			<div class="formDiv">
-			<p for="subTitleInput">Sub-title</p>
-			<input id="subTitleInput"/>
+			<div class="formDiv field" id="subTitleField">
+				<p for="subTitleInput">Sub-title</p>
+				<input id="subTitleInput"/>
 			</div>
-			<div class="formDiv">
-			<p for="volNumberInput">Volume #</p>
-			<input id="volNumberInput"/>
+			<div class="formDiv field" id="volNumberField">
+				<p for="volNumberInput">Volume #</p>
+				<input id="volNumberInput"/>
 			</div>
-			<div class="formDiv">
-			<p for="volReleaseInput">Volume release</p>
-			<input id="volReleaseInput"/>
+			<div class="formDiv field" id="volReleaseField">
+				<p for="volReleaseInput">Volume release</p>
+				<input id="volReleaseInput"/>
 			</div>
-			<div class="formDiv">
-			<p for="editionInput">Edition</p>
+				<div class="formDiv field" id="editionField">
+				<p for="editionInput">Edition</p>
 			<input id="editionInput"/>
 			</div>
-			<div class="formDiv">
-			<p for="publisherInput">Publisher</p>
-			<input id="publisherInput"/>
+			<div class="formDiv field" id="publisherField">
+				<p for="publisherInput">Publisher</p>
+				<input id="publisherInput"/>
 			</div>
-			<div class="formDiv">
-			<p for="publisherLocationInput">Publisher location</p>
-			<input id="publisherLocationInput"/>
+			<div class="formDiv field" id="publisherLocationField">
+				<p for="publisherLocationInput">Publisher location</p>
+				<input id="publisherLocationInput"/>
 			</div>
-			<div class="formDiv">
-			<p for="startPageInput">Start page</p>
-			<input id="startPageInput"/>
+			<div class="formDiv field" id="startPageField">
+				<p for="startPageInput">Start page</p>
+				<input id="startPageInput"/>
 			</div>
-			<div class="formDiv">
-			<p for="endPageInput">End page</p>
-			<input id="endPageInput"/>
+			<div class="formDiv field" id="endPageField">
+				<p for="endPageInput">End page</p>
+				<input id="endPageInput"/>
 			</div>
-			<div class="formDiv">
-			<p for="doiInput">DOI</p>
-			<input id="doiInput"/>
+			<div class="formDiv field" id="doiField">
+				<p for="doiInput">DOI</p>
+				<input id="doiInput"/>
 			</div>
-			<div class="formDiv">
-			<p for="sourceInput">Source</p>
-			<input id="sourceInput"/>
+			<div class="formDiv field" id="sourceField">
+				<p for="sourceInput">Source</p>
+				<input id="sourceInput"/>
 			</div>
 			</span>
-			<div class="formDiv" style="display:inline-block;position: absolute;width:470px; ">
-				<p style="text-align:right; margin: 0 30px;">Authors</p>
-				<table id="documentAuthorsTable" style="position: relative; width:100%;">
+			<div class="formDiv field" id= "authorsField" style="display:inline-block;position: absolute;width:470px; margin:0 0; padding:10px; box-shadow: 3px 3px 10px #222;
+	border-radius: 3px;">
+				<p style="text-align:right; margin: 0 20px;">Authors</p>
+								<div id="authorsDropDiv" >
+									<input id="authorsDropInput" style="width:180px;" type="text" value="Look up author ..."
+							
+							onkeyup="searchAuthor(this.value)"
+							autocomplete="off"
+							/>
+									<div id="authorsDropList"  >
+									</div>
+								</div>
+				<table id="documentAuthorsTable" style="position: relative; width:100%; ">
 					<colgroup>
 						<col width="50px"/>
 						<col width="150px"/>
@@ -303,30 +313,18 @@ border-radius: 6px;
 						<tr class="trans">
 							<th colspan="2"></th>
 							<th colspan="2">
-								<div id="authorsDropDiv" >
-									<input id="authorsDropInput" style="/*width:calc(100% - 20px);background-image:linear-gradient(to bottom right, transparent, #777);
-	border: none;
-	border-radius: 3px;*/" type="text" value="Look up author ..."
-							onfocus="this.value=''; searchAuthor('')"
-							onkeyup="searchAuthor(this.value)"
-							autocomplete="off"
-							/>
-									<div id="authorsDropList"  >
-									</div>
-								</div>
 					 		</th>
 					</tr>
 					<tr>
-						<th>ID</th><th>First name</th><th>Last name</th><th>options</th>
+						<th>ID</th><th>First name</th><th>Last name</th><th></th>
 					</tr>
 				</thead>
 				<tbody>
 				</tbody>
 			</table>
 		</div>
-		<div>
-		<input type="submit"/>
 		</div>
+		
 			</fieldset>
 		</form>
 	</div>
@@ -390,14 +388,26 @@ border-radius: 6px;
 
 
 <script>
+
 var table = document.getElementById("table");
 var iframe = document.getElementsByTagName("iframe")[0];
 var downloadBar = document.getElementById("downloadBar");
 var barContainer = document.getElementById("barContainer");
+var authorsDropInput = document.getElementById("authorsDropInput");
 var authorsDropList = document.getElementById("authorsDropList");
 var documentAuthorsTable = document.getElementById("documentAuthorsTable");
 var references = document.getElementById("references");
 var lookUpAuthorText = document.getElementById("authorsDropInput").value;
+
+aDIwidth = authorsDropInput.style.width;
+authorsDropInput.style.margin= "0 10px 5px calc(100% - 10px - "+aDIwidth+")";
+authorsDropList.style.width= authorsDropInput.style.width;
+authorsDropList.style.margin= authorsDropInput.style.margin;
+authorsDropInput.addEventListener("focus",function(){
+	this.value = "";
+	searchAuthor("");
+})
+
 
 var documents ={
 	fetched: false,
@@ -425,13 +435,62 @@ var docTypes = {
 	items:[],
 }
 
-formDivs = document.getElementsByClassName("formDiv");
-for (i = 1/*first formDiv is the selector, hence ignored*/; i < formDivs.length; i++){
+fieldManager={};
+
+fields = document.getElementsByClassName("field");
+
+for (field of fields){
 	span = document.createElement("span");
 	span.appendChild(document.createTextNode("*"));
 	span.classList.add("mandatory");
-	formDivs[i].insertBefore(span, formDivs[i].firstChild);
+	field.insertBefore(span, field.firstChild);
+	id = field.id;
+	fieldName = id.substring(0,id.length-5);
+	fieldManager[fieldName]={};
+	fieldManager[fieldName].field = field;
+	fieldManager[fieldName].star = span;
+	fieldManager[fieldName].required= 0;
+	fieldManager[fieldName].valid= (fieldName == "authors");
+	if (fieldName == "authors" || fieldName == "date") {
+		continue;
+	}
+	input = field.getElementsByTagName("input")[0];
+	input.addEventListener("focusout",enableRegisterButton);
+ 	input.addEventListener("keyup",enableRegisterButton);
 }
+
+function enableRegisterButton(){
+	fieldName = this.id.substring(0,this.id.length-5);
+	if (fieldManager[fieldName].required == 1){
+		if (this.value.replace(/^\s+|\s+$/g, '')){
+			fieldManager[fieldName].valid = true;
+		} else{
+			fieldManager[fieldName].valid = false;
+		}
+	} else {
+		fieldManager[fieldName].valid = true;
+	}
+	allFieldsValidation(fieldManager[fieldName].valid);
+}
+
+var registerEnabled;
+
+function allFieldsValidation(fieldValid){
+	registerEnabled = registerEnabled || false;
+	if (registerEnabled){
+		registerEnabled = fieldValid;
+	} else if (!fieldValid){
+		registerEnabled = false;
+	} else{
+		registerEnabled = true;
+		for (each in fieldManager){
+			registerEnabled &= (fieldManager[each].valid || fieldManager[each].required == 0);
+			if (!registerEnabled) break;
+		}
+	}
+	document.getElementById("registerButton").disabled = !registerEnabled;
+}
+
 
 
 fetchDocTypes().then(function(){
@@ -443,7 +502,49 @@ fetchDocTypes().then(function(){
 		option.value = docType.id;
 		docTypeSelector.appendChild(option);
 	}
+	docTypeSelector.onchange = function(){
+		option = docTypeSelector.value;
+		fields = document.getElementById("fields");
+		if (option == 0){
+			fields.hidden = true;
+			return;
+		}
+		fields.hidden = false;
+		/*
+		fieldManager.*.required can take the following values:
+			0: not required
+			1: required
+			2: optional
+		*/
+		fieldManager.date.required = 1;
+		fieldManager.journalName.required = (option==3)? 1 : 0;
+		fieldManager.title.required = 1;
+		fieldManager.subTitle.required = 2;
+		fieldManager.volNumber.required = (option==3)? 1 : 0;
+		fieldManager.volRelease.required = (option==3)? 2 : 0;
+		fieldManager.edition.required = (option == 1)? 2 : 0;
+		fieldManager.publisher.required = (option == 1)?1:((option == 2)?2:0);
+		fieldManager.publisherLocation.required = (option == 1 || option == 2)?2:0;
+		fieldManager.startPage.required = (option == 3)? 1 : 0;
+		fieldManager.endPage.required = (option == 3)? 1 : 0;
+		fieldManager.doi.required = (option == 3)? 2: 0;
+		fieldManager.source.required = 2;
+		fieldManager.authors.required = 1;
+
+		for (each in fieldManager){
+			fieldManager[each].star.hidden = (fieldManager[each].required !=1);
+			fieldManager[each].field.hidden = (fieldManager[each].required == 0);
+			fieldManager[each].valid = (each == "authors" || fieldManager[each].required !=1);
+			if (each == "authors") continue;
+			fieldManager[each].field.getElementsByTagName("input")[0].value='';
+		}
+		registerEnabled = false;
+		allFieldsValidation(true);
+	};
 });
+
+
+
 
 
 var minDate = 1200;
@@ -451,15 +552,36 @@ var maxDate = new Date().getFullYear();
 dateInput = document.getElementById("dateInput");
 
 dateInput.onkeypress = watchDate;
+dateInput.onkeyup/*in case copy+paste */ = function(){
+	val = Number(this.value);
+	if (isNaN(val)){
+		this.value = lastValidDate;
+	}
+	fieldManager.date.valid = (this.value >= minDate && this.value <= maxDate);
+	allFieldsValidation(fieldManager.date.valid);
+}
+
+dateInput.onfocusout = function(){
+	if (this.value.length != 4)
+		this.value = "";
+ 	val = Number(this.value);
+	if (isNaN(val)){
+		this.value = lastValidDate;
+	}
+	fieldManager.date.valid = (this.value >= minDate && this.value <= maxDate);
+	allFieldsValidation(fieldManager.date.valid);
+};
+
+var lastValidDate;
 function watchDate(event){
 	target = event.target;
-	date = target.value;
+	lastValidDate = target.value;
 	key = event.which || event.keyCode;
 	if (key>=48 && key <=57){
-		if (date.length==4){
+		if (lastValidDate.length==4){
 			return false;
-		} else if (date.length==3){
-			newVal = date + String.fromCharCode(key);
+		} else if (lastValidDate.length==3){
+			newVal = lastValidDate + String.fromCharCode(key);
 			newVal = Number(newVal);
 			if (newVal<minDate){
 				event.target.value = minDate;
