@@ -13,6 +13,7 @@ import dto.AuthorDTO;
 import dto.DocumentDTO;
 import dto.DocumentTypeDTO;
 import dto.FileDTO;
+import entities.Author;
 import service.DtoService;
 
 @RestController
@@ -54,5 +55,13 @@ public class DtoController {
 	@RequestMapping(value="doc_types")
 	public List<DocumentTypeDTO> getAllDocumentTypeDTO(){
 		return dtoService.getAllDocumentTypeDTO();
+	}
+	
+	@RequestMapping(method= RequestMethod.POST, value="new_doc")
+	public DocumentDTO setNewDocumentFromDTO(@RequestBody DocumentDTO documentDTO) {
+		
+		dtoService.saveDocumentFromDTO(documentDTO);
+		System.out.println(documentDTO.toString());
+		return documentDTO;
 	}
 }

@@ -14,6 +14,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import dto.DocumentDTO;
 import sub_entities.Volume;
 @Entity
 @Table(	name="document",
@@ -79,6 +80,26 @@ public class Document extends IntIdEntity {
 	
 	public Document(DocumentType documentType) {
 		this.documentType = documentType;
+	}
+	
+	public Document(DocumentDTO documentDTO) {
+		setId(documentDTO.getId());
+		setEdition(documentDTO.getEdition());
+		setPublisher(documentDTO.getPublisher());
+		setPublisherLocation(documentDTO.getPublisherLocation());
+		DocumentType docType = new DocumentType();
+		System.out.println(documentDTO.getDocType().get("id"));
+		docType.setId((Integer)documentDTO.getDocType().get("id"));
+		setDocumentType(docType);
+		setYear(documentDTO.getYear());
+		setTitle(documentDTO.getTitle());
+		setSubTitle(documentDTO.getSubTitle());
+		setJournalName(documentDTO.getJournalName());
+		setVolume(documentDTO.getVolume());
+		setStartPage(documentDTO.getStartPage());
+		setEndPage(documentDTO.getEndPage());
+		setDoi(documentDTO.getDoi());
+		setSource(documentDTO.getSource());
 	}
 
 	@Override

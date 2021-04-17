@@ -26,6 +26,7 @@ public class DocumentDTO {
 	private Integer startPage;
 	private Integer endPage;
 	private String doi;
+	private String source;
 	private Integer approxRequiredLengthForFile;
 	
 	
@@ -179,5 +180,22 @@ public class DocumentDTO {
 	public void setDoi(String doi) {
 		this.doi = doi;
 	}
-	
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String toString() {
+		String auths="";
+		for (AuthorDTO a: authors) {
+			auths +="\n{id: "+a.getId()+", firstName: "+a.getFirstName()+", lastName: "+a.getLastName()+"}";
+		}
+		return "id: "+id+
+		"\nTitle: "+title+
+		"\nYear: "+year+
+		"\nAuthors: ["+auths+"]";
+	}
 }

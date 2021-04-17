@@ -224,7 +224,7 @@ border-radius: 6px;
 		<button id="addDocument" onclick="addDocument()">Add Document</button>
 	</div>
 	<div class="cont" id ="formContainer" onclick="enableHideFormContainer = false"hidden>
-		<form id="addForm" action="" style="" >
+		<form id="addForm" style="" >
 			<fieldset>
 			<legend>New Document</legend>
 			<div class="formDiv" style="display:inline-block">
@@ -233,13 +233,13 @@ border-radius: 6px;
 				<option value="0" selected>Select ...</option>
 			</select>
 			</div>
-			<button id="registerButton" style="display: inline-block" disabled> Register</button>
+			<button id="registerButton"  style="display: inline-block" disabled> Register</button>
 			<div id="fields" hidden>
 			<span style="display:inline-block;box-shadow: 3px 3px 10px #222;
 	border-radius: 3px; position: relative;">
 			<div class="formDiv field" id="dateField">
 				<p >Date of publication</p>
-				<input id="dateInput" autocomplete="off"style="width:60px; margin: 0 10px 5px calc(100% - 10px - 60px)"type="text"/>
+				<input id="dateInput" type="number" autocomplete = "off" style="width:60px; margin: 0 10px 5px calc(100% - 10px - 60px)"type="text"/>
 			</div>
 			<div class="formDiv field" id="journalNameField">
 				<p for="journalNameInput">Journal name</p>
@@ -275,11 +275,11 @@ border-radius: 6px;
 			</div>
 			<div class="formDiv field" id="startPageField">
 				<p for="startPageInput">Start page</p>
-				<input id="startPageInput"/>
+				<input id="startPageInput" type="number"/>
 			</div>
 			<div class="formDiv field" id="endPageField">
 				<p for="endPageInput">End page</p>
-				<input id="endPageInput"/>
+				<input id="endPageInput" type="number"/>
 			</div>
 			<div class="formDiv field" id="doiField">
 				<p for="doiInput">DOI</p>
@@ -434,6 +434,45 @@ var docTypes = {
 	fetched : false,
 	items:[],
 }
+document.getElementById("addForm").onsubmit= function(){return false};
+document.getElementById("registerButton").onclick= registerHandler;
+
+function registerHandler(event){
+	console.log("REGISTER HANDLER");
+	let regDocument={
+		docType:{id:Number(document.getElementById("docTypeSelector").value)},	
+		year: dateInput.value,
+		title: titleInput.value,
+		subTitle: subTitleInput.value,
+		journalName: journalNameInput.value,
+		volume: {volumeNumber:volNumberInput.value, volumeRelease:volReleaseInput.value},
+		edition: editionInput.value,
+		publisher: publisherInput.value,
+		publisherLocation: publisherLocationInput.value,
+		startPage: startPageInput.value,
+		endPage: endPageInput.value,
+		doi: doiInput.value,
+		authors:[]
+	}
+	for (row of documentAuthorsTable.tBodies[0].children){
+		if (row.firstChild.firstChild.tagName=="SPAN") continue;
+		let author = {};
+		author.id = (row.firstChild.innerHTML=="new")?null:Number(row.firstChild.innerHTML);
+		author.firstName = row.children[1].innerHTML;
+		author.lastName = row.children[2].innerHTML;
+		regDocument.authors.push(author);
+	}
+	ajax = new XMLHttpRequest();
+	ajax.onreadystatechange = function(){
+		if (ajax.readyState == 4 && ajax.status == 200){
+			console.log("document successfully transfered to server");
+		}
+	}
+	ajax.open("POST","new_doc",true);
+	ajax.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	ajax.send(JSON.stringify(regDocument));
+}
+console.log("LOADING");
 
 fieldManager={};
 
@@ -450,8 +489,12 @@ for (field of fields){
 	fieldManager[fieldName].field = field;
 	fieldManager[fieldName].star = span;
 	fieldManager[fieldName].required= 0;
-	fieldManager[fieldName].valid= (fieldName == "authors");
-	if (fieldName == "authors" || fieldName == "date") {
+	fieldManager[fieldName].valid= false;
+	
+	if 	(	fieldName == "authors" 	||
+			fieldName == "date" 	||
+			fieldName == "startPage"||
+			fieldName == "endPage") {
 		continue;
 	}
 	input = field.getElementsByTagName("input")[0];
@@ -534,8 +577,11 @@ fetchDocTypes().then(function(){
 		for (each in fieldManager){
 			fieldManager[each].star.hidden = (fieldManager[each].required !=1);
 			fieldManager[each].field.hidden = (fieldManager[each].required == 0);
-			fieldManager[each].valid = (each == "authors" || fieldManager[each].required !=1);
-			if (each == "authors") continue;
+			if (each == "authors"){
+				fieldManager.authors.valid |= fieldManager.authors.required !=1;
+				continue;
+			}
+			fieldManager[each].valid = ( fieldManager[each].required !=1);
 			fieldManager[each].field.getElementsByTagName("input")[0].value='';
 		}
 		registerEnabled = false;
@@ -550,51 +596,76 @@ fetchDocTypes().then(function(){
 var minDate = 1200;
 var maxDate = new Date().getFullYear();
 dateInput = document.getElementById("dateInput");
+dateInput.min = minDate;
+dateInput.max = maxDate;
+
+startPageInput.min = 0;
+startPageInput.onkeypress = watchPages;
+endPageInput.onkeypress = watchPages;
+
+startPageInput.onfocusout = pageInputHandler;
+endPageInput.onfocusout = pageInputHandler;
+startPageInput.oninput = pageInputHandler;
+endPageInput.oninput = pageInputHandler;
+
+
+function watchPages(event){
+	target = event.target;
+	val = target.value;
+	key = event.which || event.keyCode;
+	console.log(key)
+	if (key < 48 || key > 57) return false;
+	
+}
+
+function pageInputHandler(event){
+	endPageInput.min = startPageInput.value;
+	startPageInput.max = endPageInput.value;
+	fieldManager.endPage.valid = (endPageInput.value >= startPageInput.value);
+	fieldManager.startPage.valid = (endPageInput.value >= startPageInput.value);
+	allFieldsValidation(fieldManager.endPage.valid);
+}
 
 dateInput.onkeypress = watchDate;
-dateInput.onkeyup/*in case copy+paste */ = function(){
-	val = Number(this.value);
-	if (isNaN(val)){
-		this.value = lastValidDate;
+
+dateInput.oninput = dateInputHandler;/*in case copy+paste */
+//dateInput.onkeyup = dateInputHandler;/*in case copy+paste */
+dateInput.onfocusout = function(event){
+	if (this.value.length != 4)
+		this.value = "";
+	dateInputHandler(event);
+};
+
+function dateInputHandler(event){
+	target = event.target;
+	val = target.value;
+	//console.log("triggered by input event. VALUE:"+val);
+	if (val.length >3){
+		target.value = (val<minDate)?minDate:((val>maxDate)?maxDate:val)
 	}
-	fieldManager.date.valid = (this.value >= minDate && this.value <= maxDate);
+	fieldManager.date.valid = (target.value >= minDate && target.value <= maxDate);
 	allFieldsValidation(fieldManager.date.valid);
 }
 
-dateInput.onfocusout = function(){
-	if (this.value.length != 4)
-		this.value = "";
- 	val = Number(this.value);
-	if (isNaN(val)){
-		this.value = lastValidDate;
-	}
-	fieldManager.date.valid = (this.value >= minDate && this.value <= maxDate);
-	allFieldsValidation(fieldManager.date.valid);
-};
-
-var lastValidDate;
 function watchDate(event){
+	//console.log("triggered by keypress event")
 	target = event.target;
-	lastValidDate = target.value;
+	val = target.value;
 	key = event.which || event.keyCode;
 	if (key>=48 && key <=57){
-		if (lastValidDate.length==4){
-			return false;
-		} else if (lastValidDate.length==3){
-			newVal = lastValidDate + String.fromCharCode(key);
-			newVal = Number(newVal);
-			if (newVal<minDate){
+		if (val.length == 3){
+			newVal = val + String.fromCharCode(key);
+			if (newVal< minDate){
 				event.target.value = minDate;
 				return false;
-			} else if(newVal>maxDate){
+			} else if (newVal > maxDate){
 				event.target.value = maxDate;
 				return false;
 			}
-		}
-	} else {
-		return false;
-	}
+		} else if (val.length > 3) return false;
+	} else return false;
 }
+
 
 
 
@@ -817,12 +888,25 @@ function appendToAuthorsTable(event){
 	options.appendChild(createArrowUp());
 	options.appendChild(createArrowDown());
 	updateTableOptions();
+	validateAuthorsField();
 }
 
 /*
  *
  *
  */
+function validateAuthorsField(){ 
+	let rows = documentAuthorsTable.tBodies[0].children;
+	let validRows = false;
+	for (row of rows){
+		if (row.firstChild.firstChild.tagName=="SPAN") continue;
+		validRows = true;
+		break;
+	}
+	fieldManager.authors.valid = validRows;
+	allFieldsValidation(validRows);
+}
+
 function acceptNewAuthor(event){
 	row = event.target.parentElement.parentElement;
 	row.firstChild.innerHTML = "new";
@@ -833,6 +917,7 @@ function acceptNewAuthor(event){
 	row.children[2].innerHTML = lastName;
 	addedAuthorsIds.shift();// The momentary id of the new author, 0, has been unshifted, instead of pushed.
 							// This saves the programme having to iterate to find where whitin the array was the 0 stored.
+	validateAuthorsField();
 }
 
 function createArrowUp(){
@@ -951,6 +1036,7 @@ function removeRow(event){
 			clearInterval(interval);
 			tBody.deleteRow(rowNumber);
 			updateTableOptions();
+			validateAuthorsField();
 		} else{
 			opacity = opacity - 0.01;
 			tr.style.opacity=opacity;

@@ -1,6 +1,5 @@
 package service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -8,13 +7,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import dto.AuthorDTO;
-import dto.DocumentDTO;
-import dto.DocumentTypeDTO;
-import dto.FileDTO;
 import entities.Author;
+import entities.Authorship;
 import entities.Document;
 import entities.DocumentType;
+import sub_entities.AuthorshipCompositeKey;
 
 public class DtoDAO {
 
@@ -52,62 +49,44 @@ public class DtoDAO {
 		}
 	}
 
-	protected AuthorDTO getAuthorDTO(Integer id) {
-		Author author = (Author) session.get(Author.class, id);
-		return new AuthorDTO(author);
+	protected Author getAuthor(Integer id) {
+		return (Author)session.get(Author.class, id);
 	}
 
-	protected List<AuthorDTO> getAllAuthorDTO() {
-		Query q = session.createQuery("FROM " + Author.class.getName());
-		@SuppressWarnings("unchecked")
-		List<Author> authors = q.list();
-		List<AuthorDTO> authorDTOs = new ArrayList<>();
-		for (Author author : authors) {
-			authorDTOs.add(new AuthorDTO(author));
-		}
-		return authorDTOs;
+		
+	@SuppressWarnings("unchecked")
+	protected List<Author>getAllAuthor(){
+		Query q = session.createQuery("FROM "+Author.class.getName());
+		return q.list();
 	}
 	
-	protected Integer saveAuthorFromDTO(AuthorDTO authorDTO) {
-		 Author newAuthor =  new Author(authorDTO.getLastName(),authorDTO.getFirstName());
-		 Integer authorID=null;
-		 try {
-		 authorID = (Integer) session.save(newAuthor);
-		 }catch(Exception e) {
-			 transaction.rollback();
-		 }
-		 return authorID;
-	}
-	
-	protected DocumentDTO getDocumentDTO(Integer id) {
-		Document doc = (Document)session.load(Document.class, id);
-		return new DocumentDTO(doc);
-	}
-	
-	protected List<DocumentDTO>getAllDocumentDTO(){
+	@SuppressWarnings("unchecked")
+	protected List<Document> getAllDocument(){
 		Query q = session.createQuery("FROM " + Document.class.getName());
-		@SuppressWarnings("unchecked")
-		List<Document> docs = q.list();
-		List<DocumentDTO> docDTOs = new ArrayList<>();
-		for (Document doc : docs) {
-			docDTOs.add(new DocumentDTO(doc));
-		}
-		return docDTOs;
+		return q.list();
 	}
 	
-	protected FileDTO getFileDTO(Integer id) {
-		Document doc = (Document)session.load(Document.class, id);
-		return new FileDTO(doc.getSource());
+	@SuppressWarnings("unchecked")
+	protected List<DocumentType>getAllDocumentType(){
+		Query q = session.createQuery("FROM "+DocumentType.class.getName());
+		return q.list();
 	}
-	protected List<DocumentTypeDTO>getAllDocumentTypeDTO(){
-		Query q = session.createQuery("FROM " + DocumentType.class.getName());
-		@SuppressWarnings("unchecked")
-		List<DocumentType> docTypes = q.list();
-		List<DocumentTypeDTO> docTypeDTOs = new ArrayList<>();
-		for (DocumentType docType: docTypes) {
-			docTypeDTOs.add(new DocumentTypeDTO(docType));
-		}
-		return docTypeDTOs;
+	
+	protected Document getDocument(Integer id) {
+		return (Document) session.get(Document.class, id);
+	}
+	
+	protected Integer saveDocument(Document document) {
+		return (Integer) session.save(document);
+	}
+	protected Integer saveAuthor(Author author) {
+		return (Integer) session.save(author);
+	}
+	protected Author loadAuthor(Integer id) {
+		return (Author) session.load(Author.class,id);
+	}
+	protected AuthorshipCompositeKey saveAuthorship(Authorship authorship) {
+		return (AuthorshipCompositeKey) session.save(authorship);
 	}
 
 }
