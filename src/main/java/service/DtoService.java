@@ -26,45 +26,47 @@ public class DtoService {
 	public AuthorDTO getAuthorDTO(Integer id) {
 		dtoDAO.enableSession();
 		Author author = dtoDAO.getAuthor(id);
+		AuthorDTO aDTO = new AuthorDTO(author);
 		dtoDAO.closeSession();
-		return new AuthorDTO (author);
+		return aDTO;
 	}
 	
 	
 	public List<AuthorDTO>getAllAuthorDTO(){
 		dtoDAO.enableSession();
 		List<Author>fetched = dtoDAO.getAllAuthor();
-		dtoDAO.closeSession();
 		List<AuthorDTO>authorDTOList = new ArrayList<>();
 		for (Author author: fetched) {
 			authorDTOList.add(new AuthorDTO(author));
 		}
+		dtoDAO.closeSession();
 		return authorDTOList;
 	}
 	
 	public DocumentDTO getDocumentDTO(Integer id) {
 		dtoDAO.enableSession();
 		Document doc = dtoDAO.getDocument(id);
+		DocumentDTO dDTO = new DocumentDTO(doc);
 		dtoDAO.closeSession();
-		return new DocumentDTO(doc);
+		return dDTO;
 	}
 	
 	public List<DocumentDTO>getAllDocumentDTO(){
 		dtoDAO.enableSession();
 		List<Document>fetched = dtoDAO.getAllDocument();
-		dtoDAO.closeSession();
 		List<DocumentDTO> list = new ArrayList<>();
 		for(Document doc : fetched) {
 			list.add(new DocumentDTO(doc));
 		}
+		dtoDAO.closeSession();
 		return list;
 	}
 	
 	public FileDTO getFileDTO(Integer id) {
 		dtoDAO.enableSession();
 		Document doc = dtoDAO.getDocument(id);
-		dtoDAO.closeSession();
 		FileDTO fDTO = new FileDTO(doc.getSource());
+		dtoDAO.closeSession();
 		return fDTO;
 	}
 	
@@ -101,7 +103,7 @@ public class DtoService {
 				author = new Author(authorDTO.getLastName(),authorDTO.getFirstName());
 				authorDTO.setId(dtoDAO.saveAuthor(author));
 			} else {
-				author = dtoDAO.loadAuthor(authorDTO.getId());
+				author = dtoDAO.getAuthor(authorDTO.getId());
 			}
 			hierarchy++;
 			Authorship authorship = new Authorship(doc,author);

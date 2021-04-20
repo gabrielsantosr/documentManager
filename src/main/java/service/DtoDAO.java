@@ -82,9 +82,7 @@ public class DtoDAO {
 	protected Integer saveAuthor(Author author) {
 		return (Integer) session.save(author);
 	}
-	protected Author loadAuthor(Integer id) {
-		return (Author) session.load(Author.class,id);
-	}
+	
 	protected AuthorshipCompositeKey saveAuthorship(Authorship authorship) {
 		return (AuthorshipCompositeKey) session.save(authorship);
 	}

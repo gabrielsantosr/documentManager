@@ -398,6 +398,7 @@ var authorsDropList = document.getElementById("authorsDropList");
 var documentAuthorsTable = document.getElementById("documentAuthorsTable");
 var references = document.getElementById("references");
 var lookUpAuthorText = document.getElementById("authorsDropInput").value;
+var docTypeSelector = document.getElementById("docTypeSelector");
 
 aDIwidth = authorsDropInput.style.width;
 authorsDropInput.style.margin= "0 10px 5px calc(100% - 10px - "+aDIwidth+")";
@@ -440,18 +441,19 @@ document.getElementById("registerButton").onclick= registerHandler;
 function registerHandler(event){
 	console.log("REGISTER HANDLER");
 	let regDocument={
-		docType:{id:Number(document.getElementById("docTypeSelector").value)},	
-		year: dateInput.value,
-		title: titleInput.value,
-		subTitle: subTitleInput.value,
-		journalName: journalNameInput.value,
-		volume: {volumeNumber:volNumberInput.value, volumeRelease:volReleaseInput.value},
-		edition: editionInput.value,
-		publisher: publisherInput.value,
-		publisherLocation: publisherLocationInput.value,
-		startPage: startPageInput.value,
-		endPage: endPageInput.value,
-		doi: doiInput.value,
+		docType:{id:Number(docTypeSelector.value)},	
+		year: (dateInput.value)?dateInput.value:null,
+		title: (titleInput.value)?titleInput.value:null,
+		subTitle: (subTitleInput.value)?subTitleInput.value:null,
+		journalName: (journalNameInput.value)?journalNameInput.value:null,
+		volume: {volumeNumber:(volNumberInput.value)?volNumberInput.value:null, volumeRelease:(volReleaseInput.value)?volReleaseInput.value:null},
+		edition: (editionInput.value)?editionInput.value:null,
+		publisher: (publisherInput.value)?publisherInput.value:null,
+		publisherLocation: (publisherLocationInput.value)?publisherLocationInput.value:null,
+		startPage: (startPageInput.value)?startPageInput.value:null,
+		endPage: (endPageInput.value)?endPageInput.value:null,
+		doi: (doiInput.value)?doiInput.value:null,
+		source: (sourceInput.value)?sourceInput.value:null,
 		authors:[]
 	}
 	for (row of documentAuthorsTable.tBodies[0].children){
@@ -466,6 +468,27 @@ function registerHandler(event){
 	ajax.onreadystatechange = function(){
 		if (ajax.readyState == 4 && ajax.status == 200){
 			console.log("document successfully transfered to server");
+			regDocument = JSON.parse(ajax.response);
+			console.log(regDocument);
+			if (authors.fetched){
+				let authorsIds=[];
+				for (author of authors.items){
+					authorsIds.push(author.id);
+				}
+				for (author of regDocument.authors){
+					if (!authorsIds.includes(author.id)){
+						authors.items.push(author);
+					}
+				}
+			}
+			if(documents.fetched){
+				documents.items.push(regDocument);
+			}
+			documentAuthorsTable.tBodies[0].innerHTML = null;
+			addedAuthorsIds=[];
+			validateAuthorsField();
+			docTypeSelector.value = 0;
+			docTypeSelector.onchange();
 		}
 	}
 	ajax.open("POST","new_doc",true);
@@ -550,6 +573,7 @@ fetchDocTypes().then(function(){
 		fields = document.getElementById("fields");
 		if (option == 0){
 			fields.hidden = true;
+			document.getElementById("registerButton").disabled = true;
 			return;
 		}
 		fields.hidden = false;
