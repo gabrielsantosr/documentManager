@@ -28,12 +28,12 @@ public class DocumentDTO {
 	private String doi;
 	private String source;
 	private Integer approxRequiredLengthForFile;
-	
-	
+
+
 	public DocumentDTO() {
-		
+
 	}
-	
+
 	public DocumentDTO(Document document) {
 		this.id = document.getId();
 		this.year = document.getYear();
@@ -50,21 +50,22 @@ public class DocumentDTO {
 		docType = new HashMap<>();
 		DocumentType dt = document.getDocumentType();
 		docType.put("id", dt.getId());
-		docType.put("type", dt.getDescription());
+		docType.put("description", dt.getDescription());
 		authors = new ArrayList<>();
 		AuthorDTO authorDTO;
 		for (Authorship a : document.getAuthorships()) {
 			authorDTO = new AuthorDTO(a.getAuthor());
-			authorDTO.setDocuments(null);
+			authorDTO.setDocuments(null);/*AuthorDTO has associated DocumentDTOs and viceversa. This line is to avoid an infinite DTO*/
 			authors.add(authorDTO);
 		}
 		try {
+			
 			FileDTO fileDTO = new FileDTO(document.getSource());
 			approxRequiredLengthForFile = fileDTO.getData().length * 4 / 3;
-		}
-		catch(Exception e) {
+		}catch(Exception e) {
 			approxRequiredLengthForFile = 0;
 		}
+
 	}
 	public Integer getId() {
 		return id;
@@ -76,7 +77,7 @@ public class DocumentDTO {
 	public Map<String, Object> getDocType() {
 		return docType;
 	}
-	
+
 	public void setDocType(Map<String, Object> docType) {
 		this.docType = docType;
 	}
@@ -194,8 +195,9 @@ public class DocumentDTO {
 			auths +="\n{id: "+a.getId()+", firstName: "+a.getFirstName()+", lastName: "+a.getLastName()+"}";
 		}
 		return "id: "+id+
-		"\nTitle: "+title+
-		"\nYear: "+year+
-		"\nAuthors: ["+auths+"]";
+				"\nTitle: "+title+
+				"\nYear: "+year+
+				"\nAuthors: ["+auths+"]"+
+				"\ndocType: "+ docType.get("type");
 	}
 }

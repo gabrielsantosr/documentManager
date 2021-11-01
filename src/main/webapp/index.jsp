@@ -3,25 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet"	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
 <!-- jQuery library -->
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- Latest compiled JavaScript -->
-<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style>
-html{
+html {
 	background-color: #444;
 }
-body{
+
+body {
 	width: 80%;
 	min-width: 1303px;
 	height: 100vh;
 	margin-left: auto;
 	margin-right: auto;
-	background-color: #777;
+	background-color: #111;
 }
-
 
 .title:hover {
 	color: blue;
@@ -29,43 +32,67 @@ body{
 }
 
 table {
-/* 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
-/* 	table-layout: fixed; */
-/* 	width: 70%; */
+	/* 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+	/* 	table-layout: fixed; */
+	/* 	width: 70%; */
 	border-radius: 6px;
 }
 
-tr:nth-child(odd){
+.sectionButton {
+	background-color: #444;
+	color: #EEE; //
+	float: left;
+	border-radius: 8px 24px 0 0;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	transition: 0.3s;
+}
+
+.active {
+	background-color: #6f6f6f;
+}
+.sectionButton.active{
+	border-style: groove groove none groove;
+}
+
+tr:nth-child(odd) {
 	background-color: #EFEFEF;
 }
-tr:nth-child(even){
+
+tr:nth-child(even) {
 	background-color: #E0E0E0;
 }
 
-td input{
+td input {
 	width: 110px;
 	margin: 0;
 	padding: 0;
-	border:none;
+	border: none;
 }
 
-.remarked{
+.remarked {
 	color: blue;
 	font-style: italic;
 	font-weight: bold;
 }
-.authorsDropListItem{
+
+.authorsDropListItem {
 	color: black;
 	font-style: normal;
 	font-weight: normal;
 	text-align: left;
 }
-.listItem{
+
+.listItem {
 	text-align: left;
 }
-.listItem:hover{
+
+.listItem:hover {
 	background-color: #ddd;
 }
+
 td {
 	padding: 10px;
 	overflow: hidden;
@@ -73,51 +100,46 @@ td {
 	text-align: left;
 }
 
-
 th {
- 	padding: 5px; 
+	padding: 5px;
 	text-align: left;
 	font-weight: normal;
 	letter-spacing: 0.1em;
 }
-#table tbody tr:last-child td:nth-child(1){
-	border-bottom-left-radius:6px;
+
+#table tbody tr:last-child td:nth-child(1) {
+	border-bottom-left-radius: 6px;
 }
-
-
 
 /*
 #authorsDropInput {
 	color: black;
 }*/
-
-#authorsDropDiv{
+#authorsDropDiv {
 	font-weight: normal;
 	text_align: left;
-	position:relative;
+	position: relative;
 	width: 100%;
 	right: 0;
 	padding: 0;
 	color: #222;
 }
 
-
-
-
 /*#referencesContainer div{
 }*/
-
-#references{
+#references {
 	margin: 10px 10px;
 	padding: 10px 10px;
 	background-color: #EFEFEF;
 	border-left: 5px solid #00AA00;
-	border-radius:6px;
+	border-radius: 6px;
 	height: 20vh;
 	overflow: auto;
 	position: relative;
-/* 	opacity:0.5; */
+	bottom: 10px;
+	/* 	opacity:0.5; */
 }
+
 .glyphicon {
 	margin: 10px;
 }
@@ -132,7 +154,7 @@ th {
 	cursor: inherit;
 }
 
-.removeIcon{
+.removeIcon {
 	color: #AA0000;
 	cursor: pointer;
 }
@@ -140,256 +162,267 @@ th {
 .okIcon {
 	color: #00AA00;
 	cursor: pointer;
-	margin:0px;
-	padding:0px;
-}
-.cont{
-position: relative;
-margin: auto;
-border-radius: 6px;
-
-/* max-width: inherit; */
+	margin: 0px;
+	padding: 0px;
 }
 
-#documentAuthorsTable thead tr/*:not(tr:first-child)*/{
+.cont {
+	position: relative;
+	margin: auto;
+	border-radius: 6px;
+	background-color: #6f6f6f;
+
+	/* max-width: inherit; */
+}
+
+#documentAuthorsTable thead tr /*:not(tr:first-child)*/ {
 	/*background-color: #222;*/
-	background-image:linear-gradient(to right,#222, #444, #222);
- 	color: #EEE;
- 	
+	background-image: linear-gradient(to right, #222, #444, #222);
+	color: #EEE;
 }
 
 /* #documentAuthorsTable thead tr:first-child{ */
 /* 	background-image: none; */
 /* 	background-color: transparent; */
 /* } */
-
-#documentAuthorsTable td:last-child,
-#documentAuthorsTable th:last-child{
+#documentAuthorsTable td:last-child, #documentAuthorsTable th:last-child
+	{
 	min-width: 122px;
 }
 
-
-
-#addForm label{
-
+#addForm label {
+	
 }
 /* #addForm input:not(#authorsDropInput) { */
 /* 	margin: 3px auto; */
 /* } */
-.formDiv/*:not(#datDiv)*/{
+.formDiv /*:not(#datDiv)*/ {
 	margin: 10px 20px;
 	width: 180px;
 }
-.formDiv p:not(#authorsDropList p){
+
+.formDiv p:not(#authorsDropList p) {
 	margin: 0px 10px;
 	text-align: right;
 	color: #EEE;
 	text-shadow: 1px 1px #222;
-	position:relative;
-}
-.formDiv input, .formDiv select{
-	margin: 0 10px 5px 10px;
-	width: calc(100% - 20px);
-	background-image:linear-gradient(to bottom right, transparent, #777);
-	border: none;
-	border-radius: 3px;
-	
-}
-.mandatory{
-	position: absolute;
-	color: #440044;
-	font-size: 20px;
-	font-weight: bold;
-	right:20px;
+	position: relative;
 }
 
-#authorsDropList{
-	position:absolute;
+.formDiv input, .formDiv select {
+	margin: 0 10px 5px 10px;
+	width: calc(100% - 20px);
+	background-image: linear-gradient(to bottom right, transparent, #777);
+	border: none;
+	border-radius: 3px;
+}
+
+.mandatory {
+	position: absolute;
+	color: #fa9a3a;
+	font-size: 20px;
+	font-weight: bold;
+	right: 20px;
+}
+
+#authorsDropList {
+	position: absolute;
 	cursor: pointer;
 	background-color: #f1f1f1;
 	max-height: 0px;
 	overflow: auto;
-  	z-index: 1;
-  	text-alignment: left;
-  	opacity: 0.9;
+	z-index: 1;
+	text-alignment: left;
+	opacity: 0.9;
 }
 </style>
 
 <title>Document Manager</title>
 </head>
 <body>
-	<div class="cont">
-		<button id="authors" onclick="getAuthors(fillAuthorsTable)">Get Authors</button>
-		<button id="documents" onclick="getDocuments()">Get	Documents</button>
-		<button id="addDocument" onclick="addDocument()">Add Document</button>
+	<div id="loading" style="font-size: 80px">LOADING</div>
+	<div id="botonera" style="margin: auto" hidden>
+		<center>
+			<button id="documents">Get Documents</button>
+			<button id="addDocument">Add Document</button>
+		</center>
 	</div>
-	<div class="cont" id ="formContainer" onclick="enableHideFormContainer = false"hidden>
-		<form id="addForm" style="" >
+	<div class="cont" id="formContainer" hidden>
+		<form id="addForm" style="">
 			<fieldset>
-			<legend>New Document</legend>
-			<div class="formDiv" style="display:inline-block">
-			<p for="docTypeSelector">Document type</p>
-			<select name="docType" id="docTypeSelector">
-				<option value="0" selected>Select ...</option>
-			</select>
-			</div>
-			<button id="registerButton"  style="display: inline-block" disabled> Register</button>
-			<div id="fields" hidden>
-			<span style="display:inline-block;box-shadow: 3px 3px 10px #222;
-	border-radius: 3px; position: relative;">
-			<div class="formDiv field" id="dateField">
-				<p >Date of publication</p>
-				<input id="dateInput" type="number" autocomplete = "off" style="width:60px; margin: 0 10px 5px calc(100% - 10px - 60px)"type="text"/>
-			</div>
-			<div class="formDiv field" id="journalNameField">
-				<p for="journalNameInput">Journal name</p>
-				<input id="journalNameInput"/>
-			</div>
-			<div class="formDiv field" id="titleField">
-				<p for="titleInput">Title</p>
-				<input id="titleInput"/>
-			</div>
-			<div class="formDiv field" id="subTitleField">
-				<p for="subTitleInput">Sub-title</p>
-				<input id="subTitleInput"/>
-			</div>
-			<div class="formDiv field" id="volNumberField">
-				<p for="volNumberInput">Volume #</p>
-				<input id="volNumberInput"/>
-			</div>
-			<div class="formDiv field" id="volReleaseField">
-				<p for="volReleaseInput">Volume release</p>
-				<input id="volReleaseInput"/>
-			</div>
-				<div class="formDiv field" id="editionField">
-				<p for="editionInput">Edition</p>
-			<input id="editionInput"/>
-			</div>
-			<div class="formDiv field" id="publisherField">
-				<p for="publisherInput">Publisher</p>
-				<input id="publisherInput"/>
-			</div>
-			<div class="formDiv field" id="publisherLocationField">
-				<p for="publisherLocationInput">Publisher location</p>
-				<input id="publisherLocationInput"/>
-			</div>
-			<div class="formDiv field" id="startPageField">
-				<p for="startPageInput">Start page</p>
-				<input id="startPageInput" type="number"/>
-			</div>
-			<div class="formDiv field" id="endPageField">
-				<p for="endPageInput">End page</p>
-				<input id="endPageInput" type="number"/>
-			</div>
-			<div class="formDiv field" id="doiField">
-				<p for="doiInput">DOI</p>
-				<input id="doiInput"/>
-			</div>
-			<div class="formDiv field" id="sourceField">
-				<p for="sourceInput">Source</p>
-				<input id="sourceInput"/>
-			</div>
-			</span>
-			<div class="formDiv field" id= "authorsField" style="display:inline-block;position: absolute;width:470px; margin:0 0; padding:10px; box-shadow: 3px 3px 10px #222;
-	border-radius: 3px;">
-				<p style="text-align:right; margin: 0 20px;">Authors</p>
-								<div id="authorsDropDiv" >
-									<input id="authorsDropInput" style="width:180px;" type="text" value="Look up author ..."
-							
-							onkeyup="searchAuthor(this.value)"
-							autocomplete="off"
-							/>
-									<div id="authorsDropList"  >
-									</div>
-								</div>
-				<table id="documentAuthorsTable" style="position: relative; width:100%; ">
-					<colgroup>
-						<col width="50px"/>
-						<col width="150px"/>
-						<col width="150px"/>
-						<col width="120px"/>
-					</colgroup>
-					<thead>
-						<tr class="trans">
-							<th colspan="2"></th>
-							<th colspan="2">
-					 		</th>
-					</tr>
-					<tr>
-						<th>ID</th><th>First name</th><th>Last name</th><th></th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
-		</div>
-		</div>
-		
+				<legend>New Document</legend>
+				<div class="formDiv" style="display: inline-block">
+					<p for="docTypeSelector">Document type</p>
+					<select name="docType" id="docTypeSelector">
+						<option value="0" selected>Select ...</option>
+					</select>
+				</div>
+				<button id="registerButton" style="display: inline-block" disabled>
+					Register</button>
+				<div id="fields" hidden>
+					<span
+						style="display: inline-block; box-shadow: 3px 3px 10px #222; border-radius: 3px; position: relative;">
+						<div class="formDiv field" id="dateField">
+							<p>Date of publication</p>
+							<input id="dateInput" type="number" autocomplete="off"
+								style="width: 60px; margin: 0 10px 5px calc(100% - 10px - 60px)"
+								type="text" />
+						</div>
+						<div class="formDiv field" id="journalNameField">
+							<p for="journalNameInput">Journal name</p>
+							<input id="journalNameInput" />
+						</div>
+						<div class="formDiv field" id="titleField">
+							<p for="titleInput">Title</p>
+							<input id="titleInput" />
+						</div>
+						<div class="formDiv field" id="subTitleField">
+							<p for="subTitleInput">Sub-title</p>
+							<input id="subTitleInput" />
+						</div>
+						<div class="formDiv field" id="volNumberField">
+							<p for="volNumberInput">Volume #</p>
+							<input id="volNumberInput" />
+						</div>
+						<div class="formDiv field" id="volReleaseField">
+							<p for="volReleaseInput">Volume release</p>
+							<input id="volReleaseInput" />
+						</div>
+						<div class="formDiv field" id="editionField">
+							<p for="editionInput">Edition</p>
+							<input id="editionInput" />
+						</div>
+						<div class="formDiv field" id="publisherField">
+							<p for="publisherInput">Publisher</p>
+							<input id="publisherInput" />
+						</div>
+						<div class="formDiv field" id="publisherLocationField">
+							<p for="publisherLocationInput">Publisher location</p>
+							<input id="publisherLocationInput" />
+						</div>
+						<div class="formDiv field" id="startPageField">
+							<p for="startPageInput">Start page</p>
+							<input id="startPageInput" type="number" />
+						</div>
+						<div class="formDiv field" id="endPageField">
+							<p for="endPageInput">End page</p>
+							<input id="endPageInput" type="number" />
+						</div>
+						<div class="formDiv field" id="doiField">
+							<p for="doiInput">DOI</p>
+							<input id="doiInput" />
+						</div>
+						<div class="formDiv field" id="sourceField">
+							<p for="sourceInput">Source</p>
+							<input id="sourceInput" />
+						</div>
+					</span>
+					<div class="formDiv field" id="authorsField"
+						style="display: inline-block; position: absolute; width: 470px; margin: 0 0; padding: 10px; box-shadow: 3px 3px 10px #222; border-radius: 3px;">
+						<p style="text-align: right; margin: 0 20px;">Authors</p>
+						<div id="authorsDropDiv">
+							<input id="authorsDropInput" style="width: 180px;" type="text"
+								value="Look up author ..." onkeyup="searchAuthor(this.value)"
+								autocomplete="off" />
+							<div id="authorsDropList"></div>
+						</div>
+						<table id="documentAuthorsTable"
+							style="position: relative; width: 100%;">
+							<colgroup>
+								<col width="50px" />
+								<col width="150px" />
+								<col width="150px" />
+								<col width="120px" />
+							</colgroup>
+							<thead>
+								<tr class="trans">
+									<th colspan="2"></th>
+									<th colspan="2"></th>
+								</tr>
+								<tr>
+									<th>ID</th>
+									<th>First name</th>
+									<th>Last name</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
 			</fieldset>
 		</form>
 	</div>
-	<div id="documentsContainer" style="position:relative; margin:10px"  hidden>
+	<div id="documentsContainer" class="cont" hidden>
 		<span class="glyphicon glyphicon-search"
-		style="position:relative; margin:4px;color: #000;left:170px; font-weight:900;" >
-		
-		</span>
-			<input style="position:absolute;left:20px;  opacity: 0.5;background-color:white;"type="text" onkeyup="search(this)"/>
-		
-		<div style="position:relative; margin: 10px;">
-			<div id="tableScrollableDiv" style="display:inline-block; width:50%; height: 50vh;" >
-				<div id="headerDiv" style=" height: 10%">
-					<table style="width:100%">
-					<colgroup>
-					<col width="10%"/>
-					<col width="20%"/>
-					<col width="20%"/>
-					<col width="40%"/>
-					<col width="10%"/>
-					</colgroup>
-					<thead id="docsHeader">
-					<tr>
-						<th style="border-top-left-radius: 6px;">ID</th>
-						<th>Type</th>
-						<th>Authors</th>
-						<th>Title</th>
-						<th style="border-top-right-radius: 6px;"></th>
-					</tr>
-					</thead>
+			style="position: relative; margin: 10px 0px /*4px*/; color: #000; left: /*170px*/ 190px; font-weight: 900;">
+
+		</span> <input id="docSearch"
+			style="position: relative; margin: 10px 0px; left: 20px; opacity: 0.5; background-color: white;"
+			type="text" onkeyup="search(this)" />
+
+		<div style="position: relative; margin: 10px;">
+			<div id="tableScrollableDiv"
+				style="display: inline-block; width: 50%; height: 50vh;">
+				<div id="headerDiv" style="height: 10%">
+					<table style="width: 100%">
+						<colgroup>
+							<col width="10%" />
+							<col width="20%" />
+							<col width="20%" />
+							<col width="40%" />
+							<col width="10%" />
+						</colgroup>
+						<thead id="docsHeader">
+							<tr>
+								<th style="border-top-left-radius: 6px;">ID</th>
+								<th>Type</th>
+								<th>Authors</th>
+								<th>Title</th>
+								<th style="border-top-right-radius: 6px;"></th>
+							</tr>
+						</thead>
 					</table>
 				</div>
-				<div id="dataTableDiv" style="width:100%; height: 90%;overflow-y:scroll;border-radius:6px;">
-			<table id="table" style="width:100%;">
-				<colgroup>
-					<col width="10%"/>
-					<col width="20%"/>
-					<col width="20%"/>
-					<col width="40%"/>
-					<col width="10%"/>
-				</colgroup>
-				<tbody style="">
-				</tbody>
-			</table>
+				<div id="dataTableDiv"
+					style="width: 100%; height: 90%; overflow-y: scroll; border-radius: 6px;">
+					<table id="docsTable" style="width: 100%;">
+						<colgroup>
+							<col width="10%" />
+							<col width="20%" />
+							<col width="20%" />
+							<col width="40%" />
+							<col width="10%" />
+						</colgroup>
+						<tbody style="">
+						</tbody>
+					</table>
 				</div>
 			</div>
-			<div id="previewDiv" style="width:calc(50% - 4px); display: inline-block;position: relative;">
-				<iframe title="file" style="height: 50vh;width:100%;border-radius:6px;"></iframe>
-				<div class="progress" id="barContainer" style="z-index:10; position:absolute; width: 100%;" hidden>
-					<div class="progress-bar" role="progressbar" id="downloadBar" ></div>
+			<div id="previewDiv"
+				style="width: calc(50% - 4px); display: inline-block; position: relative;">
+				<iframe title="file"
+					style="height: 50vh; width: 100%; border-radius: 6px;"></iframe>
+				<div class="progress" id="barContainer"
+					style="z-index: 10; position: absolute; width: 100%;" hidden>
+					<div class="progress-bar" role="progressbar" id="downloadBar"></div>
 				</div>
 			</div>
 		</div>
-		<div style="color: #EEEEEE; margin: 25px 10px 10px; letter-spacing: 0.2em; padding: 0 10px; font-size:16px; text-shadow: 1px 1px black">References</div>
-		<div id= "referencesContainer" style="position:relative;width:100%; ">
-<!-- 			<span id="referencesBackground" style="color:#222; font-weight:900; padding:0 ; position:absolute; letter-spacing: 0.5em;text-align: center;width: 100%; height:100%; font-size:100px;line-height:20vh;">references</span> -->
-			<div id ="references">
-			</div>
+		<div
+			style="color: #EEEEEE; margin: 25px 10px 10px; letter-spacing: 0.2em; padding: 0 10px; font-size: 16px; text-shadow: 1px 1px black">References</div>
+		<div id="referencesContainer" style="position: relative; width: 100%;">
+			<!-- 			<span id="referencesBackground" style="color:#222; font-weight:900; padding:0 ; position:absolute; letter-spacing: 0.5em;text-align: center;width: 100%; height:100%; font-size:100px;line-height:20vh;">references</span> -->
+			<div id="references"></div>
 		</div>
 	</div>
+	</div>
 
+	<script>
 
-<script>
-
-var table = document.getElementById("table");
+var docsTable = document.getElementById("docsTable");
 var iframe = document.getElementsByTagName("iframe")[0];
 var downloadBar = document.getElementById("downloadBar");
 var barContainer = document.getElementById("barContainer");
@@ -400,6 +433,7 @@ var references = document.getElementById("references");
 var lookUpAuthorText = document.getElementById("authorsDropInput").value;
 var docTypeSelector = document.getElementById("docTypeSelector");
 
+
 aDIwidth = authorsDropInput.style.width;
 authorsDropInput.style.margin= "0 10px 5px calc(100% - 10px - "+aDIwidth+")";
 authorsDropList.style.width= authorsDropInput.style.width;
@@ -408,21 +442,45 @@ authorsDropInput.addEventListener("focus",function(){
 	this.value = "";
 	searchAuthor("");
 })
+loadingTag = document.getElementById("loading");
+
+for (i=0;i<3;i++){
+	dotSpan = document.createElement("span");
+	dotSpan.hidden = true;
+	dotSpan.appendChild(document.createTextNode("."));
+	loadingTag.appendChild(dotSpan);
+}
+
+loadingDots = loadingTag.getElementsByTagName("span");
+loadingDotsLength = loadingDots.length;
+currentDotPosition = 0;
+var loadingAnimation = setInterval(function(){
+		if (currentDotPosition == loadingDotsLength){
+			for (dot of loadingDots) dot.hidden = true;
+			currentDotPosition = 0;
+		}
+		else loadingDots[currentDotPosition++].hidden = false;
+		},250);
 
 
 var documents ={
-	fetched: false,
 	items : [],
-	order : {
-		id: true,
+	/*When sorting is requested, if the ordering criteria is the same as in the the previous request,
+		sorting will happen in opposite direction. If it is another criteria, it will happen ascendently.
+	*/
+	order : { 
+		id: false,
 		docType: false,
 		authors: false,
 		title: false
 	}
+	
 }
 
+
+
+
 var authors={
-	fetched: false,
 	items:[],
 	order : {
 		id: false,
@@ -432,16 +490,58 @@ var authors={
 }
 
 var docTypes = {
-	fetched : false,
 	items:[],
+	get: function(id){
+		for (item of this.items){
+			if (item.id == id) return item;
+		}
+		return null;
+	}
 }
+
+
+	
 document.getElementById("addForm").onsubmit= function(){return false};
 document.getElementById("registerButton").onclick= registerHandler;
+document.onclick = hideContainer;
+
+var enableHideContainer = false;
+
+var sections = {};
+
+
+class Section {
+	constructor (button,container){
+		button.addEventListener("click",()=>{buttonHandler(button)});
+		button.classList.add("sectionButton");
+		container.addEventListener("click",()=>{enableHideContainer = false;});
+		this.button = button;
+		this.container = container;
+	}
+}
+class SectionB{
+	constructor (sectionName){
+		this.button = document.createElement("button");
+		this.button.id = sectionName;
+		this.button.innerHTML = sectionName;
+		this.button.addEventListener("click", ()=>{buttonHandler(this.button)});
+		this.container = document.createElement("div");
+		this.container.addEventListener("click", ()=>{enableHideContainer = false;});
+		this.container.style.backgroundColor = "green";
+		document.getElementById("botonera").appendChild(this.button);
+		document.body.appendChild(this.container);
+		sections[sectionName] = this;
+	}
+}
+
+
+sections.documents = new Section (document.getElementById("documents"), document.getElementById("documentsContainer"));
+sections.addDocument = new Section(document.getElementById("addDocument"), document.getElementById("formContainer"));
 
 function registerHandler(event){
 	console.log("REGISTER HANDLER");
 	let regDocument={
-		docType:{id:Number(docTypeSelector.value)},	
+		docType:docTypes.get(Number(docTypeSelector.value)),	
 		year: (dateInput.value)?dateInput.value:null,
 		title: (titleInput.value)?titleInput.value:null,
 		subTitle: (subTitleInput.value)?subTitleInput.value:null,
@@ -456,6 +556,7 @@ function registerHandler(event){
 		source: (sourceInput.value)?sourceInput.value:null,
 		authors:[]
 	}
+	
 	for (row of documentAuthorsTable.tBodies[0].children){
 		if (row.firstChild.firstChild.tagName=="SPAN") continue;
 		let author = {};
@@ -467,23 +568,24 @@ function registerHandler(event){
 	ajax = new XMLHttpRequest();
 	ajax.onreadystatechange = function(){
 		if (ajax.readyState == 4 && ajax.status == 200){
-			console.log("document successfully transfered to server");
+			refreshDocsTable = true;
+			console.log("document successfully transferred to server");
 			regDocument = JSON.parse(ajax.response);
 			console.log(regDocument);
-			if (authors.fetched){
+			if (authors.fetched ){
 				let authorsIds=[];
 				for (author of authors.items){
 					authorsIds.push(author.id);
 				}
+				let authorsSizeBefore = authors.items.length;
 				for (author of regDocument.authors){
 					if (!authorsIds.includes(author.id)){
 						authors.items.push(author);
 					}
 				}
+				refreshAuthorsTable = refreshAuthorsTable || (authors.items.length > authorsSizeBefore);
 			}
-			if(documents.fetched){
-				documents.items.push(regDocument);
-			}
+			postNewDocument(regDocument);
 			documentAuthorsTable.tBodies[0].innerHTML = null;
 			addedAuthorsIds=[];
 			validateAuthorsField();
@@ -556,65 +658,6 @@ function allFieldsValidation(fieldValid){
 	}
 	document.getElementById("registerButton").disabled = !registerEnabled;
 }
-
-
-
-fetchDocTypes().then(function(){
-	docTypeSelector = document.getElementById("docTypeSelector");
-	for (docType of docTypes.items){
-		option = document.createElement("option")
-		textNode = document.createTextNode(docType.description);
-		option.appendChild(textNode);
-		option.value = docType.id;
-		docTypeSelector.appendChild(option);
-	}
-	docTypeSelector.onchange = function(){
-		option = docTypeSelector.value;
-		fields = document.getElementById("fields");
-		if (option == 0){
-			fields.hidden = true;
-			document.getElementById("registerButton").disabled = true;
-			return;
-		}
-		fields.hidden = false;
-		/*
-		fieldManager.*.required can take the following values:
-			0: not required
-			1: required
-			2: optional
-		*/
-		fieldManager.date.required = 1;
-		fieldManager.journalName.required = (option==3)? 1 : 0;
-		fieldManager.title.required = 1;
-		fieldManager.subTitle.required = 2;
-		fieldManager.volNumber.required = (option==3)? 1 : 0;
-		fieldManager.volRelease.required = (option==3)? 2 : 0;
-		fieldManager.edition.required = (option == 1)? 2 : 0;
-		fieldManager.publisher.required = (option == 1)?1:((option == 2)?2:0);
-		fieldManager.publisherLocation.required = (option == 1 || option == 2)?2:0;
-		fieldManager.startPage.required = (option == 3)? 1 : 0;
-		fieldManager.endPage.required = (option == 3)? 1 : 0;
-		fieldManager.doi.required = (option == 3)? 2: 0;
-		fieldManager.source.required = 2;
-		fieldManager.authors.required = 1;
-
-		for (each in fieldManager){
-			fieldManager[each].star.hidden = (fieldManager[each].required !=1);
-			fieldManager[each].field.hidden = (fieldManager[each].required == 0);
-			if (each == "authors"){
-				fieldManager.authors.valid |= fieldManager.authors.required !=1;
-				continue;
-			}
-			fieldManager[each].valid = ( fieldManager[each].required !=1);
-			fieldManager[each].field.getElementsByTagName("input")[0].value='';
-		}
-		registerEnabled = false;
-		allFieldsValidation(true);
-	};
-});
-
-
-
 
 
 var minDate = 1200;
@@ -715,18 +758,55 @@ documentsContainer.addEventListener("click",function(){enableHideDocumentsContai
 function getDocuments(){
 	dc = documentsContainer;
 	dc.hidden = !dc.hidden;
-	if (!dc.hidden){
-		//Setting enableHideDocumentsContainer to false prevents the bubbling of the click
-		//that triggered the execution of this function from hiding the documents container.
+	if (!dc.hidden){//If turned from hidden to visible.
+		/*Setting enableHideDocumentsContainer to false prevents the bubbling of the click
+		that triggered the execution of this function from hiding the documents container.*/
 		enableHideDocumentsContainer = false;
 		document.addEventListener("click",hideDocuments);
-		promise = fetchDocuments();
-		promise.then(fillDocsTable);
-	} else {
+	} else {//If turned from visible to hidden.
 		document.removeEventListener("click",hideDocuments);
 	}
 }
+///////////////////////////////////////////////////////////////////////////////////
+//This method is an attempt to integrate all the sections button-handlers. It is not yet deployed.
+function buttonHandler(target){
+	for (section in sections){
+		let currentSection = sections[section];
+		let container = currentSection.container;
+		let button = currentSection.button;
+		
+		if (section == target.id){
+			 container.hidden = !container.hidden;
+			 if(!container.hidden){
+				 enableHideContainer = false;
+				 button.classList.add("active");
+			 } else {
+				 button.classList.remove("active");
+			 }
+		} else {
+			container.hidden = true;
+			button.classList.remove("active");
+		}
+	}
+}
 
+function hideContainer(target){
+	if (enableHideContainer){
+		for(section in sections){
+			let currentSection = sections[section];
+			let container = currentSection.container;
+			let button = currentSection.button;
+			if (!container.hidden){
+				container.hidden = true;
+				button.classList.remove("active");
+			}
+		}
+	} else{
+		enableHideContainer = true;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
 function hideDocuments(){
 	dc = documentsContainer;
 	if(enableHideDocumentsContainer){
@@ -737,52 +817,25 @@ function hideDocuments(){
 	}
 }
 
-var enableHideFormContainer;
-
-function addDocument(){
-	fc= document.getElementById("formContainer");
-	fc.hidden = !fc.hidden;
-	if(!fc.hidden){
-		enableHideFormContainer = false;
-		document.addEventListener("click",hideFormContainer);
-	} else{
-		document.removeEventListener("click",hideFormContainer);
-	}
-}
-
-function hideFormContainer(){
-	fc = document.getElementById("formContainer");
-	if(enableHideFormContainer){
-		fc.hidden = true;
-		document.removeEventListener("click",hideFormContainer);
-	} else{
-		enableHideFormContainer = true;
-	}
-}
-
+refreshDocsTable = true;
 
 function search(target){
 	searchArray = keyWordArrayGenerator(target.value);
-	promise = fetchDocuments();
-	promise.then(innerFunction);
-	function innerFunction(){
-		for (doc of documents.items){
-			str = doc.title+" ";
-			for (author of doc.authors){
-				str+= author.lastName+ " "+author.firstName+" ";
-			}
-			str = str.toLowerCase();
-			allWordsMatched = true ;
-
-			for (searchWord of searchArray){
-				if (!allWordsMatched) break;
-				allWordsMatched = allWordsMatched && str.includes(searchWord);
-			}
-
-			doc.display = allWordsMatched;
+	refreshDocsTable = true;
+	for (doc of documents.items){
+		str = doc.title+" ";
+		for (author of doc.authors){
+			str+= author.lastName+ " "+author.firstName+" ";
 		}
-		fillDocsTable();
+		str = str.toLowerCase();
+		allWordsMatched = true ;
+		for (searchWord of searchArray){
+			if (!allWordsMatched) break;
+			allWordsMatched = allWordsMatched && str.includes(searchWord);
+		}
+		doc.display = allWordsMatched;
 	}
+	fillDocsTable();
 }
 
 emptyAuthor = {
@@ -805,33 +858,29 @@ function searchAuthor(text){
 	div.appendChild(p);
 	authorsDropList.appendChild(div);
 	searchArray = keyWordArrayGenerator(text);
-	promise = fetchAuthors();
-	promise.then(innerFunction);
-	function innerFunction(){
-		for (author of authors.items){
-			str = author.firstName.toLowerCase() + " " + author.lastName.toLowerCase();
-			allWordsMatched = true;
-			for(searchWord of searchArray){
-				if (!allWordsMatched) break;
-				allWordsMatched = allWordsMatched && str.includes(searchWord);
-			}
-			if(allWordsMatched){
-				div = document.createElement("div");
-				div.classList.add('listItem');
-				dataP = document.createElement("p");
-				dataP.hidden = true;
-				dataP.innerHTML = JSON.stringify(author);
-				div.appendChild(dataP);
-				p = document.createElement("p");
-				p.id="listItem-"+author.id;
-				p.innerHTML = author.lastName+", "+author.firstName;
-				div.appendChild(p);
-				authorsDropList.appendChild(div);
-				p.addEventListener("click",appendToAuthorsTable,false);
-			}
+	for (author of authors.items){
+		str = author.firstName.toLowerCase() + " " + author.lastName.toLowerCase();
+		allWordsMatched = true;
+		for(searchWord of searchArray){
+			if (!allWordsMatched) break;
+			allWordsMatched = allWordsMatched && str.includes(searchWord);
 		}
-		showList();
+		if(allWordsMatched){
+			div = document.createElement("div");
+			div.classList.add('listItem');
+			dataP = document.createElement("p");
+			dataP.hidden = true;
+			dataP.innerHTML = JSON.stringify(author);
+			div.appendChild(dataP);
+			p = document.createElement("p");
+			p.id="listItem-"+author.id;
+			p.innerHTML = author.lastName+", "+author.firstName;
+			div.appendChild(p);
+			authorsDropList.appendChild(div);
+			p.addEventListener("click",appendToAuthorsTable,false);
+		}
 	}
+	showList();
 }
 
 
@@ -1133,8 +1182,11 @@ for (column of columns){
 }
 var enableSorting;
 
+
 function fillDocsTable(){
-	tBody =	table.tBodies[0];
+	if (!refreshDocsTable) return;
+	refreshDocsTable = false;
+	tBody =	docsTable.tBodies[0];
 	tBody.innerHTML = null;
 	tHead = document.getElementById("docsHeader");
 	sorters = tHead.getElementsByClassName("glyphicon-sort");
@@ -1165,75 +1217,27 @@ function fillDocsTable(){
 		}
 	}
 	
-	let field;
-	let cell;
 	for (var doc of documents.items){
 		if (!doc.display)
 			continue;
-		row = tBody.insertRow();
-		
-		cell = row.insertCell();
-		cell.innerHTML = doc.id;
-		
-		cell = row.insertCell();
-		cell.innerHTML = doc.docType.type;
-		
-		cell = row.insertCell();
-		ul = document.createElement("ul");
-		cell.appendChild(ul);
-		for (author of doc.authors){
-			li = document.createElement("li");
-			ul.appendChild(li);
-			names = author.firstName.split();
-			initials = "";
-			for (let name of names){
-				initials+= " "+name.substring(0,1)+"."
-			}
-			textNode = document.createTextNode(
-					author.lastName+","+initials);
-			li.appendChild(textNode);
-		}
-		
-		cell = row.insertCell();
-		cell.classList.add("title");
-		cell.id = "title-"+(tBody.children.length-1);
-		cell.innerHTML = doc.title;
-		cell.onclick = function(){visualiseDocument(this);};
-		
-		cell = row.insertCell();
-		plusOrMinusIcon = createRawIcon();
-		if (doc.addedToReferences){
-			plusOrMinusIcon.classList.remove('glyphicon-plus');
-			plusOrMinusIcon.classList.add('glyphicon-minus');
-		} else {
-			plusOrMinusIcon.classList.add('glyphicon-plus');
-			plusOrMinusIcon.classList.remove('glyphicon-minus');
-		}
-		plusOrMinusIcon.addEventListener("click",addOrRemoveReference);
-		cell.appendChild(plusOrMinusIcon);
-
-		cell = row.insertCell();
-		cell.hidden = true;
-		cell.innerHTML = doc.approxRequiredLengthForFile;
+		tBody.appendChild(doc.tr);
 	}
 }
 
 maxQuotedAuthors = 5; //This is the maximum number of authors quoted per reference;
 
-function addOrRemoveReference(event){
+function mostrarUOcultarReferencia(event){
 	clicked = event.target;
-	cell = clicked.parentElement;
-	row = cell.parentElement;
-	id = row.firstChild.innerHTML;
+	docId = Number(clicked.id.substring(clicked.id.search("-")+1));
 	let found = false;
-	addedReferences = [];
 	for(doc of documents.items){
-		if (doc.id == id && !found){
+		if (doc.id == docId && !found){
 			doc.addedToReferences = !doc.addedToReferences;
+			doc.referencia.hidden = !doc.referencia.hidden;
 			found = true;
 		}
-		if (doc.addedToReferences) addedReferences.push(doc);
 	}
+	
 	if (clicked.classList.contains('glyphicon-plus')){
 		clicked.classList.add('glyphicon-minus');
 		clicked.classList.remove('glyphicon-plus');
@@ -1241,32 +1245,7 @@ function addOrRemoveReference(event){
 		clicked.classList.remove('glyphicon-minus');
 		clicked.classList.add('glyphicon-plus');
 	}
-	addedReferences.sort(function (a,b){
-		var aString="";
-		var bString="";
-		for (authorA of a.authors){
-			aString+=authorA.lastName+authorA.firstName;
-		}
-		for (authorB of b.authors){
-			bString+=authorB.lastName+authorB.firstName;
-		}
-		if (aString > bString) return 1;
-		if (aString < bString) return -1;
-		return 0;
-	});
-	references.innerHTML = null;
-	for (ref of addedReferences){
-		p = document.createElement("p");
-		if (ref.docType.id!=3){
-			p.innerHTML = getBookReference(ref);
-		} else {
-			p.innerHTML = getJournalArticleReference(ref);
-		}
-		references.appendChild(p);
-	}
-	
 }
-
 
 function getAuthorNameForReference(author){
 	authorString = author.lastName + ",";
@@ -1388,79 +1367,270 @@ function getJournalArticleReference(journalArticle){
 
 function fetchDocTypes(){
 	let p = new Promise(function(resolve){
-		if (docTypes.fetched){
-			resolve();
-		} else{
+		
 			let ajax = new XMLHttpRequest();
 			ajax.onreadystatechange = function(){
 				if (ajax.readyState == 4 && ajax.status == 200){
-					docTypes.fetched = true;
 					docTypes.items = JSON.parse(ajax.response);
+					let docTypeSelector = document.getElementById("docTypeSelector");
+					for (let docType of docTypes.items){
+						option = document.createElement("option")
+						textNode = document.createTextNode(docType.description);
+						option.appendChild(textNode);
+						option.value = docType.id;
+						docTypeSelector.appendChild(option);
+					}
+					docTypeSelector.onchange = function(){
+						option = docTypeSelector.value;
+						fields = document.getElementById("fields");
+						if (option == 0){
+							fields.hidden = true;
+							document.getElementById("registerButton").disabled = true;
+							return;
+						}
+						fields.hidden = false;
+						/*
+						fieldManager.*.required can take the following values:
+							0: not required
+							1: required
+							2: optional
+						*/
+						fieldManager.date.required = 1;
+						fieldManager.journalName.required = (option==3)? 1 : 0;
+						fieldManager.title.required = 1;
+						fieldManager.subTitle.required = 2;
+						fieldManager.volNumber.required = (option==3)? 1 : 0;
+						fieldManager.volRelease.required = (option==3)? 2 : 0;
+						fieldManager.edition.required = (option == 1)? 2 : 0;
+						fieldManager.publisher.required = (option == 1)?1:((option == 2)?2:0);
+						fieldManager.publisherLocation.required = (option == 1 || option == 2)?2:0;
+						fieldManager.startPage.required = (option == 3)? 1 : 0;
+						fieldManager.endPage.required = (option == 3)? 1 : 0;
+						fieldManager.doi.required = (option == 3)? 2: 0;
+						fieldManager.source.required = 2;
+						fieldManager.authors.required = 1;
+
+						for (each in fieldManager){
+							fieldManager[each].star.hidden = (fieldManager[each].required !=1);
+							fieldManager[each].field.hidden = (fieldManager[each].required == 0);
+							if (each == "authors"){
+								fieldManager.authors.valid |= fieldManager.authors.required !=1;
+								continue;
+							}
+							fieldManager[each].valid = ( fieldManager[each].required !=1);
+							fieldManager[each].field.getElementsByTagName("input")[0].value='';
+						}
+						registerEnabled = false;
+						allFieldsValidation(true);
+					};
 					resolve();
 				}
 			}
 			ajax.open("GET","doc_types",true);
 			ajax.send();
-		}
+		
 	});
 	return p;
 }
+
 function fetchDocuments(){
 	let p = new Promise(function(resolve){
-		if (documents.fetched){
-			resolve();
-		}
-		else{
-			let ajax = new XMLHttpRequest();
-			ajax.onreadystatechange = function(){
+		let ajax = new XMLHttpRequest();
+		ajax.onreadystatechange = function(){
 				if (ajax.readyState == 4 && ajax.status == 200){
-					documents.fetched = true;
 					documents.items = JSON.parse(ajax.response);
 					documents.items.forEach(function(item){
 												item.display = true;
 												item.addedToReferences = false;
+												item.tr = crearFilaDocumento(item);
 											});
-					resolve();
+					
+					enableSorting = (documents.items.length > 1);
+					orderDocsBy("authors");//This line orders the docs by author to create the references.
+					documents.items.forEach((item)=>{
+						item.referencia = crearLineaReferencia(item);
+						references.appendChild(item.referencia);
+					});
+					orderDocsBy("id");
+				resolve();
 				}
 			}
 			ajax.open("GET","document_dto",true);
 			ajax.send();
-		}
+		
 	});
 	return p;
+}
+
+function postNewDocument(newDocument){
+	newDocument.display = true;
+	newDocument.addedToReferences = false;
+	newDocument.tr = crearFilaDocumento(newDocument);
+	newDocument.referencia = crearLineaReferencia(newDocument);
+	documents.items.push(newDocument);
+	enableSorting = (documents.items.length > 1);
+	orderDocsBy("authors");
+	references.innerHTML = null;
+	documents.items.forEach((item)=>references.appendChild(item.referencia));
+	orderDocsBy("id");
+	document.getElementById("docSearch").onkeyup();
+}
+
+function crearFilaDocumento(item){
+		row = document.createElement("tr");
+		row.id = item.id;
+		cell = row.insertCell();
+		cell.innerHTML = item.id;
+		
+		cell = row.insertCell();
+		cell.innerHTML = item.docType.description;
+		
+		cell = row.insertCell();
+		ul = document.createElement("ul");
+		cell.appendChild(ul);
+		for (author of item.authors){
+			li = document.createElement("li");
+			ul.appendChild(li);
+			names = author.firstName.split();
+			initials = "";
+			for (let name of names){
+				initials+= " "+name.substring(0,1)+"."
+			}
+			textNode = document.createTextNode(
+					author.lastName+","+initials);
+			li.appendChild(textNode);
+		}
+		
+		cell = row.insertCell();
+		cell.classList.add("title");
+		cell.id = "title-"+item.id;
+		cell.innerHTML = item.title;
+		cell.onclick = function(){visualiseDocument(this);};
+		
+		cell = row.insertCell();
+		plusOrMinusIcon = createRawIcon();
+		plusOrMinusIcon.classList.add('glyphicon-plus');
+		plusOrMinusIcon.addEventListener("click",mostrarUOcultarReferencia);
+		plusOrMinusIcon.id = "plusOrMinusIcon-"+item.id;//So that it can be easily gotten within the table.
+		cell.appendChild(plusOrMinusIcon);
+		cell = row.insertCell();
+		cell.hidden = true;
+		cell.innerHTML = item.approxRequiredLengthForFile;
+		return row;
+}
+
+function crearLineaReferencia(item){
+	linea = document.createElement("p");
+	linea.hidden = true;
+	linea.id = "referencia-"+item.id;
+	if (item.docType.id!=3){
+		linea.innerHTML = getBookReference(item);
+	} else {
+		linea.innerHTML = getJournalArticleReference(item);
+	}
+	return linea;
 }
 
 function fetchAuthors(){
 	let p = new Promise(function(resolve){
-		if (authors.fetched){
-			resolve();
+		let ajax = new XMLHttpRequest();
+		ajax.onreadystatechange = function(){
+			if (ajax.readyState == 4 && ajax.status == 200){
+				authors.fetched = true;
+				authors.items = JSON.parse(ajax.response);
+				authors.items.forEach(item =>item.display = true);
+				resolve();
+			}
 		}
-		else{
+		ajax.open("GET","author_dto",true);
+		ajax.send();
+	});
+	return p;
+}
+
+(function (){
+	fetchAuthors().then(
+		function(){
+			fetchDocuments().then(
+				function(){
+					fetchDocTypes().then(
+						function(){
+							clearInterval(loadingAnimation);
+							loadingTag.parentNode.removeChild(loadingTag);
+							document.getElementById("botonera").hidden = false;
+						}
+					);
+				}
+			);
+		}
+	);
+ }
+)();
+
+function retrieveAuthorsTest(){
+	let p = new Promise(function(resolve){
+		
 			let ajax = new XMLHttpRequest();
 			ajax.onreadystatechange = function(){
 				if (ajax.readyState == 4 && ajax.status == 200){
-					authors.fetched = true;
-					authors.items = JSON.parse(ajax.response);
-					authors.items.forEach(item =>item.display = true);
-					resolve();
+					
+					resolve(JSON.parse(ajax.response));
 				}
 			}
 			ajax.open("GET","author_dto",true);
-			ajax.send();
+			ajax.send();	
+		
+	});
+	return p;
+}
+
+function retrieveDocsTest(){
+	let p = new Promise(function(resolve){
+		
+		let ajax = new XMLHttpRequest();
+		ajax.onreadystatechange = function(){
+			if (ajax.readyState == 4 && ajax.status == 200){
+				
+				resolve(JSON.parse(ajax.response));
+			}
 		}
+		ajax.open("GET","document_dto",true);
+		ajax.send();	
+	
+	});
+	return p;
+}
+
+function retrieveDTTest(){
+	let p = new Promise(function(resolve){
+		
+		let ajax = new XMLHttpRequest();
+		ajax.onreadystatechange = function(){
+			if (ajax.readyState == 4 && ajax.status == 200){
+				
+				resolve(JSON.parse(ajax.response));
+			}
+		}
+		ajax.open("GET","doc_types",true);
+		ajax.send();	
+	
 	});
 	return p;
 }
 
 
 
+var refreshAuthorsTable = true;
+
 function fillAuthorsTable(){
-	table.innerHTML = null;
+	if (!refreshAuthorsTable) return;
+	refreshAuthorsTable = false;
+	authorsTable.innerHTML = null;
 	if (authors.items.length < 1){
 		return;
 	}
-	tHead = table.createTHead();
-	tBody = table.createTBody();
+	tHead = authorsTable.createTHead();
+	tBody = authorsTable.createTBody();
 	headerRow = tHead.insertRow();
 	let field;
 	let cell;
@@ -1553,12 +1723,17 @@ function orderDocsBy(criteria){
 	if (!enableSorting) return;
 	ret = (documents.order[criteria])?-1:1;
 	documents.order[criteria] = !documents.order[criteria];
+	for (orderingCriteria in documents.order){
+		if (orderingCriteria !=criteria) documents.order[orderingCriteria] = false;
+	}
+	
 	if (criteria==="id"){
 		documents.items.sort(function(a,b){
 			return (a.id - b.id)*ret;
 
 		})
 	} else if (criteria==="title"){
+		
 		documents.items.sort(function(a, b){
 			var x = a.title.toLowerCase();
 			var y = b.title.toLowerCase();
@@ -1568,23 +1743,31 @@ function orderDocsBy(criteria){
 		});
 	} else if (criteria==="docType"){
 		documents.items.sort(function(a, b){
-			var x = a.docType.type.toLowerCase();
-			var y = b.docType.type.toLowerCase();
+			var x = a.docType.description.toLowerCase();
+			var y = b.docType.description.toLowerCase();
 			if (x > y) {return ret;}
 			if (x < y) {return -ret;}
 			return 0;
 		});
 	} else if (criteria==="authors"){
-		documents.items.sort(function(a, b){
-			auA = a.authors[0];
-			nameA =(auA.lastName +auA.firstName).toLowerCase();
-			auB = b.authors[0];
-			nameB =(auB.lastName +auB.firstName).toLowerCase();
-			if (nameA > nameB) {return ret;}
-			if (nameA < nameB) {return -ret;}
+		documents.order.id = false;
+		documents.order.docType = false;
+		documents.order.title = false;
+		documents.items.sort(function (a,b){
+			var aString="";
+			var bString="";
+			for (authorA of a.authors){
+				aString+=authorA.lastName+authorA.firstName+" ";
+			}
+			for (authorB of b.authors){
+				bString+=authorB.lastName+authorB.firstName+" ";
+			}
+			if (aString > bString) return ret;
+			if (aString < bString) return -ret;
 			return 0;
 		});
 	}
+	refreshDocsTable = true;
 	fillDocsTable();
 }
 
@@ -1607,8 +1790,7 @@ function orderAuthorsBy(criteria){
 	}
 	fillAuthorsTable();
 }
-
 							</script>
-						</body>
+</body>
 
-					</html>
+</html>

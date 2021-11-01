@@ -6,22 +6,25 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class FileDTO {
-	
+
 	//Spring automatically converts the array of bytes into Base64.
 	private byte[] data;
 	private String name;
-	
+
 	public FileDTO(String location) {
-		File f = new File(location);
-		Path path = Path.of(location);
+		File f = null;
+		Path path = null;
+		f = new File(location);
+		path = Path.of(location);
 		this.name = path.getFileName().toString();
-		
 		try {
 			FileInputStream  inputStreamFromFile= new FileInputStream(f);
 			this.data = inputStreamFromFile.readAllBytes();
+			inputStreamFromFile.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			this.data = new byte[0];
 		}
+
 	}
 
 	public byte[] getData() {

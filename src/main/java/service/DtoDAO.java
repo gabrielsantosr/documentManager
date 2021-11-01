@@ -72,6 +72,10 @@ public class DtoDAO {
 		return q.list();
 	}
 	
+	protected DocumentType getDocumentType(Integer id) {
+		return (DocumentType) session.get(DocumentType.class, id);
+	}
+	
 	protected Document getDocument(Integer id) {
 		return (Document) session.get(Document.class, id);
 	}
