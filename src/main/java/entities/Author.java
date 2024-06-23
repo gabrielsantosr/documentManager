@@ -22,7 +22,7 @@ public class Author extends IntIdEntity {
 	//A comment
 	@Column(name="last_name", length = 30)
 	private String lastName;
-	
+	//Annother comment
 	@Column(name="first_name", length = 30)
 	private String firstName;
 	
