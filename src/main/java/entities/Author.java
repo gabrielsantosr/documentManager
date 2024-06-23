@@ -19,7 +19,7 @@ public class Author extends IntIdEntity {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
 	private Integer id;
-	//A comment
+	
 	@Column(name="last_name", length = 30)
 	private String lastName;
 	
