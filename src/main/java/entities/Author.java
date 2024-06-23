@@ -26,6 +26,8 @@ public class Author extends IntIdEntity {
 	@Column(name="first_name", length = 30)
 	private String firstName;
 	//Yet another comment
+	//And yey another one
+	//Kidding me, aren't you?
 	
 	@OneToMany(mappedBy="author")
 	@OrderBy("hierarchy")
